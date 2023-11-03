@@ -95,14 +95,14 @@ public class MNKOverlay
                     MNKSettings.Instance.Save();
                 }
             }
+            ImGuiHelper.ToggleButton("脱战使用演武（待优化）", ref MNKSettings.Instance.脱战演武);
+            {
+            }
             if (ImGui.TreeNode("参数调整"))
             {
                 ImGui.SliderFloat("功力时间设定", ref MNKSettings.Instance.功力时间, 4000f, 5000f);
                 MNKSettings.Instance.Save();
                 ImGui.TreePop();
-            }
-            ImGuiHelper.ToggleButton("脱战使用演武（待优化）", ref MNKSettings.Instance.脱战演武);
-            {
             }
             if ( !ImGui.TreeNode("DEV"))
             {
@@ -183,6 +183,12 @@ public class MNKOverlay
          //   }
 
          //   ImGui.Text($"额外红斩：{WARBattleData.Instance.额外红斩}");
+        }
+        if (ImGui.CollapsingHeader("更新日志")) 
+        {
+            ImGui.Text("11/1 出生");
+            ImGui.Text("11/2 修复演武逻辑");
+            ImGui.Text("11/3 悬浮窗简洁化");
         }
     }
 

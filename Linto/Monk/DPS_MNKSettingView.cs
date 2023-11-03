@@ -37,22 +37,13 @@ public class DPSMNKSettingView : ISettingUI
                 MNKSettings.Instance.Save();
             }
             if (ImGui.Checkbox("真言队友", ref MNKSettings.Instance.真言队友));
-            {
-                if (MNKSettings.Instance.真言队友)
-                { 
-                    ImGui.SliderFloat("队友血量阈值", ref MNKSettings.Instance.真言队友阈值设置, 0.0f, 1.0f);
-                    MNKSettings.Instance.Save();
-                }
-            }
-            if (ImGui.TreeNode("参数调整"))
-            {
-                ImGui.SliderFloat("功力时间设定", ref MNKSettings.Instance.功力时间, 4000f, 5000f);
+            if (MNKSettings.Instance.真言队友)
+            { 
+                ImGuiHelper.LeftInputFloat("队友血量阈值", ref MNKSettings.Instance.真言队友阈值设置, 0.7f);
                 MNKSettings.Instance.Save();
-                ImGui.TreePop();
             }
             ImGuiHelper.ToggleButton("脱战使用演武（待优化）", ref MNKSettings.Instance.脱战演武);
             {
-                MNKSettings.Instance.Save();
             }
         }
     }

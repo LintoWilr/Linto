@@ -73,6 +73,6 @@ public class MNKRotationEventHandler : IRotationEventHandler
     }
     public void OnEnterRotation()
     {
-        LogHelper.Print("Linto 日随武僧 Ver1.0:适配全等级武僧/格斗家");
+        LogHelper.Print("已切换到日随武僧！");
     }
 }
