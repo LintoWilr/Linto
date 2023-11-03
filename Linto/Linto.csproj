@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+        <AssemblyName>Linto</AssemblyName>
+        <RootNamespace>Linto</RootNamespace>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <Optimize>false</Optimize>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="CombatRoutine">
+        <HintPath>..\..\ae2.0\AEAssistCNVersion\AEAssist\CombatRoutine.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="Common">
+        <HintPath>..\..\ae2.0\AEAssistCNVersion\AEAssist\Common.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="ImGui.NET">
+        <HintPath>C:\Users\Lintowilr\Downloads\AcrDemo\References\ImGui.NET.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+    </ItemGroup>
+
+</Project>

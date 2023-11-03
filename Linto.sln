@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Linto", "Linto\Linto.csproj", "{79F36B4D-E906-4781-A4B5-9E24641BF5B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{79F36B4D-E906-4781-A4B5-9E24641BF5B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79F36B4D-E906-4781-A4B5-9E24641BF5B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79F36B4D-E906-4781-A4B5-9E24641BF5B5}.Debug|Any CPU.ActiveCfg = Release|Any CPU
+		{79F36B4D-E906-4781-A4B5-9E24641BF5B5}.Debug|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

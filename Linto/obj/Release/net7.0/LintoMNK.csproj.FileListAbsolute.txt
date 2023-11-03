@@ -1,0 +1,12 @@
+E:\LessMelon\LintoMNK\LintoMNK\bin\Release\net7.0\LintoMNK.deps.json
+E:\LessMelon\LintoMNK\LintoMNK\bin\Release\net7.0\LintoMNK.dll
+E:\LessMelon\LintoMNK\LintoMNK\bin\Release\net7.0\LintoMNK.pdb
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.csproj.AssemblyReference.cache
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.GeneratedMSBuildEditorConfig.editorconfig
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.AssemblyInfoInputs.cache
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.AssemblyInfo.cs
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.csproj.CoreCompileInputs.cache
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.dll
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\refint\LintoMNK.dll
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\LintoMNK.pdb
+E:\LessMelon\LintoMNK\LintoMNK\obj\Release\net7.0\ref\LintoMNK.dll
