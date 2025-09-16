@@ -1,0 +1,65 @@
+using AEAssist;
+using AEAssist.CombatRoutine.View.JobView;
+using ImGuiNET;
+using Linto.LintoPvP.PVPApi;
+
+namespace Linto.LintoPvP.RDM;
+
+public class PvPRDMOverlay
+{
+    public static void DrawGeneral(JobViewWindow jobViewWindow)
+    {
+        
+        Share.Pull = true;
+        {
+            职业配置 赤魔 = new 职业配置();
+            赤魔.配置赤魔技能();
+
+            if (ImGui.CollapsingHeader("调试窗口"))
+            {
+                PVPHelper.PvP调试窗口();
+            }
+        }
+    }
+    public static class RDMQt
+    {
+        /// 获取指定名称qt的bool值
+        public static bool GetQt(string qtName)
+        {
+            return PvPRDMEntry.JobViewWindow.GetQt(qtName);
+        }
+
+        /// 反转指定qt的值
+        /// <returns>成功返回true，否则返回false</returns>
+        public static bool ReverseQt(string qtName)
+        {
+            return PvPRDMEntry.JobViewWindow.ReverseQt(qtName);
+        }
+
+        /// 设置指定qt的值
+        /// <returns>成功返回true，否则返回false</returns>
+        public static bool SetQt(string qtName, bool qtValue)
+        {
+            return PvPRDMEntry.JobViewWindow.SetQt(qtName, qtValue);
+        }
+
+        /// 给指定qt设置新的默认值
+        public static void NewDefault(string qtName, bool newDefault)
+        {
+            PvPRDMEntry.JobViewWindow.NewDefault(qtName, newDefault);
+        }
+
+        /// 将当前所有Qt状态记录为新的默认值，
+        /// 通常用于战斗重置后qt还原到倒计时时间点的状态
+        public static void SetDefaultFromNow()
+        {
+            PvPRDMEntry.JobViewWindow.SetDefaultFromNow();
+        }
+
+        /// 返回包含当前所有qt名字的数组
+        public static string[] GetQtArray()
+        {
+            return PvPRDMEntry.JobViewWindow.GetQtArray();
+        }
+    }
+}

@@ -1,31 +1,335 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
-        <AssemblyName>Linto</AssemblyName>
-        <RootNamespace>Linto</RootNamespace>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+      <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+      <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
       <Optimize>false</Optimize>
+      <OutputPath>E:\AEAssist 国服 1001 1828\ACR\Linto\</OutputPath>
+      <WarningLevel>1</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="CombatRoutine">
-        <HintPath>..\..\ae2.0\AEAssistCNVersion\AEAssist\CombatRoutine.dll</HintPath>
+      <Reference Include="AEAssist">
+        <HintPath>..\..\..\AEAssist 国服 1001 1828\AEAssistCNVersion\AEAssist\AEAssist.dll</HintPath>
         <Private>False</Private>
       </Reference>
-      <Reference Include="Common">
-        <HintPath>..\..\ae2.0\AEAssistCNVersion\AEAssist\Common.dll</HintPath>
+      <Reference Include="Dalamud">
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\Dalamud.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="ECommons">
+        <HintPath>..\..\..\AEAssist 国服 1001 1828\AEAssistCNVersion\AEAssist\ECommons.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="FFXIVClientStructs">
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
         <Private>False</Private>
       </Reference>
       <Reference Include="ImGui.NET">
-        <HintPath>C:\Users\Lintowilr\Downloads\AcrDemo\References\ImGui.NET.dll</HintPath>
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\ImGui.NET.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="ImGuiScene">
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\ImGuiScene.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="Lumina">
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.15\Lumina.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="Lumina.Excel">
+        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
+        <Private>False</Private>
+      </Reference>
+      <Reference Include="System">
+        <HintPath>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.dll</HintPath>
+      </Reference>
+      <Reference Include="System.Windows.Forms">
+        <HintPath>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.Windows.Forms.dll</HintPath>
         <Private>False</Private>
       </Reference>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="LintoPvP" />
+      <None Remove="Wilr\**" />
+      <None Remove="obj\**" />
+      <None Remove="LintoPvP\SCH\**" />
+      <None Remove="LintoPvP\GNB\**" />
+      <None Remove="LintoPvP\MNK\**" />
+      <None Remove="LintoPvP\SMN\**" />
+      <None Remove="JobView\**" />
+      <None Remove="LintoPvP\PVPApi\PVPApi.Data\**" />
+      <None Remove="LintoPvP\PVPApi\PVPApi.Marker\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="ScholarRotationEntry.cs" />
+      <Compile Remove="Wilr\**" />
+      <Compile Remove="Scholar\**" />
+      <Compile Remove="obj\**" />
+      <Compile Remove="MNK.cs" />
+      <Compile Remove="PugilistRotationEntry.cs" />
+      <Compile Remove="Monk\**" />
+      <Compile Remove="RedMage\**" />
+      <Compile Remove="PvPSCHRotationEntry.cs" />
+      <Compile Remove="LintoPvP\SCH\**" />
+      <Compile Remove="LintoPvP\GNB\**" />
+      <Compile Remove="LintoPvP\MNK\**" />
+      <Compile Remove="LintoPvP\SMN\**" />
+      <Compile Remove="JobView\**" />
+      <Compile Remove="LintoPvP\PVPApi\PVPApi.Data\**" />
+      <Compile Remove="LintoPvP\PVPApi\PVPApi.Marker\**" />
+      <Compile Remove="Sage\**" />
+      <Compile Remove="LintoPvP\MCH1\**" />
+      <Compile Include="AurasDefine.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\以太步.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\净化.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\昏沉.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\热震荡.cs" />
+      <Compile Include="LintoPvP\BLM\Ability\药.cs" />
+      <Compile Include="LintoPvP\BLM\BLMBattleData.cs" />
+      <Compile Include="LintoPvP\BLM\GCD\LB.cs" />
+      <Compile Include="LintoPvP\BLM\GCD\火魔法.cs" />
+      <Compile Include="LintoPvP\BLM\GCD\冰魔法.cs" />
+      <Compile Include="LintoPvP\BLM\GCD\悖论.cs" />
+      <Compile Include="LintoPvP\BLM\GCD\磁暴.cs" />
+      <Compile Include="LintoPvP\BLM\PvPBLMOverlay.cs" />
+      <Compile Include="LintoPvP\BLM\PvPBLMRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\BLM\PvPBLMSettings.cs" />
+      <Compile Include="LintoPvP\BLM\Triggers\PvPBLMSettingUI.cs" />
+      <Compile Include="LintoPvP\BLM\Triggers\PvPBLM_Qt.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\九天.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\光阴神.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\净化.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\药.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\远程职能技能.cs" />
+      <Compile Include="LintoPvP\BRD\Ability\默者的夜曲.cs" />
+      <Compile Include="LintoPvP\BRD\BRDBattleData.cs" />
+      <Compile Include="LintoPvP\BRD\GCD\完美音调.cs" />
+      <Compile Include="LintoPvP\BRD\GCD\强劲射击.cs" />
+      <Compile Include="LintoPvP\BRD\GCD\爆破箭.cs" />
+      <Compile Include="LintoPvP\BRD\GCD\绝峰箭.cs" />
+      <Compile Include="LintoPvP\BRD\PvPBRDOverlay.cs" />
+      <Compile Include="LintoPvP\BRD\PvPBRDRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\BRD\PvPBRDSettings.cs" />
+      <Compile Include="LintoPvP\BRD\Triggers\PvPBRDSettingUI.cs" />
+      <Compile Include="LintoPvP\BRD\Triggers\PvPBRD_Qt.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\净化.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\后跳.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\天龙点睛.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\恐惧咆哮.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\武神枪.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\死者之岸.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\药.cs" />
+      <Compile Include="LintoPvP\DRG\Ability\高跳.cs" />
+      <Compile Include="LintoPvP\DRG\DRGBattleData.cs" />
+      <Compile Include="LintoPvP\DRG\DRGSkillID.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\云蒸龙变.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\樱花缭乱.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\渡星冲.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\苍穹刺.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\龙尾大回旋.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\龙牙龙爪.cs" />
+      <Compile Include="LintoPvP\DRG\GCD\龙眼雷电.cs" />
+      <Compile Include="LintoPvP\DRG\PvPDRGOverlay.cs" />
+      <Compile Include="LintoPvP\DRG\PvPDRGRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\DRG\PvPDRGSettings.cs" />
+      <Compile Include="LintoPvP\DRG\Triggers\PvPMNK_Qt.cs" />
+      <Compile Include="LintoPvP\DRG\Triggers\samsetting.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\T职能技能.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\净化.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\刚玉之心.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\爆破领域.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\粗分斩.cs" />
+      <Compile Include="LintoPvP\GNB\Ability\药.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\利刃斩.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\命运之环.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\残暴弹.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\烈牙连击.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\爆发击.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\续剑.cs" />
+      <Compile Include="LintoPvP\GNB\GCD\迅连斩.cs" />
+      <Compile Include="LintoPvP\GNB\GNBBattleData.cs" />
+      <Compile Include="LintoPvP\GNB\PvPGNBOverlay.cs" />
+      <Compile Include="LintoPvP\GNB\PvPGNBRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\GNB\PvPGNBSettings.cs" />
+      <Compile Include="LintoPvP\GNB\Triggers\PvPGNBSettingUI.cs" />
+      <Compile Include="LintoPvP\GNB\Triggers\PvPGNB_Qt.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\净化.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\分析.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\远程职能技能.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\药.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\象式浮空炮塔.cs" />
+      <Compile Include="LintoPvP\MCH\Ability\野火.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\全金属爆发.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\回转飞锯.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\毒菌冲击.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\空气锚.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\蓄力冲击.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\钻头.cs" />
+      <Compile Include="LintoPvP\MCH\GCD\霰弹枪.cs" />
+      <Compile Include="LintoPvP\MCH\MCHBattleData.cs" />
+      <Compile Include="LintoPvP\MCH\PvPMCHOverlay.cs" />
+      <Compile Include="LintoPvP\MCH\PvPMCHRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\MCH\PvPMCHSettings.cs" />
+      <Compile Include="LintoPvP\MCH\Triggers\PvPMCHSettingUI.cs" />
+      <Compile Include="LintoPvP\MCH\Triggers\PvPMCH_Qt.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\净化.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\切换减色.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\动物构想.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\坦培拉涂层.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\药.cs" />
+      <Compile Include="LintoPvP\PCT\Ability\莫古炮.cs" />
+      <Compile Include="LintoPvP\PCT\GCD\动物彩绘.cs" />
+      <Compile Include="LintoPvP\PCT\GCD\天星棱光.cs" />
+      <Compile Include="LintoPvP\PCT\GCD\瞬发连击.cs" />
+      <Compile Include="LintoPvP\PCT\GCD\读条连击.cs" />
+      <Compile Include="LintoPvP\PCT\GCD\黑白魔法.cs" />
+      <Compile Include="LintoPvP\PCT\PCTBattleData.cs" />
+      <Compile Include="LintoPvP\PCT\PCTSkillID.cs" />
+      <Compile Include="LintoPvP\PCT\PvPPCTOverlay.cs" />
+      <Compile Include="LintoPvP\PCT\PvPPCTRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\PCT\PvPPCTSettings.cs" />
+      <Compile Include="LintoPvP\PCT\Triggers\PvPPVR_Qt.cs" />
+      <Compile Include="LintoPvP\PCT\Triggers\PvPVPRSettingUI.cs" />
+      <Compile Include="LintoPvP\PVPApi\HotkeyData.cs" />
+      <Compile Include="LintoPvP\PVPApi\MountHandler.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Data\AurasDefine.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Data\SpellsDefine.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Marker\Marker.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Target\Filter.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Target\Group.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPApi.Target\PVPTargetHelper.cs" />
+      <Compile Include="LintoPvP\PVPApi\PVPHelper.cs" />
+      <Compile Include="LintoPvP\PVPApi\PvPJobInterface.cs" />
+      <Compile Include="LintoPvP\PVPApi\SkillDecision.cs" />
+      <Compile Include="LintoPvP\RDM\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\RDM\Ability\净化.cs" />
+      <Compile Include="LintoPvP\RDM\Ability\剑身强部.cs" />
+      <Compile Include="LintoPvP\RDM\Ability\药.cs" />
+      <Compile Include="LintoPvP\RDM\Ability\鼓励.cs" />
+      <Compile Include="LintoPvP\RDM\GCD\决断.cs" />
+      <Compile Include="LintoPvP\RDM\GCD\读条连击.cs" />
+      <Compile Include="LintoPvP\RDM\GCD\魔三连.cs" />
+      <Compile Include="LintoPvP\RDM\PvPRDMOverlay.cs" />
+      <Compile Include="LintoPvP\RDM\PvPPCTRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\RDM\PvP赤魔Settings.cs" />
+      <Compile Include="LintoPvP\RDM\RDMBattleData.cs" />
+      <Compile Include="LintoPvP\RDM\RDMSkillID.cs" />
+      <Compile Include="LintoPvP\RDM\Triggers\PvPPVR_Qt.cs" />
+      <Compile Include="LintoPvP\RDM\Triggers\PvPVPRSettingUI.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\净化.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\刀背击打.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\地天.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\明镜.cs" />
+      <Compile Include="LintoPvP\SAM\Ability\药.cs" />
+      <Compile Include="LintoPvP\SAM\GCD\斩浪.cs" />
+      <Compile Include="LintoPvP\SAM\GCD\斩铁剑.cs" />
+      <Compile Include="LintoPvP\SAM\GCD\花车连击.cs" />
+      <Compile Include="LintoPvP\SAM\GCD\雪月花.cs" />
+      <Compile Include="LintoPvP\SAM\PvPSAMOverlay.cs" />
+      <Compile Include="LintoPvP\SAM\PvPSAMRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\SAM\PvPSAMSettings.cs" />
+      <Compile Include="LintoPvP\SAM\SAMBattleData.cs" />
+      <Compile Update="LintoPvP\SAM\GCD\花.cs" />
+      <Compile Update="LintoPvP\SAM\GCD\雪.cs" />
+      <Compile Include="LintoPvP\SAM\Triggers\PvPSamSettingUI.cs" />
+      <Compile Include="LintoPvP\SAM\Triggers\PvPSAM_Qt.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\净化.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\守护之光.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\溃烂爆发.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\药.cs" />
+      <Compile Include="LintoPvP\SMN\Ability\龙神迸发.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\山崩.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\星极脉冲.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\毁荡.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\深红强袭.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\深红旋风.cs" />
+      <Compile Include="LintoPvP\SMN\GCD\螺旋气流.cs" />
+      <Compile Include="LintoPvP\SMN\PvPSMNOverlay.cs" />
+      <Compile Include="LintoPvP\SMN\PvPSMNRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\SMN\PvPSMNSettings.cs" />
+      <Compile Include="LintoPvP\SMN\SMNBattleData.cs" />
+      <Compile Include="LintoPvP\SMN\Triggers\PvPSMN_Qt.cs" />
+      <Compile Include="LintoPvP\SMN\Triggers\PvPSMNSettingUI.cs" />
+      <Compile Include="LintoPvP\VPR\Ability\冲刺.cs" />
+      <Compile Include="LintoPvP\VPR\Ability\净化.cs" />
+      <Compile Include="LintoPvP\VPR\Ability\药.cs" />
+      <Compile Include="LintoPvP\VPR\Ability\蛇续剑.cs" />
+      <Compile Include="LintoPvP\VPR\Ability\飞蛇之魂.cs" />
+      <Compile Include="LintoPvP\VPR\GCD\BUFF连击.cs" />
+      <Compile Include="LintoPvP\VPR\GCD\祖灵之牙连击.cs" />
+      <Compile Include="LintoPvP\VPR\GCD\飞蛇之尾.cs" />
+      <Compile Include="LintoPvP\VPR\GCD\齿牙体势连击.cs" />
+      <Compile Include="LintoPvP\VPR\PvPVPROverlay.cs" />
+      <Compile Include="LintoPvP\VPR\PvPVPRRotationEventHandler.cs" />
+      <Compile Include="LintoPvP\VPR\PvPVPRSettings.cs" />
+      <Compile Include="LintoPvP\VPR\Triggers\PvPPVR_Qt.cs" />
+      <Compile Include="LintoPvP\VPR\Triggers\PvPVPRSettingUI.cs" />
+      <Compile Include="LintoPvP\VPR\VPRBattleData.cs" />
+      <Compile Update="LintoPvP\VPR\GCD\斩铁剑.cs" />
+      <Compile Include="PvPBLMRotationEntry.cs" />
+      <Compile Include="PvPBRDRotationEntry.cs" />
+      <Compile Include="PvPDRGRotationEntry.cs" />
+      <Compile Include="PvPGNBRotationEntry.cs" />
+      <Compile Include="PvPMCHRotationEntry.cs" />
+      <Compile Include="PvPRDMRotationEntry.cs" />
+      <Compile Include="PvPSAMRotationEntry.cs" />
+      <Compile Include="PvPSettings.cs" />
+      <Compile Include="PvPSMNRotationEntry.cs" />
+      <Compile Include="PvP双刀小子RotationEntry.cs" />
+      <Compile Include="PvP董慧敏RotationEntry.cs" />
+      <Compile Include="SpellsDefine.cs" />
+      <Compile Update="SageRotationEntry.cs" />
+      <Compile Update="PvPSMNRotationEntry.cs" />
+      <Compile Update="PvPGNBRotationEntry.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Wilr\**" />
+      <EmbeddedResource Remove="Scholar\**" />
+      <EmbeddedResource Remove="obj\**" />
+      <EmbeddedResource Remove="Monk\**" />
+      <EmbeddedResource Remove="RedMage\**" />
+      <EmbeddedResource Remove="LintoPvP\SCH\**" />
+      <EmbeddedResource Remove="LintoPvP\GNB\**" />
+      <EmbeddedResource Remove="LintoPvP\MNK\**" />
+      <EmbeddedResource Remove="LintoPvP\SMN\**" />
+      <EmbeddedResource Remove="JobView\**" />
+      <EmbeddedResource Remove="LintoPvP\PVPApi\PVPApi.Data\**" />
+      <EmbeddedResource Remove="LintoPvP\PVPApi\PVPApi.Marker\**" />
+      <EmbeddedResource Remove="Sage\**" />
+      <EmbeddedResource Remove="LintoPvP\MCH1\**" />
+    </ItemGroup>
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
+    <ItemGroup>
+      <PackageReference Include="CSCore" Version="1.2.1.2" />
+      <PackageReference Include="Obfuscar" Version="2.2.39">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+    </ItemGroup>
+  <PropertyGroup>
+    <EnableDefaultItems>false</EnableDefaultItems>
+  </PropertyGroup>
 
 </Project>
