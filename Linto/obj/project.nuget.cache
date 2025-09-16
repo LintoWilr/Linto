@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Piy85oCkKmI=",
+  "dgSpecHash": "TtFuSyT7raw=",
   "success": true,
-  "projectFilePath": "E:\\LessMelon\\Linto\\Linto\\Linto.csproj",
+  "projectFilePath": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Lintowilr\\.nuget\\packages\\cscore\\1.2.1.2\\cscore.1.2.1.2.nupkg.sha512",
     "C:\\Users\\Lintowilr\\.nuget\\packages\\obfuscar\\2.2.39\\obfuscar.2.2.39.nupkg.sha512"
@@ -11,10 +11,10 @@
     {
       "code": "NU1701",
       "level": "Warning",
-      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
-      "projectPath": "E:\\LessMelon\\Linto\\Linto\\Linto.csproj",
+      "message": "Package 'CSCore 1.2.1.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
+      "projectPath": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
       "warningLevel": 1,
-      "filePath": "E:\\LessMelon\\Linto\\Linto\\Linto.csproj",
+      "filePath": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
       "libraryId": "CSCore",
       "targetGraphs": [
         "net9.0"

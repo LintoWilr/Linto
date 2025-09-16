@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Linto")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b80e28d394771ff832829357a77098c0afa04965")]
 [assembly: System.Reflection.AssemblyProductAttribute("Linto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Linto")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
