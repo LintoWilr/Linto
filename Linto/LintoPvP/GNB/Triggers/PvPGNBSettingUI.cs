@@ -3,7 +3,7 @@
 using AEAssist.CombatRoutine.Trigger;
 using AEAssist.CombatRoutine.View;
 using ECommons.LanguageHelpers;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 #endregion
 

@@ -2,6 +2,24 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "AEAssist.NET/1.1.12": {
+        "type": "package",
+        "compile": {
+          "lib/net9.0/AEAssist.dll": {},
+          "lib/net9.0/CSCore.dll": {},
+          "lib/net9.0/Dalamud.Bindings.ImGui.dll": {},
+          "lib/net9.0/Dalamud.dll": {},
+          "lib/net9.0/ECommons.dll": {},
+          "lib/net9.0/FFXIVClientStructs.dll": {},
+          "lib/net9.0/InteropGenerator.Runtime.dll": {},
+          "lib/net9.0/KamiToolKit.dll": {},
+          "lib/net9.0/Lumina.Excel.dll": {},
+          "lib/net9.0/Lumina.dll": {}
+        },
+        "runtime": {
+          "lib/net9.0/_._": {}
+        }
+      },
       "CSCore/1.2.1.2": {
         "type": "package",
         "compile": {
@@ -24,6 +42,26 @@
     }
   },
   "libraries": {
+    "AEAssist.NET/1.1.12": {
+      "sha512": "1mDjTGlcJEVDme2GPx0XIGCIEeP/uoYRMVNrH4WCVohNPfwuWNj580wEUkUsJn0brU4hYRK1J8xjCneuJQtrnw==",
+      "type": "package",
+      "path": "aeassist.net/1.1.12",
+      "files": [
+        ".nupkg.metadata",
+        "aeassist.net.1.1.12.nupkg.sha512",
+        "aeassist.net.nuspec",
+        "lib/net9.0/AEAssist.dll",
+        "lib/net9.0/CSCore.dll",
+        "lib/net9.0/Dalamud.Bindings.ImGui.dll",
+        "lib/net9.0/Dalamud.dll",
+        "lib/net9.0/ECommons.dll",
+        "lib/net9.0/FFXIVClientStructs.dll",
+        "lib/net9.0/InteropGenerator.Runtime.dll",
+        "lib/net9.0/KamiToolKit.dll",
+        "lib/net9.0/Lumina.Excel.dll",
+        "lib/net9.0/Lumina.dll"
+      ]
+    },
     "CSCore/1.2.1.2": {
       "sha512": "DoQKUcdZLQawo3mOg8CvujJD9YkvTt6NtEu7S+OCo8+ySl8eCeUw4LFyL2E1OcAkPU918HZM6sUNcvIMcXWg6g==",
       "type": "package",
@@ -55,28 +93,29 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "AEAssist.NET >= *",
       "CSCore >= 1.2.1.2",
       "Obfuscar >= 2.2.39"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Lintowilr\\.nuget\\packages\\": {},
+    "C:\\Users\\Administrator\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
+      "projectUniqueName": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
       "projectName": "Linto",
-      "projectPath": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
-      "packagesPath": "C:\\Users\\Lintowilr\\.nuget\\packages\\",
-      "outputPath": "E:\\LessMelon\\ACR\\Linto\\Linto\\obj\\",
+      "projectPath": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
+      "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+      "outputPath": "J:\\ACR\\Linto\\Linto\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\Lintowilr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -85,7 +124,8 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://api.nuget.org/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {},
+        "https://www.myget.org/F/aeassist/api/v3/index.json": {}
       },
       "frameworks": {
         "net9.0": {
@@ -109,6 +149,11 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "AEAssist.NET": {
+            "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "target": "Package",
+            "version": "[*, )"
+          },
           "CSCore": {
             "target": "Package",
             "version": "[1.2.1.2, )"
@@ -145,7 +190,7 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "Package 'CSCore 1.2.1.2' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net9.0'. This package may not be fully compatible with your project.",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
       "libraryId": "CSCore",
       "targetGraphs": [
         "net9.0"

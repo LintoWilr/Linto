@@ -9,7 +9,7 @@ using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Dalamud.Interface.Textures.TextureWraps;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Linto.LintoPvP.RDM;
 using Linto.LintoPvP.SAM;
 
@@ -26,7 +26,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39190u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 
@@ -85,7 +85,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29415u, out textureWrap,true))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		
@@ -128,7 +128,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29404u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		public void DrawExternal(Vector2 size, bool isActive) => SpellHelper.DrawSpellInfo(new Spell(29404u, Core.Me), size, isActive);
@@ -164,7 +164,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39215u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 
@@ -192,7 +192,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29130u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 
@@ -225,7 +225,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29537u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 
@@ -276,7 +276,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29401u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 
@@ -310,7 +310,7 @@ public class HotkeyData
 				if (!Core.Resolve<MemApiIcon>().GetActionTexture(29698u, out textureWrap))
 					return;
 			}
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 		}
 
 		public void DrawExternal(Vector2 size, bool isActive)
@@ -358,7 +358,7 @@ public class HotkeyData
 				if (!Core.Resolve<MemApiIcon>().GetActionTexture(29703u, out textureWrap))
 					return;
 			}
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 		}
 
 		public void DrawExternal(Vector2 size, bool isActive)
@@ -396,7 +396,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(41498u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>
 			SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget), size, isActive);
@@ -430,7 +430,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29399u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>
@@ -457,7 +457,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29494u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>
@@ -483,7 +483,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39210u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>
@@ -509,7 +509,7 @@ public class HotkeyData
 			IDalamudTextureWrap textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29660u, out textureWrap))
 				return;
-			ImGui.Image(textureWrap.ImGuiHandle, size1);
+			ImGui.Image(textureWrap.Handle, size1);
 
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>

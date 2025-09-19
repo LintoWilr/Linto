@@ -1,7 +1,7 @@
 ﻿namespace Linto.LintoPvP.RDM.Triggers;
 
 using AEAssist.CombatRoutine.View;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 public class PvPRDMSettingUI : ISettingUI
 {

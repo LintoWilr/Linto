@@ -11,7 +11,7 @@ using AEAssist.MemoryApi;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Textures.TextureWraps;
 using ECommons.DalamudServices;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using AEAssist.Verify;
 using Dalamud.Game.ClientState.Conditions;
 using System.Runtime.CompilerServices;
@@ -78,7 +78,7 @@ public class PVPHelper
 		return rotation;
 	}
 
-	public static unsafe bool 视线阻挡(IBattleChara 目标角色)
+	public static unsafe bool 视线阻挡(IBattleChara? 目标角色)
 	{
 		return MemApiSpell.LineOfSightChecker.IsBlocked(Core.Me.GameObject(),(目标角色.GameObject()));
 	}
@@ -258,7 +258,7 @@ public class PVPHelper
 		IDalamudTextureWrap? textureWrap;
 		if (!Core.Resolve<MemApiIcon>().GetActionTexture(skillid, out textureWrap))
 			return;
-		ImGui.Image(textureWrap.ImGuiHandle, size1);
+		ImGui.Image(textureWrap.Handle, size1);
 	}
 	private static void s1()
 	{
@@ -429,7 +429,7 @@ public class PVPHelper
 	public static void 技能配置(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -447,7 +447,7 @@ public class PVPHelper
 	public static void 技能配置2(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -461,7 +461,7 @@ public class PVPHelper
 	public static void 技能配置3(uint 技能图标id, string 技能名字, string 描述文字, ref int 数值, int 幅度, int 快速幅度, int id)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -476,7 +476,7 @@ public class PVPHelper
 		int 快速幅度, int id)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -493,7 +493,7 @@ public class PVPHelper
 		int id)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -507,7 +507,7 @@ public class PVPHelper
 	public static void 技能解释(uint 技能图标id, string 技能名字, string 描述文字)
 	{
 		ImGui.Separator();
-		ImGui.Columns(2, null, false);
+		ImGui.Columns(2, ImU8String. Empty, false);
 		ImGui.SetColumnWidth(0, 70);
 		技能图标(技能图标id);
 		ImGui.NextColumn();
@@ -843,7 +843,7 @@ public class PVPHelper
 					if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
 					{
 						// 如果成功获取到职业图标，显示该图标
-						ImGui.Image(textureJob.ImGuiHandle, new Vector2(50f, 50f));
+						ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
 					}
 
 					ImGui.SameLine();
@@ -960,7 +960,7 @@ public class PVPHelper
 				// 如果成功获取到图标，显示它
 				ImGui.Text("    ");
 				ImGui.SameLine();
-				ImGui.Image(texture.ImGuiHandle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
+				ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
 				ImGui.Columns();
 			}
 
@@ -995,7 +995,7 @@ public class PVPHelper
 						}
 
 						// 如果成功获取到职业图标，显示该图标
-						ImGui.Image(textureJob.ImGuiHandle, new Vector2(50f, 50f));
+						ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
 						if (PvPSettings.Instance.名字)
 						{
 							ImGui.SameLine();

@@ -17,38 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Reference Include="AEAssist">
-        <HintPath>..\..\..\AEAssist 国服 1001 1828\AEAssistCNVersion\AEAssist\AEAssist.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="Dalamud">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\Dalamud.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="ECommons">
-        <HintPath>..\..\..\AEAssist 国服 1001 1828\AEAssistCNVersion\AEAssist\ECommons.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="FFXIVClientStructs">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\FFXIVClientStructs.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="ImGui.NET">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\ImGui.NET.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="ImGuiScene">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\ImGuiScene.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="Lumina">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\10.0.0.15\Lumina.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
-      <Reference Include="Lumina.Excel">
-        <HintPath>..\..\..\XIVLauncherCN\Roaming\addon\Hooks\dev\Lumina.Excel.dll</HintPath>
-        <Private>False</Private>
-      </Reference>
+<PackageReference Include="AEAssist.NET" Version="*" ExcludeAssets="runtime" />
       <Reference Include="System">
         <HintPath>C:\Windows\Microsoft.NET\Framework64\v4.0.30319\System.dll</HintPath>
       </Reference>

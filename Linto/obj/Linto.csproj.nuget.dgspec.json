@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj": {}
+    "J:\\ACR\\Linto\\Linto\\Linto.csproj": {}
   },
   "projects": {
-    "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj": {
+    "J:\\ACR\\Linto\\Linto\\Linto.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
+        "projectUniqueName": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
         "projectName": "Linto",
-        "projectPath": "E:\\LessMelon\\ACR\\Linto\\Linto\\Linto.csproj",
-        "packagesPath": "C:\\Users\\Lintowilr\\.nuget\\packages\\",
-        "outputPath": "E:\\LessMelon\\ACR\\Linto\\Linto\\obj\\",
+        "projectPath": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
+        "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
+        "outputPath": "J:\\ACR\\Linto\\Linto\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Lintowilr\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Administrator\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -26,7 +26,8 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
+          "https://api.nuget.org/v3/index.json": {},
+          "https://www.myget.org/F/aeassist/api/v3/index.json": {}
         },
         "frameworks": {
           "net9.0": {
@@ -50,6 +51,11 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "AEAssist.NET": {
+              "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[*, )"
+            },
             "CSCore": {
               "target": "Package",
               "version": "[1.2.1.2, )"
