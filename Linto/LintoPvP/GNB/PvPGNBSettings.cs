@@ -8,7 +8,7 @@ namespace Linto.LintoPvP.GNB;
 
 public class PvPGNBSettings
 {
-	public static PvPGNBSettings Instance;
+	public static PvPGNBSettings? Instance;
 
 	private static string path;
 

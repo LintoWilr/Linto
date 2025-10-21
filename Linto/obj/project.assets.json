@@ -1,13 +1,15 @@
 {
   "version": 3,
   "targets": {
-    "net9.0": {
-      "AEAssist.NET/1.1.12": {
+    "net9.0-windows10.0.26100": {
+      "AEAssist.NET/1.2.2": {
         "type": "package",
         "compile": {
           "lib/net9.0/AEAssist.dll": {},
           "lib/net9.0/CSCore.dll": {},
           "lib/net9.0/Dalamud.Bindings.ImGui.dll": {},
+          "lib/net9.0/Dalamud.Bindings.ImGuizmo.dll": {},
+          "lib/net9.0/Dalamud.Bindings.ImPlot.dll": {},
           "lib/net9.0/Dalamud.dll": {},
           "lib/net9.0/ECommons.dll": {},
           "lib/net9.0/FFXIVClientStructs.dll": {},
@@ -42,17 +44,19 @@
     }
   },
   "libraries": {
-    "AEAssist.NET/1.1.12": {
-      "sha512": "1mDjTGlcJEVDme2GPx0XIGCIEeP/uoYRMVNrH4WCVohNPfwuWNj580wEUkUsJn0brU4hYRK1J8xjCneuJQtrnw==",
+    "AEAssist.NET/1.2.2": {
+      "sha512": "EzdhBtC7IUjWFUU7tYrdi9MsGJA6bb7isHkVeNCDZaxb7L2ek8UCRwsXEnL/O0Dy+CWL9c/Ng/kC8Cjq1RoaOw==",
       "type": "package",
-      "path": "aeassist.net/1.1.12",
+      "path": "aeassist.net/1.2.2",
       "files": [
         ".nupkg.metadata",
-        "aeassist.net.1.1.12.nupkg.sha512",
+        "aeassist.net.1.2.2.nupkg.sha512",
         "aeassist.net.nuspec",
         "lib/net9.0/AEAssist.dll",
         "lib/net9.0/CSCore.dll",
         "lib/net9.0/Dalamud.Bindings.ImGui.dll",
+        "lib/net9.0/Dalamud.Bindings.ImGuizmo.dll",
+        "lib/net9.0/Dalamud.Bindings.ImPlot.dll",
         "lib/net9.0/Dalamud.dll",
         "lib/net9.0/ECommons.dll",
         "lib/net9.0/FFXIVClientStructs.dll",
@@ -92,8 +96,8 @@
     }
   },
   "projectFileDependencyGroups": {
-    "net9.0": [
-      "AEAssist.NET >= *",
+    "net9.0-windows10.0.26100": [
+      "AEAssist.NET >= 1.2.2",
       "CSCore >= 1.2.1.2",
       "Obfuscar >= 2.2.39"
     ]
@@ -120,7 +124,7 @@
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "net9.0"
+        "net9.0-windows10.0.26100.0"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
@@ -128,8 +132,8 @@
         "https://www.myget.org/F/aeassist/api/v3/index.json": {}
       },
       "frameworks": {
-        "net9.0": {
-          "targetAlias": "net9.0",
+        "net9.0-windows10.0.26100": {
+          "targetAlias": "net9.0-windows10.0.26100.0",
           "projectReferences": {}
         }
       },
@@ -146,13 +150,13 @@
       "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
-      "net9.0": {
-        "targetAlias": "net9.0",
+      "net9.0-windows10.0.26100": {
+        "targetAlias": "net9.0-windows10.0.26100.0",
         "dependencies": {
           "AEAssist.NET": {
             "include": "Compile, Build, Native, ContentFiles, Analyzers, BuildTransitive",
             "target": "Package",
-            "version": "[*, )"
+            "version": "[1.2.2, )"
           },
           "CSCore": {
             "target": "Package",
@@ -176,8 +180,17 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.Windows.SDK.NET.Ref",
+            "version": "[10.0.26100.57, 10.0.26100.57]"
+          }
+        ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.Windows.SDK.NET.Ref.Windows": {
             "privateAssets": "all"
           }
         },
@@ -190,10 +203,10 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
-      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0-windows10.0.26100”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
       "libraryId": "CSCore",
       "targetGraphs": [
-        "net9.0"
+        "net9.0-windows10.0.26100"
       ]
     }
   ]

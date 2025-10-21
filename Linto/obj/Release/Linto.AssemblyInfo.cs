@@ -14,10 +14,12 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Linto")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+eb2657f9a6a3008b0e2f4a8b1352d88ad4e6fb5f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4d51d887410de0a971457771ef3ae61d3abc5802")]
 [assembly: System.Reflection.AssemblyProductAttribute("Linto")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Linto")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows10.0.26100.0")]
+[assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows10.0.26100.0")]
 
 // 由 MSBuild WriteCodeFragment 类生成。
 

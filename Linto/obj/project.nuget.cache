@@ -1,24 +1,25 @@
 {
   "version": 2,
-  "dgSpecHash": "C4M2VQ0TcSc=",
+  "dgSpecHash": "RiMltlb5rFY=",
   "success": true,
   "projectFilePath": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Administrator\\.nuget\\packages\\aeassist.net\\1.1.12\\aeassist.net.1.1.12.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\aeassist.net\\1.2.2\\aeassist.net.1.2.2.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\cscore\\1.2.1.2\\cscore.1.2.1.2.nupkg.sha512",
-    "C:\\Users\\Administrator\\.nuget\\packages\\obfuscar\\2.2.39\\obfuscar.2.2.39.nupkg.sha512"
+    "C:\\Users\\Administrator\\.nuget\\packages\\obfuscar\\2.2.39\\obfuscar.2.2.39.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.57\\microsoft.windows.sdk.net.ref.10.0.26100.57.nupkg.sha512"
   ],
   "logs": [
     {
       "code": "NU1701",
       "level": "Warning",
-      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net9.0-windows10.0.26100”还原包“CSCore 1.2.1.2”。此包可能与项目不完全兼容。",
       "projectPath": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
       "warningLevel": 1,
       "filePath": "J:\\ACR\\Linto\\Linto\\Linto.csproj",
       "libraryId": "CSCore",
       "targetGraphs": [
-        "net9.0"
+        "net9.0-windows10.0.26100"
       ]
     }
   ]
