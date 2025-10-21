@@ -117,6 +117,28 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
             ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
             return;
         }
+        // 新增：处理 _gt 宏命令
+        if (lowerArgs.EndsWith("_gt"))
+        {
+            var keyPart = lowerArgs[..^3];
+            ExecuteCustomCommand(keyPart);
+            return;
+        }
+    }
+    // 新增：自定义命令执行方法
+    private void ExecuteCustomCommand(string commandKey)
+    {
+        // 根据需要添加你的自定义命令逻辑
+        switch (commandKey.ToLower())
+        {
+            case "自动选中":
+                PvPSettings.Instance.自动选中 = !PvPSettings.Instance.自动选中;
+                LogHelper.Print($"共通配置 \"{commandKey}\" 已设置为 {PvPSettings.Instance.自动选中}。");
+                break;
+            default:
+                LogHelper.Print($"未知自定义命令: {commandKey}");
+                break;
+        }
     }
     private void ToggleQtSetting(string qtKey)
     {
@@ -171,7 +193,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
             LogHelper.Print("欢迎使用Linto的机工PVPACR。");
             ECHelper.Commands.RemoveHandler("/Linto_MCH");//先移除旧的再添加新的，以免本地重载的时候命令没有注销
             ECHelper.Commands.AddHandler("/Linto_MCH", new CommandInfo(PvPMCHCommandHandler));
-            LogHelper.Print("宏命令已注册，示例：/Linto_MCH 冲刺_qt");
+            LogHelper.Print("宏命令已注册，示例：/Linto_MCH 冲刺_qt,/Linto_MCH LB_hk,/Linto_MCH 自动选中_gt");
             BulidQtKeyDictionary(); // 生成 qtKeyDictionary
             PVPHelper.进入ACR();
             Share.Pull = true;
