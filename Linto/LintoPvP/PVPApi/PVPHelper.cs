@@ -139,7 +139,7 @@ public class PVPHelper
                                              19014409512065492 //安姐
                                          };
                                          
-    // 保持原有功能：检查当前用户是否在通用权限列表中
+    //不作变化
     public static bool 通用码权限 => 通用码权限列表.Contains(Svc.ClientState.LocalContentId) || 
                                       Core.Resolve<MemApiMap>().GetCurrTerrId() == 250;
                                       
@@ -172,7 +172,7 @@ public class PVPHelper
                                                                    
     public static bool 是否55() => RestrictedTerritoryIds.Contains(Core.Resolve<MemApiMap>().GetCurrTerrId());
     
-    // 保持原有功能：检查是否为高级码用户
+    //不作变化
     public static bool 高级码 => Share.VIP.Level != VIPLevel.Normal;
     
     public static bool check坐骑() => Svc.Condition[ConditionFlag.Mounted];
@@ -422,23 +422,23 @@ public class PVPHelper
     }*/
     
 
-    // 保持原有功能：权限获取显示
+    //不作变化
     public static void 权限获取()
     {
-        // 保持原有功能：获取当前用户的CID
+        //不作变化
         ulong cid = Svc.ClientState.LocalContentId;
         string CID = cid.ToString();
         
-        // 保持原有功能：显示当前码等级
+        //不作变化
         ImGui.Text($"当前的码等级：[{Share.VIP.Level}]");
         
-        // 保持原有功能：特殊处理狼狱权限
+        //不作变化
         if (Share.VIP.Level == VIPLevel.Normal && 高级码)
         {
             ImGui.Text($"仅狼狱可用 战场无权限");
         }
         
-        // 保持原有功能：无权限时显示红色提示和复制按钮
+        //不作变化
         if (!通用码权限 && !高级码)
         {
             ImGui.TextColored(new Vector4(255f / 255f, 0f / 255f, 0f / 255f, 0.8f), "无权限");
@@ -450,7 +450,7 @@ public class PVPHelper
             }
         }
         
-        // 保持原有功能：有权限时显示绿色提示
+        //不作变化
         if (通用码权限 || 高级码)
         {
             ImGui.TextColored(new Vector4(42f / 255f, 215f / 255f, 57f / 255f, 0.8f), "已解锁");
@@ -683,10 +683,10 @@ public class PVPHelper
         }
     }*/
     
-    // 保持原有功能：调试窗口仅限特定CID访问
+    //不作变化
     public static void PvP调试窗口()
     {
-        // 保持原有功能：只有CID为18014469511346939的用户可以访问调试窗口
+        //不作变化
         if(Svc.ClientState.LocalContentId==18014469511346939)
         {
             ImGui.Begin("调试窗口");
@@ -759,7 +759,7 @@ public class PVPHelper
         }
     }
     
-    // 保持原有功能：进入ACR时的权限检查
+    //不作变化
     public static void 进入ACR()
     {
     //	if(!PvPSettings.Instance.鬼叫) return;

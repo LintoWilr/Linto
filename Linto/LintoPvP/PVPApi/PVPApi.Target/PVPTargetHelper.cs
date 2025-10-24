@@ -34,7 +34,7 @@ public class PVPTargetHelper
 	private const uint 地天状态 = 1240u;  // 地天
 	private const uint 野火光环 = 1323u;  // 野火
 	private const uint 烈火环 = 4315u;   // 烈火环
-	private const uint 多斩光环 = 3202u;  // 多斩光环
+	private const uint 崩破 = 3202u;  // 崩破
 
 	/// <summary>
 	/// 监控技能释放，当释放野火技能时设置标志位
@@ -372,7 +372,7 @@ public class PVPTargetHelper
 
 				float totalHpPercentage = enemy. CurrentHpPercent () + ( enemy. ShieldPercentage / 100f );
 
-				if (enemy. HasLocalPlayerAura (多斩光环) &&
+				if (enemy. HasLocalPlayerAura (崩破) &&
 					!enemy. HasAura (免疫状态2) &&
 					!enemy. HasAura (免疫状态3) &&
 					totalHpPercentage <= 1.0f)
@@ -412,7 +412,7 @@ public class PVPTargetHelper
 			}
 
 		/// <summary>
-		/// 获取适合进行"斩铁"技能的目标。
+		/// 获取适合进行"斩铁剑"的目标。
 		/// </summary>
 		/// <param name="actionId">技能ID用于范围和视线检查</param>
 		/// <returns>符合条件的目标敌人，如果没有则返回 null。</returns>
@@ -431,7 +431,7 @@ public class PVPTargetHelper
 				float totalHpPercentage = enemy. CurrentHpPercent () + ( enemy. ShieldPercentage / 100f );
 
 				if (totalHpPercentage <= 1.0f &&
-					enemy. HasLocalPlayerAura (多斩光环) &&
+					enemy. HasLocalPlayerAura (崩破) &&
 					!enemy. HasAura (免疫状态1) &&
 					!enemy. HasAura (免疫状态2) &&
 					!enemy. HasAura (免疫状态3))
