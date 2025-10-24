@@ -82,6 +82,7 @@ public class PvPMCHRotationEntry : IRotationEntry
          JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
          JobViewWindow.AddTab("监控",PVPHelper.监控);
          JobViewWindow.AddTab("共通配置", PVPHelper.配置);
+
          JobViewWindow.AddQt("蓄力冲击", false);
          JobViewWindow.AddQt("钻头", true,"");
          JobViewWindow.AddQt("空气锚", true,"");
@@ -96,6 +97,7 @@ public class PvPMCHRotationEntry : IRotationEntry
          JobViewWindow.AddQt("喝热水", true);
          JobViewWindow.AddQt("自动净化", true);
          JobViewWindow.AddQt("冲刺", true);
+
          JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
          JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
          JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));

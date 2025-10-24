@@ -1,7 +1,9 @@
-﻿namespace Linto.LintoPvP.BRD.Triggers;
+﻿
+
+namespace Linto.LintoPvP.BRD.Triggers;
 
 using AEAssist.CombatRoutine.View;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 public class PvPBRDSettingUI : ISettingUI
 {

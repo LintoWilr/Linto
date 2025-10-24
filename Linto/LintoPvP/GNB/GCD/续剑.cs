@@ -21,10 +21,20 @@ public class 续剑 : ISlotResolver
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(5))
-		{
-			return -5;
-		}
+		if (Core. Me. HasLocalPlayerAura (4293))
+			{
+			if (PVPHelper. 固定距离检查 (6))
+				{
+				return 1;
+				}
+			}
+		else
+			{
+			if (PVPHelper. 通用距离检查 (5))
+				{
+				return -5;
+				}
+			}
 		if (PVPHelper.通用技能释放Check(Core.Resolve<MemApiSpell>().CheckActionChange(29106u),5)==null)
 		{
 			return -5;

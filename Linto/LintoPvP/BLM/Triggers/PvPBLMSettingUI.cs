@@ -1,7 +1,7 @@
 ﻿namespace Linto.LintoPvP.BLM;
 
 using AEAssist.CombatRoutine.View;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 public class PvPBLMSettingUI : ISettingUI
 {

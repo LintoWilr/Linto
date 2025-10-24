@@ -1,7 +1,7 @@
 ﻿namespace Linto.LintoPvP.SMN.Triggers;
 
 using AEAssist.CombatRoutine.View;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 
 public class PvPSMNSettingUI : ISettingUI
 {

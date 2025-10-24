@@ -1,0 +1,10 @@
+/.vs
+/Linto/obj
+/Linto/obj
+Linto/obj/Release/ref/Linto.dll
+/Linto/obj/Release
+/Linto/obj/Release
+Linto/obj/Release/Linto.csproj.CoreCompileInputs.cache
+*.pdb
+*.dll
+/Linto/obj/Release
