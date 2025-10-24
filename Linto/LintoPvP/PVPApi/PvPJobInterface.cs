@@ -1,6 +1,6 @@
 ﻿using AEAssist;
 using AEAssist.Helper;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Linto.LintoPvP.BLM;
 using Linto.LintoPvP.DRG;
 using Linto.LintoPvP.GNB;
@@ -92,7 +92,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 死者之岸() 
 		{ 
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(DRGSkillID.死者之岸);
 			ImGui.NextColumn();
@@ -109,7 +109,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 磁暴() 
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(29657);
 			ImGui.NextColumn();
@@ -126,7 +126,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 剑身强部() 
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(41496);
 			ImGui.NextColumn();
@@ -143,7 +143,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 后跳()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(DRGSkillID.后跳);
 			ImGui.NextColumn();
@@ -158,7 +158,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 地天()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(29533u);
 			ImGui.NextColumn();
@@ -175,7 +175,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 斩铁()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(29537u);
 			ImGui.NextColumn();
@@ -193,7 +193,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 光阴神()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(29400U);
 			ImGui.NextColumn();
@@ -249,7 +249,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 守护之光()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(29670U);
 			ImGui.NextColumn();
@@ -307,7 +307,7 @@ public class 职业配置 : BaseJobConfig
 		public static void 刚玉之心()
 		{
 			ImGui.Separator();
-			ImGui.Columns(2, null, false);
+			ImGui.Columns(2, ImU8String. Empty, false);
 			ImGui.SetColumnWidth(0, 70);
 			PVPHelper.技能图标(41443U);
 			ImGui.NextColumn();
