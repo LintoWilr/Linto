@@ -687,4 +687,117 @@ public class PVPTargetHelper
 			}
 		return re;
 		}
+
+	/// <summary>
+	/// 检查自身周围6码内是否存在地天状态的敌对玩家
+	/// </summary>
+	/// <returns>存在返回true，否则返回false</returns>
+	public static bool 自身周围6码内存在地天状态敌对玩家 ()
+		{
+		// 非PvP环境直接返回false
+		if (!Core. Me. IsPvP ()) return false;
+
+		// 检查自身周围6码内的所有敌对玩家
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead)
+				continue;
+
+			// 距离检查 - 6码范围内
+			if (unit. DistanceToPlayer () > 6f)
+				continue;
+
+			// 视线阻挡检查
+			if (PVPHelper. 视线阻挡 (unit))
+				continue;
+
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				return true;
+				}
+			}
+
+		return false;
+		}
+
+	/// <summary>
+	/// 获取自身周围6码内所有地天状态的敌对玩家列表
+	/// </summary>
+	/// <returns>地天状态敌对玩家列表</returns>
+	public static List<IBattleChara> 获取自身周围6码内地天状态敌对玩家 ()
+		{
+		var result = new List<IBattleChara> ();
+
+		// 非PvP环境直接返回空列表
+		if (!Core. Me. IsPvP ()) return result;
+
+		// 检查自身周围6码内的所有敌对玩家
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead)
+				continue;
+
+			// 距离检查 - 6码范围内
+			if (unit. DistanceToPlayer () > 6f)
+				continue;
+
+			// 视线阻挡检查
+			if (PVPHelper. 视线阻挡 (unit))
+				continue;
+
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				result. Add (unit);
+				}
+			}
+
+		return result;
+		}
+
+	/// <summary>
+	/// 检查指定目标周围6码内是否存在地天状态的敌对玩家
+	/// </summary>
+	/// <param name="target">指定的目标</param>
+	/// <returns>存在返回true，否则返回false</returns>
+	public static bool 目标周围6码内存在地天状态敌对玩家 ( IBattleChara target )
+		{
+		if (target == null || !Core. Me. IsPvP ()) return false;
+
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead ||
+				unit. GameObjectId == target. GameObjectId) // 排除目标自身
+				continue;
+
+			// 距离检查 - 与目标的距离在6码内
+			if (target. Distance (unit) > 6f)
+				continue;
+
+			// 视线阻挡检查（相对于目标）
+			if (PVPHelper. 视线阻挡 (unit, target))
+				continue;
+
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				return true;
+				}
+			}
+
+		return false;
+		}
 	}

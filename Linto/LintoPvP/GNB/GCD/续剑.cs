@@ -21,9 +21,11 @@ public class 续剑 : ISlotResolver
 		{
 			return -1;
 		}
-		if (Core. Me. HasLocalPlayerAura (4293))
+		var ChitenEnemies = PVPTargetHelper. 获取自身周围6码内地天状态敌对玩家 ();
+		
+			if (Core. Me. HasLocalPlayerAura (4293))
 			{
-			if (PVPHelper. 固定距离检查 (6))
+			if (PVPHelper. 固定距离检查 (6)|| !(ChitenEnemies. Count > 0))
 				{
 				return 1;
 				}
