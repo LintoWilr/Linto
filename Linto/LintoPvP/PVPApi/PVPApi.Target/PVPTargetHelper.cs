@@ -788,8 +788,8 @@ public class PVPTargetHelper
 				continue;
 
 			// 视线阻挡检查（相对于目标）
-			if (PVPHelper. 视线阻挡 (unit, target))
-				continue;
+			//if (PVPHelper. 视线阻挡 (unit, target))
+			//	continue;
 
 			// 核心条件：检查地天状态
 			if (unit. HasAura (地天状态))
