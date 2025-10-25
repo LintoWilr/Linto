@@ -155,6 +155,7 @@
       <Compile Include="LintoPvP\MCH\PvPMCHOverlay.cs" />
       <Compile Include="LintoPvP\MCH\PvPMCHRotationEventHandler.cs" />
       <Compile Include="LintoPvP\MCH\PvPMCHSettings.cs" />
+      <Compile Include="LintoPvP\MCH\QTKey.cs" />
       <Compile Include="LintoPvP\MCH\Triggers\PvPMCHSettingUI.cs" />
       <Compile Include="LintoPvP\MCH\Triggers\PvPMCH_Qt.cs" />
       <Compile Include="LintoPvP\PCT\Ability\冲刺.cs" />
