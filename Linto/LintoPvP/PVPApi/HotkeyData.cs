@@ -1,5 +1,3 @@
-
-
 using System.Numerics;
 using AEAssist;
 using AEAssist.CombatRoutine;
@@ -23,7 +21,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(39190u, out textureWrap))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -80,15 +78,20 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29415u, out textureWrap, true))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
         }
 
-        public void DrawExternal(Vector2 size, bool isActive) =>
-            SpellHelper.DrawSpellInfo(new Spell(29415u, Core.Me.GetCurrTarget()), size, isActive);
-
+        public void DrawExternal(Vector2 size, bool isActive)
+        {
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                SpellHelper.DrawSpellInfo(new Spell(29415u, target), size, isActive);
+            }
+        }
         public int Check() => 0;
 
         public void Run()
@@ -126,7 +129,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29404u, out textureWrap))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -166,7 +169,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(39215u, out textureWrap))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -193,7 +196,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29130u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -226,7 +229,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29537u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -284,7 +287,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29401u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -310,7 +313,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (Core.Me.HasLocalPlayerAura(3245u))
             {
                 if (!Core.Resolve<MemApiIcon>().GetActionTexture(29697u, out textureWrap))
@@ -361,7 +364,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (Core.Me.HasLocalPlayerAura(3245u))
             {
                 if (!Core.Resolve<MemApiIcon>().GetActionTexture(29702u, out textureWrap))
@@ -410,14 +413,19 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(41498u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
         }
-        public void DrawExternal(Vector2 size, bool isActive) =>
-            SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget()), size, isActive);
-
+        public void DrawExternal(Vector2 size, bool isActive)
+        {
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                SpellHelper.DrawSpellInfo(new Spell(41498u, target), size, isActive);
+            }
+        }
         public int Check()
         {
             if (Core.Me.InCombat() & Core.Me.LimitBreakCurrentValue() < 3000)
@@ -451,7 +459,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29399u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -482,7 +490,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29494u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -509,7 +517,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(39210u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);
@@ -536,7 +544,7 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(29660u, out textureWrap))
                 return;
             ImGui.Image(textureWrap.Handle, size1);

@@ -26,7 +26,7 @@ public class 守护之光 : ISlotResolver
             if (PartyHelper.Party[PvPSMNSettings.Instance.守护对象].CurrentHpPercent() <= PvPSMNSettings.Instance.守护之光血量 / 100f &&
                 PartyHelper.Party[PvPSMNSettings.Instance.守护对象].DistanceToPlayer() > 30)
                 return -91;
-            IBattleChara member = PartyHelper.CastableParty.FirstOrDefault(chara => chara.CurrentHpPercent() <= PvPSMNSettings.Instance.守护之光血量 / 100f);
+            IBattleChara? member = PartyHelper.CastableParty.FirstOrDefault(chara => chara.CurrentHpPercent() <= PvPSMNSettings.Instance.守护之光血量 / 100f);
             if (member == null) return -92;
             if (member.DistanceToPlayer() > 30) return -6;
         }
@@ -41,7 +41,7 @@ public class 守护之光 : ISlotResolver
     {
         bool 守护队友 = PvPSMNSettings.Instance.守护队友;
         bool 守护播报 = PvPSMNSettings.Instance.守护播报;
-        IBattleChara target;
+        IBattleChara? target; // 修改为可空类型
         if (守护队友)
         {
             if (PartyHelper.Party[PvPSMNSettings.Instance.守护对象].CurrentHpPercent() <= PvPSMNSettings.Instance.守护之光血量 / 100f &&
@@ -49,7 +49,8 @@ public class 守护之光 : ISlotResolver
                 target = PartyHelper.Party[PvPSMNSettings.Instance.守护对象];
             else
                 target = PartyHelper.CastableParty.FirstOrDefault(chara => chara.CurrentHpPercent() <= PvPSMNSettings.Instance.守护之光血量 / 100f);
-            if (target == null)
+
+            if (target == null) // 添加 null 检查
             {
                 return;
             }
@@ -58,6 +59,7 @@ public class 守护之光 : ISlotResolver
         {
             target = Core.Me;
         }
+
         slot.Add(new Spell(29670u, target));
         if (守护播报) LogHelper.Print($"守护目标:{target.Name}");
     }

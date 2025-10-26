@@ -102,14 +102,14 @@ public class PVPHelper
 
     public static Spell 不等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+        var spell = target != null ? new Spell(id, target) : null;
         spell.WaitServerAcq = false;
         return spell;
     }
 
     public static Spell 等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+        var spell = target != null ? new Spell(id, target) : null;
         spell.WaitServerAcq = true;
         return spell;
     }
@@ -605,10 +605,12 @@ public class PVPHelper
         return null;
     }
 
-    public static void 通用技能释放(Slot slot, uint skillid, int 距离)
+    public static void 通用技能释放 ( Slot slot, uint skillid, int 距离 )
     {
         slot.maxDuration = 300;
-        slot.Add(通用技能释放Check(skillid, 距离));
+        var spell = 通用技能释放Check(skillid, 距离);
+        if (spell != null)
+            slot.Add(spell);
     }
 
     public static bool 通用距离检查(int 距离)
@@ -714,7 +716,9 @@ public class PVPHelper
             ImGui.Text($"小队人数：{PartyHelper.CastableParty.Count}");
             ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(Core.Me, 1, PvPRDMSettings.Instance.护盾距离)}");
             ImGui.Text($"20米内小队人数：{PartyHelper.CastableAlliesWithin20.Count}");
-            ImGui.Text($"目标5米内人数：{TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 5)}");
+            IBattleChara? target = Core.Me.GetCurrTarget();
+            int nearbyCount = target != null ? TargetHelper.GetNearbyEnemyCount(target, 25, 5) : 0;
+            ImGui.Text($"目标5米内人数：{nearbyCount}");
             ImGui.Text($"LB槽当前数值：{Core.Me.LimitBreakCurrentValue()}");
             ImGui.Text($"上个技能：{Core.Resolve<MemApiSpellCastSuccess>().LastSpell}");
             ImGui.Text($"上个GCD：{Core.Resolve<MemApiSpellCastSuccess>().LastGcd}");
