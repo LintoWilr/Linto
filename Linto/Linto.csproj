@@ -15,7 +15,7 @@
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>True</Optimize>
-    <OutputPath>E:\AEAssist 国服 1001 1828\ACR\Linto\</OutputPath>
+    <OutputPath>E:\AEAssist 7.3\ACR\Linto\</OutputPath>
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
 
@@ -178,6 +178,7 @@
     <Compile Include="LintoPvP\PCT\Ability\切换减色.cs" />
     <Compile Include="LintoPvP\PCT\Ability\动物构想.cs" />
     <Compile Include="LintoPvP\PCT\Ability\坦培拉涂层.cs" />
+    <Compile Include="LintoPvP\PCT\Ability\法师职能技能.cs" />
     <Compile Include="LintoPvP\PCT\Ability\药.cs" />
     <Compile Include="LintoPvP\PCT\Ability\莫古炮.cs" />
     <Compile Include="LintoPvP\PCT\GCD\动物彩绘.cs" />
@@ -203,6 +204,7 @@
     <Compile Include="LintoPvP\PVPApi\PVPHelper.cs" />
     <Compile Include="LintoPvP\PVPApi\PvPJobInterface.cs" />
     <Compile Include="LintoPvP\PVPApi\SkillDecision.cs" />
+    <Compile Include="LintoPvP\RDM\Ability\法师职能技能.cs" />
     <Compile Include="LintoPvP\RDM\Ability\冲刺.cs" />
     <Compile Include="LintoPvP\RDM\Ability\净化.cs" />
     <Compile Include="LintoPvP\RDM\Ability\剑身强部.cs" />
@@ -239,7 +241,8 @@
     <Compile Include="LintoPvP\SMN\Ability\冲刺.cs" />
     <Compile Include="LintoPvP\SMN\Ability\净化.cs" />
     <Compile Include="LintoPvP\SMN\Ability\守护之光.cs" />
-    <Compile Include="LintoPvP\SMN\Ability\溃烂爆发.cs" />
+    <Compile Include="LintoPvP\SMN\Ability\法师职能技能.cs" />
+    <Compile Include="LintoPvP\SMN\Ability\坏死爆发.cs" />
     <Compile Include="LintoPvP\SMN\Ability\药.cs" />
     <Compile Include="LintoPvP\SMN\Ability\龙神迸发.cs" />
     <Compile Include="LintoPvP\SMN\GCD\山崩.cs" />
