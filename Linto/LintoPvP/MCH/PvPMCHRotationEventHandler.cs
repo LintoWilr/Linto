@@ -12,47 +12,47 @@ namespace Linto.LintoPvP.MCH;
 
 public class PvPMCHRotationEventHandler : IRotationEventHandler
 {
-	public void OnTerritoryChanged()
-	{
+    public void OnTerritoryChanged()
+    {
 
-	}
-	public void OnSpellCastSuccess(Slot slot, Spell spell)
-	{
+    }
+    public void OnSpellCastSuccess(Slot slot, Spell spell)
+    {
 
-	}
-	public void OnResetBattle()
-	{
-		PvPMCHBattleData.Instance.Reset();
-	}
-	public async Task OnPreCombat()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
-	public async Task OnNoTarget()
-	{
-		var slot = new Slot();
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
+    }
+    public void OnResetBattle()
+    {
+        PvPMCHBattleData.Instance.Reset();
+    }
+    public async Task OnPreCombat()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
+    public async Task OnNoTarget()
+    {
+        var slot = new Slot();
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
 
-	public void AfterSpell(Slot slot, Spell spell)
-	{
-		uint id = spell.Id;
-	}
-	public void OnBattleUpdate(int currTime)
-	{
-		PVPHelper.战斗状态();
-		PVPTargetHelper.自动选中();
-	}
+    public void AfterSpell(Slot slot, Spell spell)
+    {
+        uint id = spell.Id;
+    }
+    public void OnBattleUpdate(int currTime)
+    {
+        PVPHelper.战斗状态();
+        PVPTargetHelper.自动选中();
+    }
     #region 宏支持相关
 
     public Dictionary<string, string>? qtKeyDictionary;
@@ -187,7 +187,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     }
     #endregion
     public void OnEnterRotation()
-	{
+    {
         try
         {
             LogHelper.Print("欢迎使用Linto的机工PVPACR。");
@@ -203,9 +203,9 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
             LogHelper.PrintError($"初始化失败: {ex.Message}");
         }
 
-	}
-	public void OnExitRotation()
-	{
-		Share.Pull = false;
-	}
+    }
+    public void OnExitRotation()
+    {
+        Share.Pull = false;
+    }
 }

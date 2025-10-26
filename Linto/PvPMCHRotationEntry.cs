@@ -28,8 +28,8 @@ public class PvPMCHRotationEntry : IRotationEntry
     {
         settingUI.Draw();
     }
-    public static JobViewWindow JobViewWindow;
-    private PvPMCHOverlay _lazyOverlay =  new PvPMCHOverlay();
+    public static JobViewWindow? JobViewWindow;
+    private PvPMCHOverlay _lazyOverlay = new PvPMCHOverlay();
     public List<SlotResolverData> SlotResolvers = new()
     {
         new (new 净化(),SlotMode.Always),
@@ -51,7 +51,7 @@ public class PvPMCHRotationEntry : IRotationEntry
     };
 
     public string OverlayTitle { get; } = "机工";
-    
+
     public void DrawOverlay()
     {
     }
@@ -70,39 +70,39 @@ public class PvPMCHRotationEntry : IRotationEntry
             Description = "机工",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
-    //    rot.AddTriggerAction(new LintoPvPMCHQt());
+        //    rot.AddTriggerAction(new LintoPvPMCHQt());
         rot.SetRotationEventHandler(new PvPMCHRotationEventHandler());
         rot.AddOpener(GetOpener);
         return rot;
     }
     public void BuildQt()
     {
-         JobViewWindow = new JobViewWindow(PvPMCHSettings.Instance.JobViewSave, PvPMCHSettings.Instance.Save, OverlayTitle);
-         //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
-         JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
-         JobViewWindow.AddTab("监控",PVPHelper.监控);
-         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
+        JobViewWindow = new JobViewWindow(PvPMCHSettings.Instance.JobViewSave, PvPMCHSettings.Instance.Save, OverlayTitle);
+        //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
+        JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
+        JobViewWindow.AddTab("共通配置", PVPHelper.配置);
 
-         JobViewWindow.AddQt("蓄力冲击", false);
-         JobViewWindow.AddQt("钻头", true,"");
-         JobViewWindow.AddQt("空气锚", true,"");
-         JobViewWindow.AddQt("毒菌冲击", true,"");
-         JobViewWindow.AddQt("回转飞锯", true,"");
-         JobViewWindow.AddQt("霰弹枪", false,"");
-         JobViewWindow.AddQt("野火", true,"");
-         JobViewWindow.AddQt("分析", true,"");
-         JobViewWindow.AddQt("职能技能", true,"");
-         JobViewWindow.AddQt("浮空炮", true,"");
-         JobViewWindow.AddQt("全金属爆发", true,"");
-         JobViewWindow.AddQt("喝热水", true);
-         JobViewWindow.AddQt("自动净化", true);
-         JobViewWindow.AddQt("冲刺", true);
+        JobViewWindow.AddQt("蓄力冲击", false);
+        JobViewWindow.AddQt("钻头", true, "");
+        JobViewWindow.AddQt("空气锚", true, "");
+        JobViewWindow.AddQt("毒菌冲击", true, "");
+        JobViewWindow.AddQt("回转飞锯", true, "");
+        JobViewWindow.AddQt("霰弹枪", false, "");
+        JobViewWindow.AddQt("野火", true, "");
+        JobViewWindow.AddQt("分析", true, "");
+        JobViewWindow.AddQt("职能技能", true, "");
+        JobViewWindow.AddQt("浮空炮", true, "");
+        JobViewWindow.AddQt("全金属爆发", true, "");
+        JobViewWindow.AddQt("喝热水", true);
+        JobViewWindow.AddQt("自动净化", true);
+        JobViewWindow.AddQt("冲刺", true);
 
-         JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("智能目标:LB最低范围内最低血量,请确保没有高低差视野阻挡\n未启用智能目标:选中目标",new HotkeyData.机工LB());
-         JobViewWindow.AddHotkey("对当前目标释放霰弹枪",new HotkeyData.霰弹枪());
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("智能目标:LB最低范围内最低血量,请确保没有高低差视野阻挡\n未启用智能目标:选中目标", new HotkeyData.机工LB());
+        JobViewWindow.AddHotkey("对当前目标释放霰弹枪", new HotkeyData.霰弹枪());
     }
     private IOpener? GetOpener(uint level)
     {

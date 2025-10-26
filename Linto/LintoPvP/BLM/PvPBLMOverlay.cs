@@ -4,11 +4,12 @@ using Dalamud.Bindings.ImGui;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.BLM;
+
 public class PvPBLMOverlay
 {
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
             职业配置 黑魔 = new 职业配置();

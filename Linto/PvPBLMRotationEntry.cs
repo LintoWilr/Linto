@@ -61,15 +61,15 @@ public class PvPBLMEntry : IRotationEntry
         rot.AddOpener(GetOpener);
         return rot;
     }
-    public static JobViewWindow JobViewWindow { get; private set; }
+    public static JobViewWindow? JobViewWindow { get; private set; }
     public IRotationUI GetRotationUI()
     {
-        return PvPBLMEntry.JobViewWindow;
+        return PvPBLMEntry.JobViewWindow ?? throw new InvalidOperationException("JobViewWindow is not initialized");
     }
     private PvPBLMSettingUI settingUI = new();
     public void OnDrawSetting()
     {
-       settingUI.Draw();
+        settingUI.Draw();
     }
     public void BuildQT()
     {
@@ -78,13 +78,13 @@ public class PvPBLMEntry : IRotationEntry
         //贤者ACR入口.职业视图窗口.AddTab("日志", _lazyOverlay.更新日志);
         //贤者ACR入口.职业视图窗口.AddTab("DEV", _lazyOverlay.DrawDev);
         JobViewWindow.AddTab("职业配置", PvPBLMOverlay.DrawGeneral);
-        JobViewWindow.AddTab("监控",PVPHelper.监控);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
         //JobViewWindow.AddTab("解锁", PvPBLMOverlay.DrawDev);
         JobViewWindow.AddQt("悖论", true);
         JobViewWindow.AddQt("悖论", true);
         JobViewWindow.AddQt("耀星", true);
-        JobViewWindow.AddQt("元素天赋", true); 
+        JobViewWindow.AddQt("元素天赋", true);
         JobViewWindow.AddQt("异言", true);
         JobViewWindow.AddQt("昏沉", true);
         JobViewWindow.AddQt("磁暴", true);
@@ -93,10 +93,10 @@ public class PvPBLMEntry : IRotationEntry
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);
-        JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("以太步",new HotkeyData.以太步());
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("以太步", new HotkeyData.以太步());
         JobViewWindow.DrawQtWindow();
     }
     private IOpener? GetOpener(uint level)

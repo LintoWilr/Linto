@@ -26,8 +26,8 @@ public class PvPGNBRotationEntry : IRotationEntry
     {
         settingUI.Draw();
     }
-    public static JobViewWindow JobViewWindow;
-    private PvPGNBOverlay _lazyOverlay =  new PvPGNBOverlay();
+    public static JobViewWindow? JobViewWindow;
+    private PvPGNBOverlay _lazyOverlay = new PvPGNBOverlay();
     public List<SlotResolverData> SlotResolvers = new()
     {
         new (new 净化(),SlotMode.Always),
@@ -47,7 +47,7 @@ public class PvPGNBRotationEntry : IRotationEntry
     };
 
     public string OverlayTitle { get; } = "绝枪战士";
-    
+
     public void DrawOverlay()
     {
     }
@@ -66,33 +66,33 @@ public class PvPGNBRotationEntry : IRotationEntry
             Description = "绝枪",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
-    //    rot.AddTriggerAction(new LintoPvPMCHQt());
+        //    rot.AddTriggerAction(new LintoPvPMCHQt());
         rot.SetRotationEventHandler(new PvPGNBRotationEventHandler());
         rot.AddOpener(GetOpener);
         return rot;
     }
     public void BuildQt()
     {
-         JobViewWindow = new JobViewWindow(PvPGNBSettings.Instance.JobViewSave, PvPGNBSettings.Instance.Save, OverlayTitle);
-         //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
-         JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
-         JobViewWindow.AddTab("监控",PVPHelper.监控);
-         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
-         JobViewWindow.AddQt("爆发击连击", true);
-         JobViewWindow.AddQt("烈牙连击", true);
-         JobViewWindow.AddQt("续剑", true);
-         JobViewWindow.AddQt("粗分斩", true);
-         JobViewWindow.AddQt("命运之环", true);
-         JobViewWindow.AddQt("爆破领域", true);
-         JobViewWindow.AddQt("刚玉之心", true);
-         JobViewWindow.AddQt("职能技能", true);
-         JobViewWindow.AddQt("喝热水", false);
-         JobViewWindow.AddQt("自动净化", false);
-         JobViewWindow.AddQt("冲刺", true);
-         JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("连续剑",new HotkeyData.绝枪LB());
+        JobViewWindow = new JobViewWindow(PvPGNBSettings.Instance.JobViewSave, PvPGNBSettings.Instance.Save, OverlayTitle);
+        //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
+        JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
+        JobViewWindow.AddTab("共通配置", PVPHelper.配置);
+        JobViewWindow.AddQt("爆发击连击", true);
+        JobViewWindow.AddQt("烈牙连击", true);
+        JobViewWindow.AddQt("续剑", true);
+        JobViewWindow.AddQt("粗分斩", true);
+        JobViewWindow.AddQt("命运之环", true);
+        JobViewWindow.AddQt("爆破领域", true);
+        JobViewWindow.AddQt("刚玉之心", true);
+        JobViewWindow.AddQt("职能技能", true);
+        JobViewWindow.AddQt("喝热水", false);
+        JobViewWindow.AddQt("自动净化", false);
+        JobViewWindow.AddQt("冲刺", true);
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("连续剑", new HotkeyData.绝枪LB());
 
     }
     private IOpener? GetOpener(uint level)

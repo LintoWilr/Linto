@@ -10,7 +10,7 @@ public class PvPBRDOverlay
     private static bool 调试窗口 = false;
     public void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
             职业配置 诗人 = new 职业配置();

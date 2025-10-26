@@ -19,7 +19,7 @@ public class PvPSMNRotationEventHandler : IRotationEventHandler
     {
         PvPSMNBattleData.Instance.Reset();
     }
-	
+
 
     public async Task OnPreCombat()
     {

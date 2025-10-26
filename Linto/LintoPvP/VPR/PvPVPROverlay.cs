@@ -10,11 +10,11 @@ public class PvPVPROverlay
     private static bool 调试窗口 = false;
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
             PVPHelper.权限获取();
-            ImGui.Separator();  
+            ImGui.Separator();
             ImGui.Text("哥哥没我砍的快");
             ImGui.Separator();
             PVPHelper.技能图标(29711u);
@@ -24,7 +24,7 @@ public class PvPVPROverlay
             ImGui.Separator();
             PvPVPRSettings.Instance.Save();
         }
-    } 
+    }
     public static class VPRQt
     {
         /// 获取指定名称qt的bool值

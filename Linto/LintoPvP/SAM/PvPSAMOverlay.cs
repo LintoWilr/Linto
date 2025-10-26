@@ -11,7 +11,7 @@ public class PvPSAMOverlay
     private static bool 更新日志 = false;
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
             职业配置 盘子 = new 职业配置();
