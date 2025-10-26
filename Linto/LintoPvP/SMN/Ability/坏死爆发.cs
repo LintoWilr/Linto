@@ -7,7 +7,7 @@ using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.SMN.Ability;
 
-public class 溃烂爆发 : ISlotResolver
+public class 坏死爆发 : ISlotResolver
 {
     public SlotMode SlotMode { get; } = SlotMode.Always;
     public int Check()
@@ -20,13 +20,17 @@ public class 溃烂爆发 : ISlotResolver
         {
             return -1;
         }
-        if (SpellHelper.GetSpell(41483u).Charges < 1)
+        if (SpellHelper.GetSpell(41483u).Charges < 1.1)
         {
             return -1;
         }
-        if (Core.Me.GetCurrTarget().CurrentHpPercent() > PvPSMNSettings.Instance.溃烂阈值)
+
+        if (PvPSMNSettings.Instance.毁绝不重复)
         {
-            return -5;
+            if (Core.Me.HasLocalPlayerAura(4399u))
+            {
+                return -1;
+            }
         }
         if (PVPHelper.通用距离检查(25))
         {

@@ -26,9 +26,9 @@ public class PvPSMNRotationEntry : IRotationEntry
     {
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
-        new (new 冲刺(),SlotMode.Always),
         new (new 龙神迸发(),SlotMode.Always),
-        new (new 溃烂爆发(),SlotMode.Always),
+        new (new 法师职能技能(),SlotMode.Always),
+        new (new 坏死爆发(),SlotMode.Always),
         new (new 守护之光(),SlotMode.Always),
         new (new 山崩(),SlotMode.Always),
         new (new 深红旋风(),SlotMode.Always),
@@ -36,6 +36,7 @@ public class PvPSMNRotationEntry : IRotationEntry
         new (new 螺旋气流(),SlotMode.Always),
         new (new 星极脉冲(),SlotMode.Always),
         new (new 毁荡(),SlotMode.Always),
+        new (new 冲刺(),SlotMode.Always),
     };
     public Rotation Build(string settingFolder)
     {
@@ -48,7 +49,7 @@ public class PvPSMNRotationEntry : IRotationEntry
             AcrType = AcrType.PVP,
             MinLevel = 0,
             MaxLevel = 100,
-            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.1适配]",
+            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.3适配]",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
         //  rot.AddTriggerAction(new LintoPvPSMNQt());
@@ -84,8 +85,10 @@ public class PvPSMNRotationEntry : IRotationEntry
         JobViewWindow.AddQt("守护之光", true, "50血以下对自己使用");
         JobViewWindow.AddQt("毁荡", true, "没事干就打1111吧");
         JobViewWindow.AddQt("龙神迸发", true);
+        JobViewWindow.AddQt("职能技能", true);
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
+        JobViewWindow.AddQt("冲刺", true);
         //   JobViewWindow.AddHotkey("龙神召唤(选中目标)",new 龙神召唤());
         JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));

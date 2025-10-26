@@ -27,6 +27,7 @@ public class PvP董慧敏Entry : IRotationEntry
     {
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
+        new (new 法师职能技能(),SlotMode.Always),
         new (new 坦培拉涂层(),SlotMode.Always),
         new (new 天星棱光(),SlotMode.Always),
         new (new 莫古力炮(),SlotMode.Always),
@@ -49,7 +50,7 @@ public class PvP董慧敏Entry : IRotationEntry
             AcrType = AcrType.PVP,
             MinLevel = 0,
             MaxLevel = 100,
-            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.1适配]",
+            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.3适配]",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
         //  rot.AddTriggerAction(new LintoPvPPCTQt());
@@ -88,8 +89,9 @@ public class PvP董慧敏Entry : IRotationEntry
         JobViewWindow.AddQt("黑白Aoe", true);
         JobViewWindow.AddQt("莫古力炮", true);
         JobViewWindow.AddQt("坦培拉涂层", true);
-        JobViewWindow.AddQt("切换减色", true);
+        JobViewWindow.AddQt("切换减色", false);
         JobViewWindow.AddQt("天星棱光", true);
+        JobViewWindow.AddQt("职能技能", true);
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);

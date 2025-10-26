@@ -11,28 +11,6 @@ using Linto.LintoPvP.SMN;
 
 namespace Linto.LintoPvP.PVPApi;
 /// <summary>
-/// 技能配置切换类型
-/// </summary>
-public enum SkillSwitchType
-{
-    /// <summary>
-    /// 对应 PVPHelper.技能配置切换:bool开关
-    /// </summary>
-    Switch1 = 1,
-    /// <summary>
-    /// 对应 PVPHelper.技能配置切换2:bool开关
-    /// </summary>
-    Switch2 = 2,
-    /// <summary>
-    /// 对应 PVPHelper.技能配置切换3:int数值调整
-    /// </summary>
-    Switch3 = 3,
-    /// <summary>
-    /// 对应 PVPHelper.技能配置切换4:bool开关+int数值调整
-    /// </summary>
-    Switch4 = 4,
-}
-/// <summary>
 /// 职业悬浮窗配置接口
 /// </summary>
 public interface PvPJobInterface
@@ -40,7 +18,6 @@ public interface PvPJobInterface
     /// <summary>
     /// 获取当前权限配置
     /// </summary>
-    void 权限获取();
 }
 
 public abstract class BaseJobConfig : PvPJobInterface
@@ -54,32 +31,36 @@ public abstract class BaseJobConfig : PvPJobInterface
     }
 
     /// <summary>
-    /// 配置技能界面
+    /// 适用于只有单个Bool的技能
     /// </summary>
-    /// <param name="技能ID">技能ID</param>
-    /// <param name="技能名">技能名</param>
-    /// <param name="描述">这是一段话</param>
-    /// <param name="设置状态">一般是保存设置里的bool</param>
-    /// <param name="标识符">随便填个数字吧</param>
-    /// <param name="技能切换类型"></param>
     public virtual void ConfigureSkillBool(uint SkillID, string SkillName, string description, ref bool variable, int ID)
     {
         PVPHelper.技能配置2(SkillID, SkillName, description, ref variable, ID);
     }
-
+    /// <summary>
+    /// 适用于只有单个int的技能
+    /// </summary>
     public virtual void ConfigureSkillInt(uint SkillID, string SkillName, string description, ref int value, int step, int quickstep, int id)
     {
         PVPHelper.技能配置3(SkillID, SkillName, description, ref value, step, quickstep, id);
     }
-
+    /// <summary>
+    /// 适用于bool+int的技能
+    /// </summary>
     public virtual void ConfigureSkillBoolInt(uint SkillID, string SkillName, string IntDescription, string description, ref bool status, ref int value, int step, int quickstep, int id)
     {
         PVPHelper.技能配置4(SkillID, SkillName, IntDescription, description, ref status, ref value, step, quickstep, id);
     }
+    /// <summary>
+    /// 适用于单个滑块float的技能
+    /// </summary>
     public virtual void ConfigureSkillSliderFloat(uint SkillID, string SkillName, string IntDescription, ref float value, float min, float max, int id)
     {
         PVPHelper.技能配置5(SkillID, SkillName, IntDescription, ref value, min, max, id);
     }
+    /// <summary>
+    /// 只是技能解释，只是解释
+    /// </summary>
     public virtual void ConfigureSkilldescription(uint SkillID, string SkillName, string description)
     {
         PVPHelper.技能解释(SkillID, SkillName, description);
@@ -543,8 +524,7 @@ public class 职业配置 : BaseJobConfig
         ConfigureSkillInt(29667u, "猛き炎", "火神冲敌人距离", ref PvPSMNSettings.Instance.火神冲, 1, 5, 2);
 
         // 技能3: 坏死爆发
-        PvPSMNSettings.Instance.溃烂阈值 = Math.Clamp(PvPSMNSettings.Instance.溃烂阈值, 0.1f, 1f);
-        ConfigureSkillSliderFloat(41483u, "坏死爆发", "敌人血量阈值", ref PvPSMNSettings.Instance.溃烂阈值, 0.1f, 1f, 3);
+        ConfigureSkillBool(41483u, "坏死爆发", "有毁绝预备时不使用", ref PvPSMNSettings.Instance.毁绝不重复,41483);
 
         自定义.守护之光();
         PvPSMNSettings.Instance.Save();

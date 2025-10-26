@@ -27,6 +27,7 @@ public class PvPRDMEntry : IRotationEntry
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
         new (new 剑身强部(),SlotMode.Always),
+        new (new 法师职能技能(),SlotMode.Always),
         new (new 荆棘环绕(),SlotMode.Always),
         new (new 光芒四射(),SlotMode.Always),
         new (new 鼓励(),SlotMode.Always),
@@ -82,6 +83,7 @@ public class PvPRDMEntry : IRotationEntry
         JobViewWindow.AddQt("鼓励", true);
         JobViewWindow.AddQt("光芒四射", true);
         JobViewWindow.AddQt("决断", true);
+        JobViewWindow.AddQt("职能技能", true);
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);
