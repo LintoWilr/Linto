@@ -18,8 +18,8 @@ public class LintoPvPVPRQt : ITriggerAction
     public string ValueName { get; set; } = new("");
     public bool Value { get; set; } = new();
     public string DisplayName => "PvPVPR".Loc();
+  public string Remark { get; set; } = string.Empty;
 
-    public string? Remark { get; set; }
 
     public bool Draw()
     {
