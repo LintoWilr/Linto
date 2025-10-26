@@ -88,10 +88,8 @@ public class PvPRDMEntry : IRotationEntry
         JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
-        JobViewWindow.AddHotkey("突进", new HotKeyResolver_NormalSpell(29699U, SpellTargetType.Self, false));
-        JobViewWindow.AddHotkey("后跳", new HotKeyResolver_NormalSpell(29700U, SpellTargetType.Self, false));
-        //JobViewWindow.AddHotkey("抗死&疲惫",new HotkeyData.抗死());
-        // JobViewWindow.AddHotkey("切换魔元",new HotkeyData.黑白魔元切换());
+        JobViewWindow.AddHotkey("突进", new HotKeyResolver_NormalSpell(29699U, SpellTargetType.Target, false));
+        JobViewWindow.AddHotkey("后跳", new HotKeyResolver_NormalSpell(29700U, SpellTargetType.Target, false));
         JobViewWindow.AddHotkey("LB", new HotkeyData.赤魔LB());
     }
     private IOpener? GetOpener(uint level)
