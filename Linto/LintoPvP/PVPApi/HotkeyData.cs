@@ -1,4 +1,4 @@
-﻿
+
 
 using System.Numerics;
 using AEAssist;
@@ -38,37 +38,36 @@ public class HotkeyData
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
+
+            var target = Core.Me.GetCurrTarget();
             if (!Core.Me.HasLocalPlayerAura(4094u) & Core.Me.InCombat() & Core.Me.LimitBreakCurrentValue() >= 3000 &
-                Core.Me.GetCurrTarget() != null && PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != Core.Me &&
-                Core.Me.GetCurrTarget().DistanceToPlayer() < 25)
+                target != null && PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != Core.Me &&
+                target.DistanceToPlayer() < 25)
             {
-                if (PvPSettings.Instance.技能自动选中)
+                if (PvPSettings.Instance?.技能自动选中 ?? false)
                 {
-                    if (PvPSettings.Instance.最合适目标)
+                    if (PvPSettings.Instance?.最合适目标 ?? false)
                     {
-                        if (PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != null &&
-                            PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != Core.Me)
+                        var suitableTarget = PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u);
+                        if (suitableTarget != null && suitableTarget != Core.Me)
                         {
-                            AI.Instance.BattleData.NextSlot.Add(new Spell(39190u,
-                                PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u)));
+                            AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, suitableTarget));
                         }
                     }
                     else
                     {
-                        if (PVPTargetHelper.TargetSelector.Get最近目标() != null &&
-                            PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != Core.Me)
+                        var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
+                        if (nearestTarget != null && PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u) != Core.Me)
                         {
-                            AI.Instance.BattleData.NextSlot.Add(new Spell(39190u,
-                                PVPTargetHelper.TargetSelector.Get最近目标()));
+                            AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, nearestTarget));
                         }
-
                     }
                 }
                 else
                 {
-                    if (Core.Me.GetCurrTarget() != null)
+                    if (target != null)
                     {
-                        AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, Core.Me.GetCurrTarget()));
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, target));
                     }
                 }
             }
@@ -98,21 +97,25 @@ public class HotkeyData
                 AI.Instance.BattleData.NextSlot = new Slot();
             if (Core.Me.LimitBreakCurrentValue() >= 3000)
             {
-                if (PvPMCHSettings.Instance.智能魔弹)
+                var machSettings = PvPMCHSettings.Instance;
+                if (machSettings?.智能魔弹 ?? false)
                 {
-                    if (PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u) is { IsTargetable: true })
+                    var target = PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u);
+                    if (target is { IsTargetable: true })
                     {
-                        AI.Instance.BattleData.NextSlot.Add(new Spell(29415u,
-                            PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u)));
-                        Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u)?.Name} 释放 魔弹射手,距离你{PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u).DistanceToPlayer()}米!", 1, 3000);
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, target));
+                        Core.Resolve<MemApiChatMessage>()?.Toast2($"正在尝试对 {target.Name} 释放 魔弹射手,距离你{target.DistanceToPlayer()}米!", 1, 3000);
                     }
                 }
                 else
                 {
-                    AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, Core.Me.GetCurrTarget()));
-                    Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {Core.Me.GetCurrTarget()?.Name} 释放 魔弹射手,距离你{Core.Me.GetCurrTarget().DistanceToPlayer()}米!", 1, 3000);
+                    var target = Core.Me.GetCurrTarget();
+                    if (target != null)
+                    {
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, target));
+                        Core.Resolve<MemApiChatMessage>()?.Toast2($"正在尝试对 {target.Name} 释放 魔弹射手,距离你{target.DistanceToPlayer()}米!", 1, 3000);
+                    }
                 }
-
             }
         }
     }
@@ -131,11 +134,12 @@ public class HotkeyData
         public void DrawExternal(Vector2 size, bool isActive) => SpellHelper.DrawSpellInfo(new Spell(29404u, Core.Me), size, isActive);
         public int Check()
         {
-            if (Core.Me.GetCurrTarget() == null)
+            var target = Core.Me.GetCurrTarget();
+            if (target == null)
             {
                 return -1;
             }
-            if (Core.Me.GetCurrTarget().DistanceToPlayer() > 12)
+            if (target.DistanceToPlayer() > 12)
             {
                 return -3;
             }
@@ -149,7 +153,11 @@ public class HotkeyData
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
-            AI.Instance.BattleData.NextSlot.Add(new Spell(29404u, Core.Me.GetCurrTarget()));
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                AI.Instance.BattleData.NextSlot.Add(new Spell(29404u, target));
+            }
         }
     }
     public class 画家LB : IHotkeyResolver
@@ -236,29 +244,36 @@ public class HotkeyData
                 AI.Instance.BattleData.NextSlot = new Slot();
             if (!PVPHelper.CanActive() && Core.Me.InCombat() && Core.Me.LimitBreakCurrentValue() > 3500)
             {
-                if (PvPSAMSettings.Instance.多斩模式)
+                var samSettings = PvPSAMSettings.Instance;
+                if (samSettings?.多斩模式 ?? false)
                 {
-                    if (PvPSAMSettings.Instance.斩铁调试)
+                    var target = PVPTargetHelper.TargetSelector.Get多斩Target(samSettings.多斩人数);
+                    if (target != null)
                     {
-                        LogHelper.Print($"尝试斩铁目标：{PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数)}");
-                    }
+                        if (samSettings.斩铁调试)
+                        {
+                            LogHelper.Print($"尝试斩铁目标：{target}");
+                        }
 
-                    AI.Instance.BattleData.NextSlot.Add(
-                        new Spell(29537u, PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数)));
-                    Core.Resolve<MemApiChatMessage>()
-                        .Toast2($"正在尝试对 {PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数).Name} 释放 斩铁剑", 1, 1500);
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(29537u, target));
+                        Core.Resolve<MemApiChatMessage>()?
+                            .Toast2($"正在尝试对 {target.Name} 释放 斩铁剑", 1, 1500);
+                    }
                 }
                 else
                 {
-                    if (PvPSAMSettings.Instance.斩铁调试)
+                    var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
+                    if (target != null)
                     {
-                        LogHelper.Print($"尝试斩铁目标：{PVPTargetHelper.TargetSelector.Get斩铁目标()}");
+                        if (samSettings?.斩铁调试 ?? false)
+                        {
+                            LogHelper.Print($"尝试斩铁目标：{target}");
+                        }
+
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(29537u, target));
+                        Core.Resolve<MemApiChatMessage>()?.Toast2($"正在尝试对 {target.Name} 释放 斩铁剑", 1, 1500);
                     }
-
-                    AI.Instance.BattleData.NextSlot.Add(new Spell(29537u, PVPTargetHelper.TargetSelector.Get斩铁目标()));
-                    Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {PVPTargetHelper.TargetSelector.Get斩铁目标().Name} 释放 斩铁剑", 1, 1500);
                 }
-
             }
         }
     }
@@ -315,7 +330,10 @@ public class HotkeyData
             {
                 SpellHelper.DrawSpellInfo(new Spell(29697u, Core.Me), size, isActive);
             }
-            else SpellHelper.DrawSpellInfo(new Spell(29698u, Core.Me), size, isActive);
+            else
+            {
+                SpellHelper.DrawSpellInfo(new Spell(29698u, Core.Me), size, isActive);
+            }
         }
 
         public int Check()
@@ -363,7 +381,10 @@ public class HotkeyData
             {
                 SpellHelper.DrawSpellInfo(new Spell(29702u, Core.Me), size, isActive);
             }
-            else SpellHelper.DrawSpellInfo(new Spell(29703u, Core.Me), size, isActive);
+            else
+            {
+                SpellHelper.DrawSpellInfo(new Spell(29703u, Core.Me), size, isActive);
+            }
         }
 
         public int Check()
@@ -395,7 +416,7 @@ public class HotkeyData
             ImGui.Image(textureWrap.Handle, size1);
         }
         public void DrawExternal(Vector2 size, bool isActive) =>
-            SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget), size, isActive);
+            SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget()), size, isActive);
 
         public int Check()
         {
@@ -409,12 +430,19 @@ public class HotkeyData
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
             if (Core.Me.InCombat() & Core.Me.LimitBreakCurrentValue() >= 3000)
-                if (PvPRDMSettings.Instance.南天自己)
+            {
+                var rdmaSettings = PvPRDMSettings.Instance;
+                if (rdmaSettings?.南天自己 ?? false)
                     AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, Core.Me));
                 else
                 {
-                    AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, Core.Me.GetCurrTarget()));
+                    var target = Core.Me.GetCurrTarget();
+                    if (target != null)
+                    {
+                        AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, target));
+                    }
                 }
+            }
         }
     }
     public class 后射 : IHotkeyResolver
@@ -441,7 +469,11 @@ public class HotkeyData
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
-            AI.Instance.BattleData.NextSlot.Add(new Spell(29399, Core.Me.GetCurrTarget()));
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                AI.Instance.BattleData.NextSlot.Add(new Spell(29399, target));
+            }
         }
     }
     public class 后跳 : IHotkeyResolver
@@ -466,8 +498,9 @@ public class HotkeyData
         }
         public void Run()
         {
-            Core.Resolve<MemApiMove>().SetRot(PVPHelper.GetCameraRotation反向());
-            Core.Resolve<MemApiSpell>().Cast(29494u, PVPHelper.向量位移反向(Core.Me.Position, PVPHelper.GetCameraRotation(), 15));
+            var helper = PVPHelper.GetCameraRotation反向();
+            Core.Resolve<MemApiMove>()?.SetRot(helper);
+            Core.Resolve<MemApiSpell>()?.Cast(29494u, PVPHelper.向量位移反向(Core.Me.Position, PVPHelper.GetCameraRotation(), 15));
         }
     }
     public class 速涂 : IHotkeyResolver
@@ -492,8 +525,9 @@ public class HotkeyData
         }
         public void Run()
         {
-            Core.Resolve<MemApiMove>().SetRot(PVPHelper.GetCameraRotation());
-            Core.Resolve<MemApiSpell>().Cast(39210u, PVPHelper.向量位移(Core.Me.Position, PVPHelper.GetCameraRotation(), 15));
+            var rotation = PVPHelper.GetCameraRotation();
+            Core.Resolve<MemApiMove>()?.SetRot(rotation);
+            Core.Resolve<MemApiSpell>()?.Cast(39210u, PVPHelper.向量位移(Core.Me.Position, rotation, 15));
         }
     }
     public class 以太步 : IHotkeyResolver
@@ -520,7 +554,11 @@ public class HotkeyData
         {
             if (AI.Instance.BattleData.NextSlot == null)
                 AI.Instance.BattleData.NextSlot = new Slot();
-            AI.Instance.BattleData.NextSlot.Add(new Spell(29660u, Core.Me.GetCurrTarget));
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                AI.Instance.BattleData.NextSlot.Add(new Spell(29660u, target));
+            }
         }
     }
     public class 喵 : IHotkeyResolver
