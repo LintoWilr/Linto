@@ -17,10 +17,14 @@ public class PvPGNBRotationEntry : IRotationEntry
     public void Dispose()
     {
     }
-    public IRotationUI GetRotationUI()
-    {
-        return PvPGNBRotationEntry.JobViewWindow;
-    }
+        public IRotationUI GetRotationUI()
+        {
+            if (JobViewWindow == null)
+            {
+                JobViewWindow = new JobViewWindow(PvPGNBSettings.Instance.JobViewSave, PvPGNBSettings.Instance.Save, OverlayTitle);
+            }
+            return JobViewWindow;
+        }
     private PvPGNBSettingUI settingUI = new();
     public void OnDrawSetting()
     {
@@ -104,6 +108,6 @@ public class PvPGNBRotationEntry : IRotationEntry
             return null;
         }
 
-        return null;
+
     }
 }

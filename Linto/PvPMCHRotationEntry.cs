@@ -113,6 +113,6 @@ public class PvPMCHRotationEntry : IRotationEntry
             return null;
         }
 
-        return null;
+
     }
 }
