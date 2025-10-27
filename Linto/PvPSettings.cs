@@ -1,5 +1,6 @@
 using AEAssist.Helper;
 using AEAssist.IO;
+using System.Numerics;
 
 namespace Linto;
 
@@ -31,6 +32,7 @@ public class PvPSettings
     public float 高1 = 500f;
     public float 图片宽1 = 125f;
     public float 图片高1 = 200f;
+    public float 图标大小 = 32.0f;
     public bool 紧凑 = true;
     public int 紧凑数量 = 3;
     public int 警报数量 = 4;
@@ -39,9 +41,14 @@ public class PvPSettings
     public float iconWidth = 64.0f; // 图标宽度，默认 64 像素
     public float inputWidth = 100.0f; // InputInt 宽度，默认 100 像素
     public float lineSpacing = 10.0f; // 行距（style.ItemSpacing.Y），默认 4 像素
+    public Vector2 监控窗口位置= new Vector2(100, 100); // 默认位置
+    public Vector2 监控窗口大小= new Vector2(200, 200); // 默认大小
+    public bool 禁止移动窗口  = false; 
+    public bool 鼠标穿透 = false;
     public bool 名字 = true;
     public bool 血量 = true;
     public bool 距离 = true;
+
     public static void Build(string settingPath)
     {
         path = Path.Combine(settingPath, "PvPSettings.json");

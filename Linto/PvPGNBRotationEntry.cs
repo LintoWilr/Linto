@@ -3,35 +3,25 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using Linto.LintoPvP;
 using Linto.LintoPvP.GNB;
 using Linto.LintoPvP.GNB.Ability;
 using Linto.LintoPvP.GNB.GCD;
 using Linto.LintoPvP.GNB.Triggers;
 using Linto.LintoPvP.PVPApi;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
+using Linto.UI;
 
 namespace Linto;
 
 public class PvPGNBRotationEntry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
-        public IRotationUI GetRotationUI()
-        {
-            if (JobViewWindow == null)
-            {
-                JobViewWindow = new JobViewWindow(PvPGNBSettings.Instance.JobViewSave, PvPGNBSettings.Instance.Save, OverlayTitle);
-            }
-            return JobViewWindow;
-        }
-    private PvPGNBSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-        settingUI.Draw();
-    }
-    public static JobViewWindow? JobViewWindow;
+    public string AuthorName { get; set; } = "Linto PvP";
+    public static JobViewWindow JobViewWindow { get; private set; }
+    private NewWindow 监控窗口; // 监控
+    private CompositeRotationUI _compositeUI; // 组合 UI
     private PvPGNBOverlay _lazyOverlay = new PvPGNBOverlay();
+    private PvPGNBSettingUI settingUI = new();
     public List<SlotResolverData> SlotResolvers = new()
     {
         new (new 净化(),SlotMode.Always),
@@ -50,31 +40,28 @@ public class PvPGNBRotationEntry : IRotationEntry
         new (new 冲刺(),SlotMode.Always),
     };
 
-    public string OverlayTitle { get; } = "绝枪战士";
+    public string OverlayTitle { get; } = "绝枪";
 
-    public void DrawOverlay()
-    {
-    }
-    public string AuthorName { get; set; } = "Linto PvP";
     public Rotation Build(string settingFolder)
     {
         PvPGNBSettings.Build(settingFolder);
         PvPSettings.Build(settingFolder);
         BuildQt();
+        Build监控窗口(); // 初始化 监控窗口 
+        BuildCompositeUI(); // 组合 UI
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Gunbreaker,
             AcrType = AcrType.PVP,
             MinLevel = 1,
             MaxLevel = 100,
-            Description = "绝枪",
+            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈",
         };
-        //rot.AddSlotSequences(new TriggerAction_QT());
-        //    rot.AddTriggerAction(new LintoPvPMCHQt());
         rot.SetRotationEventHandler(new PvPGNBRotationEventHandler());
-        rot.AddOpener(GetOpener);
+        // 如果需要起手，添加 GetOpener 逻辑
         return rot;
     }
+
     public void BuildQt()
     {
         JobViewWindow = new JobViewWindow(PvPGNBSettings.Instance.JobViewSave, PvPGNBSettings.Instance.Save, OverlayTitle);
@@ -99,15 +86,38 @@ public class PvPGNBRotationEntry : IRotationEntry
         JobViewWindow.AddHotkey("连续剑", new HotkeyData.绝枪LB());
 
     }
-    private IOpener? GetOpener(uint level)
+
+    private void Build监控窗口()
     {
-        if (level < 90)
-            return null;
-        else
+        // 初始化窗口（内部已注册独立绘制事件）
+        监控窗口 = new NewWindow(() => PvPSettings.Instance.Save());
+        监控窗口.SetUpdateAction(On监控Update);
+    }
+    public void On监控Update()
+    {
+        //窗口的更新逻辑
+    }
+    private void BuildCompositeUI()
+    {
+        _compositeUI = new CompositeRotationUI(new List<IRotationUI>
         {
-            return null;
-        }
+            监控窗口,
+            JobViewWindow
+        });
+    }
 
+    public IRotationUI GetRotationUI()
+    {
+        return _compositeUI;
+    }
 
+    public void OnDrawSetting()
+    {
+        settingUI.Draw();
+    }
+
+    public void Dispose()
+    {
+        监控窗口?.Dispose();
     }
 }

@@ -289,6 +289,9 @@
     <Compile Update="SageRotationEntry.cs" />
     <Compile Update="PvPSMNRotationEntry.cs" />
     <Compile Update="PvPGNBRotationEntry.cs" />
+    <Compile Include="UI\NewWindows.cs" />
+    <Compile Include="UI\Windows.cs" />
+    <Compile Include="UI\组合UI.cs" />
   </ItemGroup>
 
   <ItemGroup>

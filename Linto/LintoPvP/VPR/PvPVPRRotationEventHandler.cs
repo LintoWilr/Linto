@@ -21,7 +21,7 @@ public class PvPVPRRotationEventHandler : IRotationEventHandler
     }
     public void OnUIUpdate()
     {
-        if (PvPSettings.Instance.监控) PVPHelper.监控窗口();
+        
     }
     public async Task OnPreCombat()
     {

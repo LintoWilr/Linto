@@ -3,26 +3,27 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using Linto.LintoPvP;
 using Linto.LintoPvP.PCT;
 using Linto.LintoPvP.PCT.Ability;
 using Linto.LintoPvP.PCT.GCD;
 using Linto.LintoPvP.PCT.Triggers;
 using Linto.LintoPvP.PVPApi;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
+using Linto.UI;
 
 
 namespace Linto;
 
 
-
 public class PvP董慧敏Entry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
-
-    public string OverlayTitle { get; } = "PvP董慧敏";
     public string AuthorName { get; set; } = "Linto PvP";
+    public static JobViewWindow JobViewWindow { get; private set; }
+    private NewWindow 监控窗口; // 监控
+    private CompositeRotationUI _compositeUI; // 组合 UI
+    private PvPPCTOverlay _lazyOverlay = new PvPPCTOverlay();
+    private PvPPCTSettingUI settingUI = new();
     public List<SlotResolverData> SlotResolvers = new()
     {
         new (new 净化(),SlotMode.Always),
@@ -39,38 +40,27 @@ public class PvP董慧敏Entry : IRotationEntry
         new (new 读条连击(),SlotMode.Always),
         new (new 冲刺(),SlotMode.Always),
     };
+
+    public string OverlayTitle { get; } = "绝枪";
+
     public Rotation Build(string settingFolder)
     {
         PvPPCTSettings.Build(settingFolder);
         PvPSettings.Build(settingFolder);
         BuildQT();
+        Build监控窗口(); // 初始化 监控窗口 
+        BuildCompositeUI(); // 组合 UI
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Pictomancer,
             AcrType = AcrType.PVP,
-            MinLevel = 0,
+            MinLevel = 1,
             MaxLevel = 100,
-            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.3适配]",
+            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈",
         };
-        //rot.AddSlotSequences(new TriggerAction_QT());
-        //  rot.AddTriggerAction(new LintoPvPPCTQt());
         rot.SetRotationEventHandler(new PvPPCTRotationEventHandler());
-        rot.AddOpener(GetOpener);
+        // 如果需要起手，添加 GetOpener 逻辑
         return rot;
-    }
-
-
-    public static JobViewWindow JobViewWindow { get; private set; } = null!;
-
-    public IRotationUI GetRotationUI()
-    {
-
-        return PvP董慧敏Entry.JobViewWindow;
-    }
-    private PvPPCTSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-        settingUI.Draw();
     }
     public void BuildQT()
     {
@@ -99,35 +89,40 @@ public class PvP董慧敏Entry : IRotationEntry
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("LB", new HotkeyData.画家LB());
-       // JobViewWindow.AddHotkey("镜头方向速滑", new HotkeyData.速涂());
+        // JobViewWindow.AddHotkey("镜头方向速滑", new HotkeyData.速涂());
         //JobViewWindow.AddHotkey("监控",new HotkeyData.监控());
     }
-    private IOpener? GetOpener(uint level)
+    private void Build监控窗口()
     {
-        return null;
+        // 初始化窗口（内部已注册独立绘制事件）
+        监控窗口 = new NewWindow(() => PvPSettings.Instance.Save());
+        监控窗口.SetUpdateAction(On监控Update);
+    }
+    public void On监控Update()
+    {
+        //窗口的更新逻辑
+    }
+    private void BuildCompositeUI()
+    {
+        _compositeUI = new CompositeRotationUI(new List<IRotationUI>
+        {
+            监控窗口,
+            JobViewWindow
+        });
+    }
+
+    public IRotationUI GetRotationUI()
+    {
+        return _compositeUI;
+    }
+
+    public void OnDrawSetting()
+    {
+        settingUI.Draw();
+    }
+
+    public void Dispose()
+    {
+        监控窗口?.Dispose();
     }
 }
-//if (ImGui.CollapsingHeader("插入技能状态"))
-//{
-//    if (ImGui.Button("清除队列"))
-//    {
-//        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
-//        AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
-//    }
-
-//    ImGui.PCTeLine();
-//    if (ImGui.Button("清除一个"))
-//    {
-//        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
-//        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
-//    }
-
-//    ImGui.Text("-------能力技-------");
-//    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
-//        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_OffGCD)
-//            ImGui.Text(spell.Name);
-//    ImGui.Text("-------GCD-------");
-//    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
-//        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_GCD)
-//            ImGui.Text(spell.Name);
-//}
