@@ -79,6 +79,7 @@
     <Compile Include="LintoPvP\BLM\Ability\冲刺.cs" />
     <Compile Include="LintoPvP\BLM\Ability\净化.cs" />
     <Compile Include="LintoPvP\BLM\Ability\昏沉.cs" />
+    <Compile Include="LintoPvP\BLM\Ability\法师职能技能.cs" />
     <Compile Include="LintoPvP\BLM\Ability\热震荡.cs" />
     <Compile Include="LintoPvP\BLM\Ability\药.cs" />
     <Compile Include="LintoPvP\BLM\BLMBattleData.cs" />

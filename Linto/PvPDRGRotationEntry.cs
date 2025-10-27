@@ -87,7 +87,7 @@ public class PvPDRGRotationEntry : IRotationEntry
         JobViewWindow.AddQt("樱花缭乱", true, "万千烈火");
         JobViewWindow.AddQt("高跳", false, "狂想曲");
         JobViewWindow.AddQt("苍穹刺", true, "愤怒之雨");
-        JobViewWindow.AddQt("后跳", false, "怒火共鸣");
+      //  JobViewWindow.AddQt("后跳", false, "怒火共鸣");
         JobViewWindow.AddQt("天龙点睛", true, "日珥俯冲");
         JobViewWindow.AddQt("恐惧咆哮", true, "爆裂·震天·咆哮");
         JobViewWindow.AddQt("喝热水", false);
@@ -96,7 +96,7 @@ public class PvPDRGRotationEntry : IRotationEntry
         JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
-        JobViewWindow.AddHotkey("镜头方向后跳", new HotkeyData.后跳());
+      //  JobViewWindow.AddHotkey("镜头方向后跳", new HotkeyData.后跳());
     }
 
     private IOpener? GetOpener(uint level)

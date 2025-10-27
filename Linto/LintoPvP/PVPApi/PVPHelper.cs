@@ -270,14 +270,16 @@ public class PVPHelper
         return BattleChara.HasAura(buffId, 0);
     }
 
-    public static void 技能图标(uint id)
+    public static void 技能图标(uint id, float size)
     {
         uint skillid = id;
-        Vector2 size1 = new Vector2(60, 60);
         IDalamudTextureWrap? textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(skillid, out textureWrap))
+        {
+            ImGui.Dummy(new Vector2(size, size)); 
             return;
-        if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
+        }
+        if (textureWrap != null) ImGui.Image(textureWrap.Handle, new Vector2(size, size)); 
     }
 
     private static void s1()
@@ -455,97 +457,360 @@ public class PVPHelper
         {
             ImGui.TextColored(new Vector4(42f / 255f, 215f / 255f, 57f / 255f, 0.8f), "已解锁");
         }
+        ImGui.SameLine();
+        调整控件();
     }
+    private static bool 调整配置 = false;
 
+    public static void 调整控件()
+    {
+        if (ImGui.Button("UI调整开/关"))
+        {
+            调整配置 = !调整配置;
+        }
+
+        if (调整配置)
+        { 
+            ImGui.Separator();
+            ImGui.Text("调整布局参数");
+            
+            ImGui.SliderFloat("图标尺寸", ref PvPSettings.Instance.iconWidth, 32.0f, 128.0f, "%.0f 像素");
+            PvPSettings.Instance.iconWidth = Math.Max(32.0f, PvPSettings.Instance.iconWidth);
+
+            ImGui.SliderFloat("输入框宽度", ref PvPSettings.Instance.inputWidth, 50.0f, 500.0f, "%.0f 像素");
+            PvPSettings.Instance.inputWidth = Math.Max(50.0f, PvPSettings.Instance.inputWidth);
+
+            ImGui.SliderFloat("行距", ref PvPSettings.Instance.lineSpacing, 2.0f, 100.0f, "%.1f 像素");
+            PvPSettings.Instance.lineSpacing = Math.Max(2.0f, PvPSettings.Instance.lineSpacing);
+            
+            PvPSettings.Instance.Save();
+        }
+    }
+    
     public static void 技能配置(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float buttonHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + buttonHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+    
+        Vector2 startPos = ImGui.GetCursorPos();
+    
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + 当前状态 + 切换按钮
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}: {切换配置}");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{描述文字}: {切换配置}").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         if (ImGui.Button($"切换##{id}"))
         {
             切换配置 = !切换配置;
         }
 
-        ImGui.Columns(1);
-    }
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
 
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
     public static void 技能配置2(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + checkboxHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
         ImGui.Checkbox($"##{id}", ref 切换配置);
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
     public static void 技能配置3(uint 技能图标id, string 技能名字, string 描述文字, ref int 数值, int 幅度, int 快速幅度, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        // 计算布局参数
+        float lineHeight = ImGui.GetTextLineHeight(); // 单行文字高度
+        float inputHeight = ImGui.GetFrameHeight(); // InputInt 高度（包括边框）
+        float totalHeight = lineHeight + inputHeight + PvPSettings.Instance.lineSpacing; // 两行总高度
+        float iconSize = PvPSettings.Instance.iconWidth; // 图标尺寸（正方形，宽度 = 高度）
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - iconSize - style.ItemSpacing.X * 2; // 文字区域宽度
+    
+        Vector2 startPos = ImGui.GetCursorPos();
+    
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + iconSize + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + InputInt
+        ImGui.SetCursorPos(new Vector2(startPos.X + iconSize + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{描述文字}:").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         ImGui.InputInt($"##{id}", ref 数值, 幅度, 快速幅度);
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
-    public static void 技能配置4(uint 技能图标id, string 技能名字, string 数值描述, string 描述文字, ref bool 切换配置, ref int 数值, int 幅度,
-        int 快速幅度, int id)
+    public static void 技能配置4(uint 技能图标id, string 技能名字, string 数值描述, string 描述文字, ref bool 切换配置, ref int 数值, int 幅度, int 快速幅度, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float inputHeight = ImGui.GetFrameHeight();
+        float totalHeight = (lineHeight * 2) + inputHeight + (PvPSettings.Instance.lineSpacing * 2); // 三行内容
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
         ImGui.Checkbox($"##{id}", ref 切换配置);
+
+        // 第三行：数值描述 + InputInt
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + (PvPSettings.Instance.lineSpacing * 2)));
         ImGui.Text($"{数值描述}:");
+        ImGui.SameLine();
+        float numDescWidth = ImGui.CalcTextSize($"{数值描述}:").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         ImGui.InputInt($"##{id}+1", ref 数值, 幅度, 快速幅度);
-        ImGui.Columns(1);
-    }
 
-    public static void 技能配置5(uint 技能图标id, string 技能名字, string IntDescription, ref float value, float min, float max,
-        int id)
-    {
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
         ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
-        ImGui.Text(技能名字);
-        ImGui.Text($"{IntDescription}:");
-        ImGui.SliderFloat($"##{id}", ref value, min, max);
-        ImGui.Columns(1);
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
+    public static void 技能配置5(uint 技能图标id, string 技能名字, string IntDescription, ref float value, float min, float max, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float sliderHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + sliderHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+        
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + SliderFloat
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text($"{IntDescription}:");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{IntDescription}:").X;
+        
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth);
+        ImGui.SliderFloat($"##{id}", ref value, min, max);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
+    /// <summary>
+    /// 3个bool值
+    /// </summary>
+    /// <param name="none">适用于需要三个bool进行配置的技能</param>
+    public static void 技能配置6(uint 技能图标id, string 技能名字, string 效果1, string 效果2, string 效果3,ref bool 效果1bool, ref bool 效果2bool,ref bool 效果3bool, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight =
+            (lineHeight * 3) + (checkboxHeight * 3) + (PvPSettings.Instance.lineSpacing * 3); // 三行文字 + 三行 Checkbox
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth -
+                              style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        PVPHelper.技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：效果1 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text(效果1);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果1}", ref 效果1bool);
+
+        // 第三行：效果2 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + checkboxHeight + (PvPSettings.Instance.lineSpacing * 2)));
+        ImGui.Text(效果2);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果2}", ref 效果2bool);
+
+        // 第四行：效果3 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 3) + (checkboxHeight * 2) + (PvPSettings.Instance.lineSpacing * 3)));
+        ImGui.Text(效果3);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果3}", ref 效果3bool);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
+        /// <summary>
+    /// 3个bool值
+    /// </summary>
+    /// <param name="none">适用于需要三个bool进行配置的技能</param>
+    public static void 技能配置7(uint 技能图标id, string 技能名字, string 效果1, string 效果2,ref bool 效果1bool, ref bool 效果2bool, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight =
+            (lineHeight * 3) + (checkboxHeight * 3) + (PvPSettings.Instance.lineSpacing * 2); // 三行文字 + 三行 Checkbox
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth -
+                              style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        PVPHelper.技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：效果1 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text(效果1);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果1}", ref 效果1bool);
+
+        // 第三行：效果2 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + checkboxHeight + (PvPSettings.Instance.lineSpacing * 2)));
+        ImGui.Text(效果2);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果2}", ref 效果2bool);
+        
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
     public static void 技能解释(uint 技能图标id, string 技能名字, string 描述文字)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+        float lineHeight = ImGui.GetTextLineHeight();
+        float totalHeight = (lineHeight * 2) + PvPSettings.Instance.lineSpacing; // 两行纯文本
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
     public static Spell? 通用技能释放Check(uint skillid, int 距离)
@@ -697,6 +962,7 @@ public class PVPHelper
             ImGui.Text($"是否55:{PVPHelper.是否55()}");
             IBattleChara? 最近目标 = PVPTargetHelper.TargetSelector.Get最近目标();
             SeString 最近目标名称 = 最近目标?.Name ?? "无";
+            ImGui.Text($"Core.Me.GetCurrTarget().DistanceToPlayer(): {Core.Me.GetCurrTarget().DistanceToPlayer()}");
             ImGui.Text($"视线阻挡: {视线阻挡(Core.Me.GetCurrTarget())}");
             ImGui.Text($"最近目标: {最近目标名称}");
             IBattleChara? 最合适目标25米 = PVPTargetHelper.TargetSelector.Get最合适目标(25, 1);

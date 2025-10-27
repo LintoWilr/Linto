@@ -36,8 +36,9 @@ public class PvPSettings
     public int 警报数量 = 4;
     public bool 窗口开关 = true;
     public int 监控数量 = 6;
-    public float 职业配置1 = 70f;
-    public float 职业配置2 = 150f;
+    public float iconWidth = 64.0f; // 图标宽度，默认 64 像素
+    public float inputWidth = 100.0f; // InputInt 宽度，默认 100 像素
+    public float lineSpacing = 10.0f; // 行距（style.ItemSpacing.Y），默认 4 像素
     public bool 名字 = true;
     public bool 血量 = true;
     public bool 距离 = true;

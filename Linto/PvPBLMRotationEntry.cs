@@ -23,6 +23,7 @@ public class PvPBLMEntry : IRotationEntry
     {
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
+        new (new 法师职能技能(),SlotMode.Always),
         new (new 昏沉(),SlotMode.Always),
         new (new 元素天赋(),SlotMode.Always),
         new (new 磁暴(),SlotMode.Always),
@@ -90,6 +91,7 @@ public class PvPBLMEntry : IRotationEntry
         JobViewWindow.AddQt("磁暴", true);
         JobViewWindow.AddQt("火魔法", true);
         JobViewWindow.AddQt("冰魔法", true);
+        JobViewWindow.AddQt("职能技能", false);
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);

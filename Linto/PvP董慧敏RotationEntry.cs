@@ -99,7 +99,7 @@ public class PvP董慧敏Entry : IRotationEntry
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("LB", new HotkeyData.画家LB());
-        JobViewWindow.AddHotkey("镜头方向速滑", new HotkeyData.速涂());
+       // JobViewWindow.AddHotkey("镜头方向速滑", new HotkeyData.速涂());
         //JobViewWindow.AddHotkey("监控",new HotkeyData.监控());
     }
     private IOpener? GetOpener(uint level)

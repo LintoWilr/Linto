@@ -10,19 +10,14 @@ public class PvPVPROverlay
     private static bool 调试窗口 = false;
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-
         Share.Pull = true;
         {
-            PVPHelper.权限获取();
-            ImGui.Separator();
-            ImGui.Text("哥哥没我砍的快");
-            ImGui.Separator();
-            PVPHelper.技能图标(29711u);
-            ImGui.SameLine();
-            ImGui.Text("喝热水");
-            ImGui.InputInt("热水阈值", ref PvPVPRSettings.Instance.药血量, 5, 4);
-            ImGui.Separator();
-            PvPVPRSettings.Instance.Save();
+            职业配置 蛇蛇 = new 职业配置();
+            蛇蛇.配置蛇蛇技能();
+            if (ImGui.CollapsingHeader("调试窗口"))
+            {
+                PVPHelper.PvP调试窗口();
+            }
         }
     }
     public static class VPRQt
