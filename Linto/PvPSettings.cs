@@ -30,8 +30,7 @@ public class PvPSettings
     public string 坐骑名 = "";
     public float 宽1 = 500f;
     public float 高1 = 500f;
-    public float 图片宽1 = 125f;
-    public float 图片高1 = 200f;
+    public float 图片比例 = 125.0f;
     public float 图标大小 = 32.0f;
     public bool 紧凑 = true;
     public int 紧凑数量 = 3;
@@ -44,7 +43,6 @@ public class PvPSettings
     public Vector2 监控窗口位置= new Vector2(100, 100); // 默认位置
     public Vector2 监控窗口大小= new Vector2(200, 200); // 默认大小
     public bool 禁止移动窗口  = false; 
-    public bool 鼠标穿透 = false;
     public bool 名字 = true;
     public bool 血量 = true;
     public bool 距离 = true;

@@ -46,6 +46,7 @@ namespace Linto.LintoPvP.BRD.Ability
 
         public void Build(Slot slot)
         {
+            slot.maxDuration = 300;
             bool 光阴队友 = PvPBRDSettings.Instance.光阴队友;
             bool 光阴播报 = PvPBRDSettings.Instance.光阴播报;
             IBattleChara target;

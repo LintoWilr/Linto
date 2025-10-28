@@ -16,6 +16,7 @@ using AEAssist.Verify;
 using Dalamud.Game.ClientState.Conditions;
 using System.Runtime.CompilerServices;
 using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Plugin.Services;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
@@ -93,20 +94,30 @@ public class PVPHelper
     /// </summary>
     public static bool 净化判断()
     {
-        if (Core.Me.HasCanDispel())
+        if (Core.Me.HasAnyAura(净化List))
         {
             return true;
         }
-        return false;
+        if(Core.Me.HasCanDispel())return true;
+        else 
+            return false;
     }
-
+    private static List<uint> 净化List = new List<uint>
+    {
+        1343u, //眩晕
+        1344u, //加重
+        1345u, //止步
+        1347u, //沉默
+        4470u, //沉默
+        3085u, //自然的奇迹
+        3219u, //冻结
+    };
     public static Spell 不等服务器Spell(uint id, IBattleChara? target)
     {
         var spell = target != null ? new Spell(id, target) : null;
         spell.WaitServerAcq = false;
         return spell;
     }
-
     public static Spell 等服务器Spell(uint id, IBattleChara? target)
     {
         var spell = target != null ? new Spell(id, target) : null;
@@ -229,8 +240,7 @@ public class PVPHelper
     /// <param name="检查是不是3秒内用过龟壳">7</param>
     public static bool CanActive()
     {
-        uint 技能龟壳 = 29711u;
-        //	if (!Enum.IsDefined(typeof(ZoneId), GetZoneId()))
+        uint 技能龟壳 = 29054u;
         if (!Core.Me.IsPvP())
         {
             return false;
@@ -868,7 +878,7 @@ public class PVPHelper
 
         return null;
     }
-
+    
     public static void 通用技能释放 ( Slot slot, uint skillid, int 距离 )
     {
         slot.maxDuration = 300;
@@ -950,24 +960,29 @@ public class PVPHelper
     }*/
 
     //不作变化
-    public static void PvP调试窗口()
+    public static  void PvP调试窗口()
     {
         //不作变化
-        if (Svc.ClientState.LocalContentId == 18014469511346939)
+        if (Share.VIP.Level != VIPLevel.Normal)
         {
             ImGui.Begin("调试窗口");
             ImGui.Text($"gcd:{GCDHelper.GetGCDCooldown()}");
             ImGui.Text($"CastActionId:{Core.Me.CastActionId}");
             ImGui.Text($"是否55:{PVPHelper.是否55()}");
-            IBattleChara? 最近目标 = PVPTargetHelper.TargetSelector.Get最近目标();
-            SeString 最近目标名称 = 最近目标?.Name ?? "无";
             ImGui.Text($"Core.Me.GetCurrTarget().DistanceToPlayer(): {Core.Me.GetCurrTarget().DistanceToPlayer()}");
             ImGui.Text($"视线阻挡: {视线阻挡(Core.Me.GetCurrTarget())}");
+            ImGui.Text($"净化判断：{净化判断()})");
+            ImGui.Text($"有没有1347u：{Core.Me.HasAura(1347u)})");
+            ImGui.Text($"能不能解净化：{Core.Me.HasCanDispel()})");
+            IBattleChara? 最近目标 = PVPTargetHelper.TargetSelector.Get最近目标();
+            SeString 最近目标名称 = 最近目标?.Name ?? "无";
             ImGui.Text($"最近目标: {最近目标名称}");
+            
             IBattleChara? 最合适目标25米 = PVPTargetHelper.TargetSelector.Get最合适目标(25, 1);
             SeString 最合适目标25米名称 = 最合适目标25米?.Name ?? "无";
             ImGui.Text($"最合适25米目标: {最合适目标25米名称}");
             //	ImGui.Text($"技能状态变化:{Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能1冰结之蓝青)}");
+            
             ImGui.Text($"自己：{Core.Me.Name},{Core.Me.DataId},{Core.Me.Position}");
             ImGui.Text($"坐骑状态：{Svc.Condition[(ConditionFlag)4]}");
             ImGui.Text($"血量百分比：{Core.Me.CurrentHpPercent()}");
@@ -981,8 +996,8 @@ public class PVPHelper
             ImGui.Text($"小队人数：{PartyHelper.CastableParty.Count}");
             ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(Core.Me, 1, PvPRDMSettings.Instance.护盾距离)}");
             ImGui.Text($"20米内小队人数：{PartyHelper.CastableAlliesWithin20.Count}");
-            IBattleChara? target = Core.Me.GetCurrTarget();
-            int nearbyCount = target != null ? TargetHelper.GetNearbyEnemyCount(target, 25, 5) : 0;
+            IBattleChara? target1 = Core.Me.GetCurrTarget();
+            int nearbyCount = target1 != null ? TargetHelper.GetNearbyEnemyCount(target1, 25, 5) : 0;
             ImGui.Text($"目标5米内人数：{nearbyCount}");
             ImGui.Text($"LB槽当前数值：{Core.Me.LimitBreakCurrentValue()}");
             ImGui.Text($"上个技能：{Core.Resolve<MemApiSpellCastSuccess>().LastSpell}");
@@ -1014,12 +1029,14 @@ public class PVPHelper
             {
                 Core.Resolve<MemApiMove>().SetRot(GetCameraRotation());
             }
-            ImGui.Text($"？：{Core.Me.HasAura(3212)}");
-            if (ImGui.Button("21"))
+            var target = Core.Me.GetCurrTarget();
+            if (target == null)
             {
-
+                ImGui.Text("目标状态列表: 无目标");
+                return;
             }
-
+            var list = target.StatusList;
+            ImGui.Text($"目标状态列表: {(list?.Any() == true ? string.Join("  ", list.Select(s => $"[{s.StatusId}] {s.RemainingTime:F1}s")) : "无")}");
             ImGui.End();
         }
         else
@@ -1122,13 +1139,12 @@ public class PVPHelper
         if (通用码权限 || 高级码)
         {
             ImGui.Checkbox($"启用挨打监控窗口##{28}", ref PvPSettings.Instance.监控);
-            ImGui.SliderFloat("[看着你的人数]图片宽", ref PvPSettings.Instance.图片宽1, 0, 1000);
-            ImGui.SliderFloat("[看着你的人数]图片高", ref PvPSettings.Instance.图片高1, 0, 1000);
+            ImGui.SliderFloat("[看着你的人数]人数图片大小", ref PvPSettings.Instance.图片比例, 0, 1000);
+            ImGui.SliderFloat("[看着你的人数]职业图标大小", ref PvPSettings.Instance.图标大小, 0, 1000);
             ImGui.Checkbox($"监控布局紧凑##{29}", ref PvPSettings.Instance.紧凑);
             ImGui.SameLine();
-            ImGui.Checkbox($"锁定窗口移动##{38}", ref PvPSettings.Instance.禁止移动窗口);
-            ImGui.SameLine();
-            ImGui.Checkbox($"鼠标穿透##{39}", ref PvPSettings.Instance.鼠标穿透);
+            ImGui.Checkbox($"锁定窗口##{38}", ref PvPSettings.Instance.禁止移动窗口);
+           // ImGui.Checkbox($"鼠标穿透##{39}", ref PvPSettings.Instance.鼠标穿透);
             ImGui.Text("显示看着你的人的 \n名字|血量百分比|距离");
             ImGui.Checkbox($"##{35}", ref PvPSettings.Instance.名字);
             ImGui.SameLine();

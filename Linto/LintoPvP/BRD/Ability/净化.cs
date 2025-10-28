@@ -1,5 +1,6 @@
 using AEAssist;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using Linto.LintoPvP.PVPApi;
 
@@ -8,25 +9,23 @@ namespace Linto.LintoPvP.BRD.Ability;
 public class 净化 : ISlotResolver
 {
     public SlotMode SlotMode { get; } = SlotMode.Always;
-    public uint 技能净化 = 29056;
     public int Check()
     {
         if (!PvPBRDOverlay.BRDQt.GetQt("自动净化"))
         {
             return -9;
         }
-        if (!技能净化.GetSpell().IsReadyWithCanCast())
+        if (!29056u.GetSpell().IsReadyWithCanCast() || Core.Me.CurrentMp < 2500)
         {
             return -2;
         }
-        if (PVPHelper.净化判断())
-        {
+        if(PVPHelper.净化判断())
             return 1;
-        }
-        return -3;
+        return -666;
     }
     public void Build(Slot slot)
     {
-        slot.Add(PVPHelper.等服务器Spell(29056u, Core.Me));
+        slot.maxDuration = 300;
+        slot.Add(PVPHelper.不等服务器Spell(29056u, Core.Me));
     }
 }

@@ -43,7 +43,7 @@ public class NewWindow : IRotationUI
     }
     public void Update()
     {
-        // 执行GCD窗口的专属更新逻辑（如果有）
+        // 执行窗口的专属更新逻辑（如果有）
         UpdateAction?.Invoke();
     }
     // 2. 实现 IDisposable 接口的 Dispose() 方法

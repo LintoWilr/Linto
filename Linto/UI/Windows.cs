@@ -52,15 +52,14 @@ public static class 监控窗口
                           | ImGuiWindowFlags.AlwaysAutoResize; // 可选：自动适应内容（可根据需要移除）
         // 根据 PvPSettings 动态添加 NoMove 和鼠标穿透标志
         if (PvPSettings.Instance.禁止移动窗口)
-            windowFlags |= ImGuiWindowFlags.NoMove;
-        if (PvPSettings.Instance.鼠标穿透)
-            windowFlags |= ImGuiWindowFlags.NoInputs
+            windowFlags |= ImGuiWindowFlags.NoMove
+                           | ImGuiWindowFlags.NoInputs
                            | ImGuiWindowFlags.NoNav
                            | ImGuiWindowFlags.NoNavInputs
                            | ImGuiWindowFlags.NoMouseInputs;
 
         // 启动窗口
-        if (ImGui.Begin("###GCD窗口", ref _isWindowOpen, windowFlags))
+        if (ImGui.Begin("###监控窗口", ref _isWindowOpen, windowFlags))
         {
             // 实时保存窗口位置和大小
             _savedWindowPos = ImGui.GetWindowPos();
@@ -75,6 +74,38 @@ public static class 监控窗口
             画图标和文本(windowContentSize);
         }
         ImGui.End();
+    }
+    
+    // 封装：绘制带颜色 + 描边 + 背景的标签
+    static void DrawLabel(string text, Vector4 bgColor, Vector4 textColor, Vector4 outlineColor)
+    {
+        var pos = ImGui.GetCursorScreenPos();
+        var textSize = ImGui.CalcTextSize(text);
+        var padding = new Vector2(6, 2);
+        var size = textSize + padding * 2;
+        var drawList = ImGui.GetWindowDrawList();
+
+        // 背景（圆角）
+        drawList.AddRectFilled(pos, pos + size, ImGui.ColorConvertFloat4ToU32(bgColor), 4f);
+
+        // 描边文字
+        var textPos = pos + padding;
+        DrawTextOutline(text, textPos, textColor, outlineColor);
+
+        ImGui.Dummy(size); // 占位
+    }
+    static void DrawTextOutline(string text, Vector2 pos, Vector4 color, Vector4 outlineColor)
+    {
+        var drawList = ImGui.GetWindowDrawList();
+        uint outline = ImGui.ColorConvertFloat4ToU32(outlineColor);
+        uint main = ImGui.ColorConvertFloat4ToU32(color);
+
+        float t = 1f;
+        drawList.AddText(pos + new Vector2(-t, 0), outline, text);
+        drawList.AddText(pos + new Vector2(t, 0), outline, text);
+        drawList.AddText(pos + new Vector2(0, -t), outline, text);
+        drawList.AddText(pos + new Vector2(0, t), outline, text);
+        drawList.AddText(pos, main, text);
     }
 
     public static void 画图标和文本(Vector2 windowContentSize)
@@ -102,7 +133,7 @@ public static class 监控窗口
             ImGui.Text("    ");
             ImGui.SameLine();
             if (texture != null)
-                ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
+                ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片比例, PvPSettings.Instance.图片比例*1.5f));
             ImGui.Columns();
         }
 
@@ -137,23 +168,38 @@ public static class 监控窗口
                     }
 
                     // 如果成功获取到职业图标，显示该图标
-                    if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
+                    if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(PvPSettings.Instance.图标大小, PvPSettings.Instance.图标大小));
+                    
+                    float hpPercent = v.CurrentHpPercent() * 100f;
+                    float distance = v.DistanceToPlayer(); 
+                    // 1. 名字（蓝色背景 + 白字 + 黑边）
                     if (PvPSettings.Instance.名字)
                     {
                         ImGui.SameLine();
-                        ImGui.Text($"{v.Name}");
+                        DrawLabel($" {v.Name} ", 
+                            new Vector4(0.1f, 0.3f, 0.7f, 0.8f),  // 蓝底
+                            new Vector4(1f, 1f, 1f, 1f),         // 白字
+                            new Vector4(0f, 0f, 0f, 1f));        // 黑边
                     }
-
+                    // 2. 血量（红→绿渐变 + 百分号）
                     if (PvPSettings.Instance.血量)
                     {
                         ImGui.SameLine();
-                        ImGui.Text($"HP百分比:{v.CurrentHpPercent() * 100f}");
-                    }
+                        var hpColor = hpPercent > 50 ? 
+                            new Vector4(0.1f, 0.7f, 0.1f, 0.8f) :  // 绿
+                            new Vector4(0.7f, 0.1f, 0.1f, 0.8f);  // 红
 
+                        DrawLabel($" {hpPercent:F1}% ", hpColor, Vector4.One, new Vector4(0,0,0,1));
+                    }
+                    // 3. 距离（橙色警告）
                     if (PvPSettings.Instance.距离)
                     {
                         ImGui.SameLine();
-                        ImGui.Text($"距离:{v.DistanceToPlayer():F1}m");
+                        var distColor = distance < 5 ? 
+                            new Vector4(0.8f, 0.2f, 0.1f, 0.9f) :  // 近距离 → 红
+                            new Vector4(0.8f, 0.6f, 0.1f, 0.8f);  // 远距离 → 橙
+
+                        DrawLabel($" {distance:F1}米 ", distColor, Vector4.One, new Vector4(0,0,0,1));
                     }
                 }
 

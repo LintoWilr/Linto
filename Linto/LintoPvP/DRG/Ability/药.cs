@@ -33,6 +33,7 @@ namespace Linto.LintoPvP.DRG
 
         public void Build(Slot slot)
         {
+            slot.maxDuration = 300;
             slot.Add(PVPHelper.等服务器Spell(29711, Core.Me));
         }
     }

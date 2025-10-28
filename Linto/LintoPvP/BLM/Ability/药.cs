@@ -35,7 +35,8 @@ namespace Linto.LintoPvP.BLM.Ability
 
         public void Build(Slot slot)
         {
-            slot.Add(SpellHelper.GetSpell(29711, SpellTargetType.Self));
+            slot.maxDuration = 300;
+            slot.Add(PVPHelper.等服务器Spell(29711, Core.Me));
         }
     }
 }

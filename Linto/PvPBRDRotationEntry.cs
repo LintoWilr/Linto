@@ -73,9 +73,9 @@ public class PvPBRDRotationEntry : IRotationEntry
         JobViewWindow.AddQt("爆破箭", true);
         JobViewWindow.AddQt("绝峰箭", true);
         JobViewWindow.AddQt("强劲射击", true);
-        JobViewWindow.AddQt("喝热水", false);
+        JobViewWindow.AddQt("喝热水", true);
         JobViewWindow.AddQt("职能技能", true);
-        JobViewWindow.AddQt("自动净化", false);
+        JobViewWindow.AddQt("自动净化", true);
         JobViewWindow.AddQt("冲刺", true);
         JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
         JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));

@@ -15,7 +15,7 @@
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>True</Optimize>
-    <OutputPath>E:\AEAssist 7.3\ACR\Linto\</OutputPath>
+    <OutputPath></OutputPath>
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
 

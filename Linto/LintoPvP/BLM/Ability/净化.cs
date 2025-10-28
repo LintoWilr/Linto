@@ -1,3 +1,4 @@
+using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
@@ -16,19 +17,19 @@ public class 净化 : ISlotResolver
         {
             return -9;
         }
-        if (!29056u.GetSpell().IsReadyWithCanCast())
+        if (!29056u.GetSpell().IsReadyWithCanCast() || Core.Me.CurrentMp < 2500)
         {
             return -2;
         }
         if (PVPHelper.净化判断())
         {
-            return 0;
+            return 1;
         }
         return -3;
     }
-
     public void Build(Slot slot)
     {
-        slot.Add(SpellHelper.GetSpell(29056u, SpellTargetType.Self));
+        slot.maxDuration = 300;
+        slot.Add(PVPHelper.等服务器Spell(29056u, Core.Me));
     }
 }
