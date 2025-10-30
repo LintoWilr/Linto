@@ -55,9 +55,7 @@ public class 热冲击 : ISlotResolver
 
     public uint 烈焰弹id()
     {
-        if (PvPMCHSettings.Instance.热冲击)
-            return 29403u;
-        else return 41468u;
+        return 41468u;
     }
     public int Check()
     {

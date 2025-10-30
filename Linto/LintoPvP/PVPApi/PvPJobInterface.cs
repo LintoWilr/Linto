@@ -770,14 +770,10 @@ public class 职业配置 : BaseJobConfig
         配置Bool1(29414u, "分析", "钻头套装可用才使用分析", ref PvPMCHSettings.Instance.分析可用, 5);
 
         // 技能4: 野火
-        配置Bool1(29409u, "野火", "仅过热状态时使用", ref PvPMCHSettings.Instance.过热野火, 6);
+        配置Bool2(29409u, "野火", "仅过热状态时使用","自动选中优先选中带有野火的目标" ,ref PvPMCHSettings.Instance.过热野火,ref PvPMCHSettings.Instance.优先选择野火, 6);
 
         // 技能7: 全金属爆发
         配置Bool1(41469u, "全金属爆发", "仅野火期间使用", ref PvPMCHSettings.Instance.金属爆发仅野火, 12);
-
-        // 技能6: 整活
-
-        配置Bool1(41468u, "烈焰弹(整活)", "使用旧版热冲击(只会降低2000威力)", ref PvPMCHSettings.Instance.热冲击, 10);
 
         // 技能5: LB
         配置Bool1(29415u, "魔弹射手(热键)", "使用智能目标", ref PvPMCHSettings.Instance.智能魔弹, 7);

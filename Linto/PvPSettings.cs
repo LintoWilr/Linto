@@ -27,7 +27,7 @@ public class PvPSettings
     public int 语音cd = 1;
     public int 语音选择 = 1;
     public bool 指定坐骑 = false;
-    public string 坐骑名 = "";
+    public uint 坐骑名 = 1u;
     public float 宽1 = 500f;
     public float 高1 = 500f;
     public float 图片比例 = 125.0f;

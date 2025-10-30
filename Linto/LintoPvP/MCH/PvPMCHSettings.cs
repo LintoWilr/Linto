@@ -12,8 +12,7 @@ public class PvPMCHSettings
     private static string? path;
 
     public int 药血量 = 70;
-    public int 减色切换 = 4000;
-    public float 盾自身血量 = 0.6f;
+    public bool 优先选择野火 = true;
     public bool 钻头分析 = true;
     public bool 毒菌分析 = true;
     public bool 回转飞锯分析 = true;

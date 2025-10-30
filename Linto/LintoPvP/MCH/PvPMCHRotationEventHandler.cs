@@ -47,6 +47,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     public void AfterSpell(Slot slot, Spell spell)
     {
         uint id = spell.Id;
+        PVPTargetHelper.MonitorSkill(id);
     }
     public void OnBattleUpdate(int currTime)
     {

@@ -98,7 +98,8 @@ public class PVPHelper
         {
             return true;
         }
-        if(Core.Me.HasCanDispel())return true;
+        if(Core.Me.HasCanDispel())
+            return true;
         else 
             return false;
     }
@@ -343,18 +344,20 @@ public class PVPHelper
         //ImGui.Checkbox($"无目标挂机时冲刺(测试)##{232}", ref PvPSettings.Instance.无目标冲刺);
         //ImGui.SameLine();
         ImGui.Checkbox($"无目标时自动坐骑(默认陆行鸟)测试##{222}", ref PvPSettings.Instance.无目标坐骑);
-        ImGui.Checkbox($"自动坐骑指定相应坐骑##{678}", ref PvPSettings.Instance.指定坐骑);
-        if (PvPSettings.Instance.指定坐骑)
+        if (ImGui.InputUInt("坐骑编号", ref PvPSettings.Instance.坐骑名, 16))
         {
-            ImGui.SameLine();
-            if (ImGui.InputText("坐骑名字", ref PvPSettings.Instance.坐骑名, 16))
-            {
-                ImGui.Text($"设置的坐骑名字为: {PvPSettings.Instance.坐骑名}");
-            }
-            if (ImGui.Button("呼叫坐骑!"))
-            {
-                Core.Resolve<MemApiSendMessage>().SendMessage($"/mount {PvPSettings.Instance.坐骑名}");
-            }
+            ImGui.Text($"设置的坐骑编号为: {PvPSettings.Instance.坐骑名}");
+        }
+        if (ImGui.Button("呼叫坐骑!"))
+        {
+            ExecuteMountByAction();
+        }
+        unsafe static void ExecuteMountByAction()
+        {
+            var actionManager = FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance();
+            var mountId = PvPSettings.Instance.坐骑名;
+            if (mountId != 0)
+                actionManager->UseAction(FFXIVClientStructs.FFXIV.Client.Game.ActionType.Mount, mountId);
         }
         ImGui.Text($"自动坐骑在范围");
         ImGui.SameLine();
@@ -381,26 +384,6 @@ public class PVPHelper
         // 	Voice.PlayVoice("崩破");
         // }
         PvPSettings.Instance.Save();
-        if (ImGui.CollapsingHeader("7.2更新进度"))
-        {
-            ImGui.Text("只更新了绝枪及其职能技能 其他职业待更新");
-        }
-        if (ImGui.CollapsingHeader("更新日志"))
-        {
-            ImGui.Text("7/1 自动选中只在pvp生效 修复机工野火目标");
-            ImGui.Text("3/8 诗人光阴神提供自定义选择");
-            ImGui.Text("3/2 更新了7.1 机工");
-            ImGui.Text("2/26 更新了7.1 画蛇");
-            ImGui.Text("2/25 提供了只选中玩家和坐骑间隔");
-            ImGui.Text("2/20 添加了黑魔自定义配置");
-            ImGui.Text("2/19 更新了7.1 黑诗侍赤龙");
-            ImGui.Text("12/15 修复战场武士Lb狂按的问题");
-            ImGui.Text("12/4 添加了指定坐骑");
-            ImGui.Text("11/7 修复黑魔热震荡");
-            ImGui.Text("11/2 添加赤魔");
-            ImGui.Text("11/1 机工现在会强制锁野火目标了");
-            ImGui.Text("11/1 修复冲刺会打断龟壳的问题");
-        }
     }
 
     /*public static IBattleChara Get绝枪绿吸取目标()
@@ -1025,9 +1008,14 @@ public class PVPHelper
             {
                 Core.Resolve<MemApiMove>().SetRot(GetCameraRotation反向());
             }
+            unsafe static void ExecuteMountByAction()
+            {
+                var actionManager = FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance();
+                    actionManager->UseAction(FFXIVClientStructs.FFXIV.Client.Game.ActionType.PvPAction, 29056U);
+            }
             if (ImGui.Button("21"))
             {
-                Core.Resolve<MemApiMove>().SetRot(GetCameraRotation());
+                ExecuteMountByAction();
             }
             var target = Core.Me.GetCurrTarget();
             if (target == null)
@@ -1197,7 +1185,6 @@ public class PVPHelper
             //     // 重置列状态
             //     ImGui.Columns(1);
             // }
-
             void DrawUnitList()
             {
                 // 添加表头（分列显示）

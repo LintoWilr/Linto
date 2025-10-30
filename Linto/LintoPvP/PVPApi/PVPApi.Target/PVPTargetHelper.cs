@@ -74,14 +74,17 @@ public class PVPTargetHelper
         IBattleChara? target = null;
 
         // 如果已释放野火技能，优先选择野火目标
-        if (_wildfireReleased)
+        if (PvPMCHSettings.Instance.优先选择野火)
         {
-            target = TargetSelector.Get野火目标();
-            // 如果野火目标不存在或距离过远，则重置状态并选择最近目标
-            if (target == null || target.DistanceToPlayer() > 25)
+            if (_wildfireReleased)
             {
-                _wildfireReleased = false;
-                target = TargetSelector.Get最近目标();
+                target = TargetSelector.Get野火目标();
+                // 如果野火目标不存在或距离过远，则重置状态并选择最近目标
+                if (target == null || target.DistanceToPlayer() > 25)
+                {
+                    ResetWildfireStatus();
+                    target = TargetSelector.Get最近目标();
+                }
             }
         }
         else
