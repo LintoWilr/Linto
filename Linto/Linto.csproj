@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows10.0.26100.0</TargetFramework>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <!-- Enable Windows Forms tooling for SDK-style projects -->
@@ -30,9 +30,9 @@
 
   <!-- Package references -->
   <ItemGroup>
-    <PackageReference Include="AEAssist.NET" Version="1.2.2" ExcludeAssets="runtime" />
+    <PackageReference Include="AEAssist.NET" Version="1.2.8" ExcludeAssets="runtime" />
     <PackageReference Include="CSCore" Version="1.2.1.2" />
-    <PackageReference Include="Obfuscar" Version="2.2.39">
+    <PackageReference Include="Obfuscar" Version="2.2.50">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
