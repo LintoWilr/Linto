@@ -3,6 +3,7 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Game.Command;
 using Linto.LintoPvP.PVPApi;
@@ -48,7 +49,15 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
 	{
 		uint id = spell.Id;
 	}
-	public void OnBattleUpdate(int currTime)
+    public void BeforeSpell(Slot slot, Spell spell)
+    {
+        if(Core.Me.GetCurrTarget()==null)return;
+        var 距离 = Core.Me.GetCurrTarget().DistanceToPlayer();
+        if (PvPSettings.Instance.诊断模式)
+            LogHelper.Print(AI.Instance.BattleData.CurrBattleTimeInSec + ",释放技能:" + spell.Name + ":" + spell.Id + 
+                $"目标：{Core.Me.GetCurrTarget().Name},血量：{Core.Me.GetCurrTarget().CurrentHp}，距离：{距离}");
+    }
+    public void OnBattleUpdate(int currTime)
 	{
 		PVPHelper.战斗状态();
 		PVPTargetHelper.自动选中();

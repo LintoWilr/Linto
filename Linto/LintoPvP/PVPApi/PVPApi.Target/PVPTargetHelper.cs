@@ -63,7 +63,7 @@ public class PVPTargetHelper
 	public static void 自动选中 ()
 		{
 		// 非PvP环境直接返回
-		if (!Core. Me. IsPvP ()) return;
+		if (!Core.Me.IsPvP()) return;
 
 		// 没有权限直接返回
 		if (!( PVPHelper. 通用码权限 || PVPHelper. 高级码 )) return;
@@ -72,7 +72,7 @@ public class PVPTargetHelper
 		if (!PvPSettings. Instance. 自动选中) return;
 
 		IBattleChara? target = null;
-
+		
 		// 如果已释放野火技能，优先选择野火目标
 		if (_wildfireReleased)
 			{
@@ -93,8 +93,9 @@ public class PVPTargetHelper
 		// 如果选中的目标与当前目标不同，且不是自己，则设置为目标
 		if (target != Core. Me. GetCurrTarget () && target != Core. Me && target != null)
 			{
-			Svc. Targets. Target = target;
+			Core.Me.SetTarget(target);
 			}
+		
 		}
 
 	/// <summary>
