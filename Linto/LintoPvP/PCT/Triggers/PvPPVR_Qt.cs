@@ -19,7 +19,7 @@ public class LintoPvPPCTQt : ITriggerAction
     public bool Value { get; set; } = new();
     public string DisplayName => "PvPPCT".Loc();
 
-    public string Remark { get; set; }
+public string Remark { get; set; } = string.Empty;
 
     public bool Draw()
     {

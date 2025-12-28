@@ -3,12 +3,14 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
+using Linto.LintoPvP;
 using Linto.LintoPvP.PVPApi;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
 using Linto.LintoPvP.VPR;
 using Linto.LintoPvP.VPR.Ability;
 using Linto.LintoPvP.VPR.GCD;
 using Linto.LintoPvP.VPR.Triggers;
+using Linto.UI;
 
 
 namespace Linto;
@@ -17,11 +19,12 @@ namespace Linto;
 
 public class PvP双刀小子Entry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
-    public string OverlayTitle { get; } = "PvP双刀小子";
     public string AuthorName { get; set; } = "Linto PvP";
+    public static JobViewWindow JobViewWindow { get; private set; }
+    private NewWindow 监控窗口; // 监控
+    private CompositeRotationUI _compositeUI; // 组合 UI
+    private PvPVPROverlay _lazyOverlay = new PvPVPROverlay();
+    private PvPVPRSettingUI settingUI = new();
     public List<SlotResolverData> SlotResolvers = new()
     {
         new (new 净化(),SlotMode.Always),
@@ -34,34 +37,27 @@ public class PvP双刀小子Entry : IRotationEntry
         new (new 齿牙体势连击(),SlotMode.Always),
         new (new 冲刺(),SlotMode.Always),
     };
+
+    public string OverlayTitle { get; } = "绝枪";
+
     public Rotation Build(string settingFolder)
     {
         PvPVPRSettings.Build(settingFolder);
         PvPSettings.Build(settingFolder);
         BuildQT();
+        Build监控窗口(); // 初始化 监控窗口 
+        BuildCompositeUI(); // 组合 UI
         var rot = new Rotation(SlotResolvers)
         {
             TargetJob = Jobs.Viper,
             AcrType = AcrType.PVP,
             MinLevel = 1,
             MaxLevel = 100,
-            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.1适配]",
+            Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈",
         };
-        //rot.AddSlotSequences(new TriggerAction_QT());
-      //  rot.AddTriggerAction(new LintoPvPVPRQt());
         rot.SetRotationEventHandler(new PvPVPRRotationEventHandler());
-        rot.AddOpener(GetOpener);
+        // 如果需要起手，添加 GetOpener 逻辑
         return rot;
-    }
-    public static JobViewWindow JobViewWindow { get; private set; }
-    public IRotationUI GetRotationUI()
-    {
-        return PvP双刀小子Entry.JobViewWindow;
-    }
-    private PvPVPRSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-       settingUI.Draw();
     }
     public void BuildQT()
     {
@@ -70,7 +66,7 @@ public class PvP双刀小子Entry : IRotationEntry
         //贤者ACR入口.职业视图窗口.AddTab("日志", _lazyOverlay.更新日志);
         //贤者ACR入口.职业视图窗口.AddTab("DEV", _lazyOverlay.DrawDev);
         JobViewWindow.AddTab("职业配置", PvPVPROverlay.DrawGeneral);
-        JobViewWindow.AddTab("监控",PVPHelper.监控);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
         JobViewWindow.AddQt("连击", true);
         JobViewWindow.AddQt("蛇续剑", true);
@@ -80,37 +76,42 @@ public class PvP双刀小子Entry : IRotationEntry
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);
-        JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("LB",new HotkeyData.蛇LB());
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("LB", new HotkeyData.蛇LB());
     }
-    private IOpener? GetOpener(uint level)
+    private void Build监控窗口()
     {
-        return null;
+        // 初始化窗口（内部已注册独立绘制事件）
+        监控窗口 = new NewWindow(() => PvPSettings.Instance.Save());
+        监控窗口.SetUpdateAction(On监控Update);
+    }
+    public void On监控Update()
+    {
+        //窗口的更新逻辑
+    }
+    private void BuildCompositeUI()
+    {
+        _compositeUI = new CompositeRotationUI(new List<IRotationUI>
+        {
+            监控窗口,
+            JobViewWindow
+        });
+    }
+
+    public IRotationUI GetRotationUI()
+    {
+        return _compositeUI;
+    }
+
+    public void OnDrawSetting()
+    {
+        settingUI.Draw();
+    }
+
+    public void Dispose()
+    {
+        监控窗口?.Dispose();
     }
 }
-        //if (ImGui.CollapsingHeader("插入技能状态"))
-        //{
-        //    if (ImGui.Button("清除队列"))
-        //    {
-        //        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
-        //        AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
-        //    }
-
-        //    ImGui.VPReLine();
-        //    if (ImGui.Button("清除一个"))
-        //    {
-        //        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
-        //        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
-        //    }
-
-        //    ImGui.Text("-------能力技-------");
-        //    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
-        //        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_OffGCD)
-        //            ImGui.Text(spell.Name);
-        //    ImGui.Text("-------GCD-------");
-        //    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
-        //        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_GCD)
-        //            ImGui.Text(spell.Name);
-        //}

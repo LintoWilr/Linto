@@ -1,11 +1,12 @@
 using AEAssist.Helper;
 using AEAssist.IO;
+using System.Numerics;
 
 namespace Linto;
 
 public class PvPSettings
 {
-	public static PvPSettings Instance;
+    public static PvPSettings? Instance;
 
 	private static string path;
 	public bool 监控 = false;
@@ -60,9 +61,34 @@ public class PvPSettings
 		}
 	}
 
-	public void Save()
-	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
-		File.WriteAllText(path, JsonHelper.ToJson((object)this));
-	}
+    public static void Build(string settingPath)
+    {
+        path = Path.Combine(settingPath, "PvPSettings.json");
+        if (!File.Exists(path))
+        {
+            Instance = new PvPSettings();
+            Instance.Save();
+            return;
+        }
+        try
+        {
+            Instance = JsonHelper.FromJson<PvPSettings>(File.ReadAllText(path));
+        }
+        catch (Exception e)
+        {
+            Instance = new PvPSettings();
+            LogHelper.Error(e.ToString());
+        }
+    }
+
+    public void Save()
+    {
+        if (!string.IsNullOrEmpty(path))
+        {
+            var directory = Path.GetDirectoryName(path);
+            if (directory != null)
+                Directory.CreateDirectory(directory);
+            File.WriteAllText(path, JsonHelper.ToJson((object)this));
+        }
+    }
 }

@@ -16,33 +16,34 @@ using AEAssist.Verify;
 using Dalamud.Game.ClientState.Conditions;
 using System.Runtime.CompilerServices;
 using Dalamud.Game.Text.SeStringHandling;
+using Dalamud.Plugin.Services;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
 using Linto.LintoPvP.RDM;
-using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;    
+using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
 namespace Linto.LintoPvP.PVPApi;
 
 public class PVPHelper
-{ 
+{
     //抄来的
-    public static Vector3 向量位移(Vector3 position, float facingRadians, float distance) 
+    public static Vector3 向量位移(Vector3 position, float facingRadians, float distance)
     {
         // 计算x-z平面上移动的距离分量  
         float dx = (float)(Math.Sin(facingRadians) * distance);
         float dz = (float)(Math.Cos(facingRadians) * distance);
 
-        return new Vector3(position.X + dx, position.Y + 5, position.Z + dz); 
+        return new Vector3(position.X + dx, position.Y + 5, position.Z + dz);
     }
-    
-    public static Vector3 向量位移反向(Vector3 position, float facingRadians, float distance) 
+
+    public static Vector3 向量位移反向(Vector3 position, float facingRadians, float distance)
     {
         // 计算x-z平面上移动的距离分量（反向）
         float dx = (float)(Math.Sin(facingRadians) * (-distance));
         float dz = (float)(Math.Cos(facingRadians) * (-distance));
 
-        return new Vector3(position.X + dx, position.Y + 5, position.Z + dz); 
+        return new Vector3(position.X + dx, position.Y + 5, position.Z + dz);
     }
 
     private static unsafe RaptureAtkModule* RaptureAtkModule => CSFramework.Instance()->GetUIModule()->GetRaptureAtkModule();
@@ -59,7 +60,7 @@ public class PVPHelper
 
         return rotation;
     }
-    
+
     internal static unsafe float GetCameraRotation反向()
     {
         // 获取当前相机旋转（以弧度表示）
@@ -84,32 +85,43 @@ public class PVPHelper
     public static unsafe bool 视线阻挡(IBattleChara? 目标角色)
     {
         if (目标角色 == null) return true;
-        return MemApiSpell.LineOfSightChecker.IsBlocked(Core.Me.GameObject(),(目标角色.GameObject()));
+        return MemApiSpell.LineOfSightChecker.IsBlocked(Core.Me.GameObject(), (目标角色.GameObject()));
     }
 
-    
+
     /// <summary>
     /// 判断是否需要用净化 有BUFF为True 无BUFF为False
     /// </summary>
     public static bool 净化判断()
     {
-        if (Core.Me.HasCanDispel())
+        if (Core.Me.HasAnyAura(净化List))
         {
             return true;
         }
-        return false;
+        if(Core.Me.HasCanDispel())
+            return true;
+        else 
+            return false;
     }
-
+    private static List<uint> 净化List = new List<uint>
+    {
+        1343u, //眩晕
+        1344u, //加重
+        1345u, //止步
+        1347u, //沉默
+        4470u, //沉默
+        3085u, //自然的奇迹
+        3219u, //冻结
+    };
     public static Spell 不等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+        var spell = target != null ? new Spell(id, target) : null;
         spell.WaitServerAcq = false;
         return spell;
     }
-
     public static Spell 等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+        var spell = target != null ? new Spell(id, target) : null;
         spell.WaitServerAcq = true;
         return spell;
     }
@@ -138,11 +150,11 @@ public class PVPHelper
                                              19014409516898973, //dc 佐迪亚克
                                              19014409512065492 //安姐
                                          };
-                                         
+
     //不作变化
-    public static bool 通用码权限 => 通用码权限列表.Contains(Svc.ClientState.LocalContentId) || 
+    public static bool 通用码权限 => 通用码权限列表.Contains(Svc.ClientState.LocalContentId) ||
                                       Core.Resolve<MemApiMap>().GetCurrTerrId() == 250;
-                                      
+
     private const uint 狼狱停船厂 = 250;
     private const uint 赤土红沙 = 1138;
     private const uint 赤土红沙自定义 = 1139;
@@ -155,28 +167,28 @@ public class PVPHelper
     private const uint 火山之心自定义 = 1059;
     private const uint 九霄云上自定义 = 1060;
 
-    private static readonly HashSet<uint> RestrictedTerritoryIds = new HashSet<uint> 
+    private static readonly HashSet<uint> RestrictedTerritoryIds = new HashSet<uint>
                                                                    {
-                                                                       狼狱停船厂, 
-                                                                       赤土红沙, 
-                                                                       赤土红沙自定义, 
-                                                                       机关大殿, 
+                                                                       狼狱停船厂,
+                                                                       赤土红沙,
+                                                                       赤土红沙自定义,
+                                                                       机关大殿,
                                                                        机关大殿自定义,
-                                                                       角力学校, 
-                                                                       火山之心, 
-                                                                       九霄云上, 
-                                                                       角力学校自定义, 
-                                                                       火山之心自定义, 
+                                                                       角力学校,
+                                                                       火山之心,
+                                                                       九霄云上,
+                                                                       角力学校自定义,
+                                                                       火山之心自定义,
                                                                        九霄云上自定义,
                                                                    };
-                                                                   
+
     public static bool 是否55() => RestrictedTerritoryIds.Contains(Core.Resolve<MemApiMap>().GetCurrTerrId());
-    
+
     //不作变化
     public static bool 高级码 => Share.VIP.Level != VIPLevel.Normal;
-    
+
     public static bool check坐骑() => Svc.Condition[ConditionFlag.Mounted];
-    
+
     /*public static Dictionary<uint, IBattleChara> GetList_all(float range = 50f)
     {
         if (!Core.Me.IsPvP())
@@ -216,7 +228,7 @@ public class PVPHelper
         }
         return re;
     }*/
-    
+
     /// <summary>
     /// 行动状态检测
     /// </summary>
@@ -229,8 +241,7 @@ public class PVPHelper
     /// <param name="检查是不是3秒内用过龟壳">7</param>
     public static bool CanActive()
     {
-        uint 技能龟壳 = 29711u;
-        //	if (!Enum.IsDefined(typeof(ZoneId), GetZoneId()))
+        uint 技能龟壳 = 29054u;
         if (!Core.Me.IsPvP())
         {
             return false;
@@ -261,25 +272,27 @@ public class PVPHelper
         }
         return true;
     }
-    
+
     private static IBattleChara? Target;
-    
+
     public static bool HasBuff(IBattleChara? BattleChara, uint buffId)
     {
         if (BattleChara == null) return false;
         return BattleChara.HasAura(buffId, 0);
     }
-    
-    public static void 技能图标(uint id)
+
+    public static void 技能图标(uint id, float size)
     {
         uint skillid = id;
-        Vector2 size1 = new Vector2(60, 60);
         IDalamudTextureWrap? textureWrap;
         if (!Core.Resolve<MemApiIcon>().GetActionTexture(skillid, out textureWrap))
+        {
+            ImGui.Dummy(new Vector2(size, size)); 
             return;
-        if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
+        }
+        if (textureWrap != null) ImGui.Image(textureWrap.Handle, new Vector2(size, size)); 
     }
-    
+
     private static void s1()
     {
         ImGui.PushItemWidth(100);
@@ -293,14 +306,14 @@ public class PVPHelper
         ImGui.InputInt($"米内最近目标##{229}", ref PvPSettings.Instance.自动选中自定义范围);
         ImGui.PopItemWidth();
     }
-    
+
     private static void s3()
     {
         ImGui.PushItemWidth(100);
         ImGui.InputInt($"秒##{230}", ref PvPSettings.Instance.坐骑cd);
         ImGui.PopItemWidth();
     }
-    
+
     public static void 通用设置配置()
     {
         ImGui.Text("共通配置");
@@ -332,18 +345,20 @@ public class PVPHelper
         //ImGui.Checkbox($"无目标挂机时冲刺(测试)##{232}", ref PvPSettings.Instance.无目标冲刺);
         //ImGui.SameLine();
         ImGui.Checkbox($"无目标时自动坐骑(默认陆行鸟)测试##{222}", ref PvPSettings.Instance.无目标坐骑);
-        ImGui.Checkbox($"自动坐骑指定相应坐骑##{678}", ref PvPSettings.Instance.指定坐骑);
-        if (PvPSettings.Instance.指定坐骑) 
+        if (ImGui.InputUInt("坐骑编号", ref PvPSettings.Instance.坐骑名, 16))
         {
-            ImGui.SameLine();
-            if (ImGui.InputText("坐骑名字", ref PvPSettings.Instance.坐骑名, 16))
-            {
-                ImGui.Text($"设置的坐骑名字为: {PvPSettings.Instance.坐骑名}");
-            }
-            if (ImGui.Button("呼叫坐骑!"))
-            {
-                Core.Resolve<MemApiSendMessage>().SendMessage($"/mount {PvPSettings.Instance.坐骑名}");
-            }
+            ImGui.Text($"设置的坐骑编号为: {PvPSettings.Instance.坐骑名}");
+        }
+        if (ImGui.Button("呼叫坐骑!"))
+        {
+            ExecuteMountByAction();
+        }
+        unsafe static void ExecuteMountByAction()
+        {
+            var actionManager = FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance();
+            var mountId = PvPSettings.Instance.坐骑名;
+            if (mountId != 0)
+                actionManager->UseAction(FFXIVClientStructs.FFXIV.Client.Game.ActionType.Mount, mountId);
         }
         ImGui.Text($"自动坐骑在范围");
         ImGui.SameLine();
@@ -370,29 +385,8 @@ public class PVPHelper
         // 	Voice.PlayVoice("崩破");
         // }
         PvPSettings.Instance.Save();
-        //监控窗口();
-        if (ImGui.CollapsingHeader("7.2更新进度"))
-        {
-            ImGui.Text("只更新了绝枪及其职能技能 其他职业待更新");
-        }
-        if (ImGui.CollapsingHeader("更新日志"))
-        {
-            ImGui.Text("7/1 自动选中只在pvp生效 修复机工野火目标");
-            ImGui.Text("3/8 诗人光阴神提供自定义选择");
-            ImGui.Text("3/2 更新了7.1 机工");
-            ImGui.Text("2/26 更新了7.1 画蛇");
-            ImGui.Text("2/25 提供了只选中玩家和坐骑间隔");
-            ImGui.Text("2/20 添加了黑魔自定义配置");
-            ImGui.Text("2/19 更新了7.1 黑诗侍赤龙");
-            ImGui.Text("12/15 修复战场武士Lb狂按的问题");
-            ImGui.Text("12/4 添加了指定坐骑");
-            ImGui.Text("11/7 修复黑魔热震荡");
-            ImGui.Text("11/2 添加赤魔");
-            ImGui.Text("11/1 机工现在会强制锁野火目标了");
-            ImGui.Text("11/1 修复冲刺会打断龟壳的问题");
-        }
     }
-    
+
     /*public static IBattleChara Get绝枪绿吸取目标()
     {
         IBattleChara[] 玩家25米内敌人 = TargetMgr.Instance.EnemysIn25.Values.ToArray();
@@ -421,7 +415,7 @@ public class PVPHelper
         }
         return Core.Me;
     }*/
-    
+
 
     //不作变化
     public static void 权限获取()
@@ -429,16 +423,16 @@ public class PVPHelper
         //不作变化
         ulong cid = Svc.ClientState.LocalContentId;
         string CID = cid.ToString();
-        
+
         //不作变化
         ImGui.Text($"当前的码等级：[{Share.VIP.Level}]");
-        
+
         //不作变化
         if (Share.VIP.Level == VIPLevel.Normal && 高级码)
         {
             ImGui.Text($"仅狼狱可用 战场无权限");
         }
-        
+
         //不作变化
         if (!通用码权限 && !高级码)
         {
@@ -450,108 +444,371 @@ public class PVPHelper
                 LogHelper.Print("已复制CID到剪贴板");
             }
         }
-        
+
         //不作变化
         if (通用码权限 || 高级码)
         {
             ImGui.TextColored(new Vector4(42f / 255f, 215f / 255f, 57f / 255f, 0.8f), "已解锁");
         }
+        ImGui.SameLine();
+        调整控件();
     }
+    private static bool 调整配置 = false;
 
+    public static void 调整控件()
+    {
+        if (ImGui.Button("UI调整开/关"))
+        {
+            调整配置 = !调整配置;
+        }
+
+        if (调整配置)
+        { 
+            ImGui.Separator();
+            ImGui.Text("调整布局参数");
+            
+            ImGui.SliderFloat("图标尺寸", ref PvPSettings.Instance.iconWidth, 32.0f, 128.0f, "%.0f 像素");
+            PvPSettings.Instance.iconWidth = Math.Max(32.0f, PvPSettings.Instance.iconWidth);
+
+            ImGui.SliderFloat("输入框宽度", ref PvPSettings.Instance.inputWidth, 50.0f, 500.0f, "%.0f 像素");
+            PvPSettings.Instance.inputWidth = Math.Max(50.0f, PvPSettings.Instance.inputWidth);
+
+            ImGui.SliderFloat("行距", ref PvPSettings.Instance.lineSpacing, 2.0f, 100.0f, "%.1f 像素");
+            PvPSettings.Instance.lineSpacing = Math.Max(2.0f, PvPSettings.Instance.lineSpacing);
+            
+            PvPSettings.Instance.Save();
+        }
+    }
+    
     public static void 技能配置(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float buttonHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + buttonHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+    
+        Vector2 startPos = ImGui.GetCursorPos();
+    
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + 当前状态 + 切换按钮
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}: {切换配置}");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{描述文字}: {切换配置}").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         if (ImGui.Button($"切换##{id}"))
         {
             切换配置 = !切换配置;
         }
 
-        ImGui.Columns(1);
-    }
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
 
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
     public static void 技能配置2(uint 技能图标id, string 技能名字, string 描述文字, ref bool 切换配置, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + checkboxHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
         ImGui.Checkbox($"##{id}", ref 切换配置);
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
     public static void 技能配置3(uint 技能图标id, string 技能名字, string 描述文字, ref int 数值, int 幅度, int 快速幅度, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        // 计算布局参数
+        float lineHeight = ImGui.GetTextLineHeight(); // 单行文字高度
+        float inputHeight = ImGui.GetFrameHeight(); // InputInt 高度（包括边框）
+        float totalHeight = lineHeight + inputHeight + PvPSettings.Instance.lineSpacing; // 两行总高度
+        float iconSize = PvPSettings.Instance.iconWidth; // 图标尺寸（正方形，宽度 = 高度）
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - iconSize - style.ItemSpacing.X * 2; // 文字区域宽度
+    
+        Vector2 startPos = ImGui.GetCursorPos();
+    
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + iconSize + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + InputInt
+        ImGui.SetCursorPos(new Vector2(startPos.X + iconSize + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{描述文字}:").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         ImGui.InputInt($"##{id}", ref 数值, 幅度, 快速幅度);
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
-    public static void 技能配置4(uint 技能图标id, string 技能名字, string 数值描述, string 描述文字, ref bool 切换配置, ref int 数值, int 幅度,
-        int 快速幅度, int id)
+    public static void 技能配置4(uint 技能图标id, string 技能名字, string 数值描述, string 描述文字, ref bool 切换配置, ref int 数值, int 幅度, int 快速幅度, int id)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float inputHeight = ImGui.GetFrameHeight();
+        float totalHeight = (lineHeight * 2) + inputHeight + (PvPSettings.Instance.lineSpacing * 2); // 三行内容
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
         ImGui.Checkbox($"##{id}", ref 切换配置);
+
+        // 第三行：数值描述 + InputInt
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + (PvPSettings.Instance.lineSpacing * 2)));
         ImGui.Text($"{数值描述}:");
+        ImGui.SameLine();
+        float numDescWidth = ImGui.CalcTextSize($"{数值描述}:").X;
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth); // 直接使用 inputWidth
         ImGui.InputInt($"##{id}+1", ref 数值, 幅度, 快速幅度);
-        ImGui.Columns(1);
-    }
 
-    public static void 技能配置5(uint 技能图标id, string 技能名字, string IntDescription, ref float value, float min, float max,
-        int id)
-    {
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
         ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
-        ImGui.Text(技能名字);
-        ImGui.Text($"{IntDescription}:");
-        ImGui.SliderFloat($"##{id}", ref value, min, max);
-        ImGui.Columns(1); 
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
 
+    public static void 技能配置5(uint 技能图标id, string 技能名字, string IntDescription, ref float value, float min, float max, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float sliderHeight = ImGui.GetFrameHeight();
+        float totalHeight = lineHeight + sliderHeight + PvPSettings.Instance.lineSpacing;
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+        
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：描述文字 + SliderFloat
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text($"{IntDescription}:");
+        ImGui.SameLine();
+        float descWidth = ImGui.CalcTextSize($"{IntDescription}:").X;
+        
+        ImGui.SetNextItemWidth(PvPSettings.Instance.inputWidth);
+        ImGui.SliderFloat($"##{id}", ref value, min, max);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
+    /// <summary>
+    /// 3个bool值
+    /// </summary>
+    /// <param name="none">适用于需要三个bool进行配置的技能</param>
+    public static void 技能配置6(uint 技能图标id, string 技能名字, string 效果1, string 效果2, string 效果3,ref bool 效果1bool, ref bool 效果2bool,ref bool 效果3bool, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight =
+            (lineHeight * 3) + (checkboxHeight * 3) + (PvPSettings.Instance.lineSpacing * 3); // 三行文字 + 三行 Checkbox
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth -
+                              style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        PVPHelper.技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：效果1 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text(效果1);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果1}", ref 效果1bool);
+
+        // 第三行：效果2 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + checkboxHeight + (PvPSettings.Instance.lineSpacing * 2)));
+        ImGui.Text(效果2);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果2}", ref 效果2bool);
+
+        // 第四行：效果3 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 3) + (checkboxHeight * 2) + (PvPSettings.Instance.lineSpacing * 3)));
+        ImGui.Text(效果3);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果3}", ref 效果3bool);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
+        /// <summary>
+    /// 3个bool值
+    /// </summary>
+    /// <param name="none">适用于需要三个bool进行配置的技能</param>
+    public static void 技能配置7(uint 技能图标id, string 技能名字, string 效果1, string 效果2,ref bool 效果1bool, ref bool 效果2bool, int id)
+    {
+        var style = ImGui.GetStyle();
+
+        float lineHeight = ImGui.GetTextLineHeight();
+        float checkboxHeight = ImGui.GetFrameHeight();
+        float totalHeight =
+            (lineHeight * 3) + (checkboxHeight * 3) + (PvPSettings.Instance.lineSpacing * 2); // 三行文字 + 三行 Checkbox
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth -
+                              style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        PVPHelper.技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y));
+        ImGui.Text(技能名字);
+
+        // 第二行：效果1 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
+        ImGui.Text(效果1);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果1}", ref 效果1bool);
+
+        // 第三行：效果2 + Checkbox
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + (lineHeight * 2) + checkboxHeight + (PvPSettings.Instance.lineSpacing * 2)));
+        ImGui.Text(效果2);
+        ImGui.SameLine();
+        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + style.ItemSpacing.X);
+        ImGui.Checkbox($"##{效果2}", ref 效果2bool);
+        
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
+    }
     public static void 技能解释(uint 技能图标id, string 技能名字, string 描述文字)
     {
-        ImGui.Separator();
-        ImGui.Columns(2, ImU8String.Empty, false);
-        ImGui.SetColumnWidth(0, 70);
-        技能图标(技能图标id);
-        ImGui.NextColumn();
-        ImGui.SetColumnWidth(1, 150);
+        var style = ImGui.GetStyle();
+        float lineHeight = ImGui.GetTextLineHeight();
+        float totalHeight = (lineHeight * 2) + PvPSettings.Instance.lineSpacing; // 两行纯文本
+        float iconSize = PvPSettings.Instance.iconWidth;
+        float textAreaWidth = ImGui.GetContentRegionAvail().X - PvPSettings.Instance.iconWidth - style.ItemSpacing.X * 2;
+
+        Vector2 startPos = ImGui.GetCursorPos();
+
+        技能图标(技能图标id, iconSize);
+
+        // 第一行：技能名字
+        ImGui.SameLine();
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X, startPos.Y));
         ImGui.Text(技能名字);
+
+        // 第二行：描述文字
+        ImGui.SetCursorPos(new Vector2(startPos.X + PvPSettings.Instance.iconWidth + style.ItemSpacing.X,
+            startPos.Y + lineHeight + PvPSettings.Instance.lineSpacing));
         ImGui.Text($"{描述文字}:");
-        ImGui.Columns(1);
+
+        // 分隔线
+        ImGui.SetCursorPosY(startPos.Y + Math.Max(totalHeight, iconSize) + 5);
+        ImGui.Separator();
+
+        // 留出空间
+        ImGui.SetCursorPosY(ImGui.GetCursorPosY());
     }
-    
+
     public static Spell? 通用技能释放Check(uint skillid, int 距离)
     {
-        if (skillid==29402u||skillid==29403u||skillid==29408u||skillid==29406u||skillid==29407u||skillid==29404u)
+        if (skillid == 29402u || skillid == 29403u || skillid == 29408u || skillid == 29406u || skillid == 29407u || skillid == 29404u)
         {
             var wildfireTarget = PVPTargetHelper.TargetSelector.Get野火目标();
             if (wildfireTarget != null)
@@ -565,11 +822,11 @@ public class PVPHelper
             if (PvPSettings.Instance.技能自动选中)
             {
                 if (PvPSettings.Instance.最合适目标 &&
-                    (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u) != null &&
-                     PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u) != Core.Me))
+                    (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, 29405u) != null &&
+                     PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, 29405u) != Core.Me))
                 {
                     return 等服务器Spell(skillid,
-                        PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u));
+                        PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, 29405u));
                 }
 
                 var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
@@ -583,11 +840,11 @@ public class PVPHelper
         if (PvPSettings.Instance.技能自动选中)
         {
             if (PvPSettings.Instance.最合适目标 &&
-                (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid) != null &&
-                 PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid) != Core.Me))
+                (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, skillid) != null &&
+                 PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, skillid) != Core.Me))
             {
                 return 等服务器Spell(skillid,
-                    PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid));
+                    PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, skillid));
             }
 
             var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
@@ -596,27 +853,29 @@ public class PVPHelper
                 return 等服务器Spell(skillid, nearestTarget);
             }
         }
-        
+
         var currentTarget = Core.Me.GetCurrTarget();
         if (currentTarget != null && currentTarget != Core.Me)
         {
             return 等服务器Spell(skillid, currentTarget);
         }
-        
+
         return null;
     }
-
+    
     public static void 通用技能释放 ( Slot slot, uint skillid, int 距离 )
     {
         slot.maxDuration = 300;
-        slot.Add(通用技能释放Check(skillid, 距离));
+        var spell = 通用技能释放Check(skillid, 距离);
+        if (spell != null)
+            slot.Add(spell);
     }
 
     public static bool 通用距离检查(int 距离)
     {
         var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
         var currentTarget = Core.Me.GetCurrTarget();
-        
+
         if (PvPSettings.Instance.技能自动选中)
         {
             if (nearestTarget == null || nearestTarget == Core.Me ||
@@ -634,12 +893,12 @@ public class PVPHelper
 
         return false;
     }
-    
+
     public static bool 固定距离检查(int 距离)
     {
         var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
         var currentTarget = Core.Me.GetCurrTarget();
-        
+
         if (PvPSettings.Instance.技能自动选中)
         {
             if (nearestTarget == null || nearestTarget == Core.Me ||
@@ -657,7 +916,7 @@ public class PVPHelper
 
         return false;
     }
-    
+
     public static void 配置(JobViewWindow jobViewWindow)
     {
         通用设置配置();
@@ -683,25 +942,31 @@ public class PVPHelper
             }
         }
     }*/
-    
+
     //不作变化
-    public static void PvP调试窗口()
+    public static  void PvP调试窗口()
     {
         //不作变化
-        if(Svc.ClientState.LocalContentId==18014469511346939)
+        if (Share.VIP.Level != VIPLevel.Normal)
         {
             ImGui.Begin("调试窗口");
             ImGui.Text($"gcd:{GCDHelper.GetGCDCooldown()}");
             ImGui.Text($"CastActionId:{Core.Me.CastActionId}");
             ImGui.Text($"是否55:{PVPHelper.是否55()}");
-            IBattleChara?最近目标 = PVPTargetHelper.TargetSelector.Get最近目标();
-            SeString 最近目标名称 = 最近目标?.Name ?? "无";
+            ImGui.Text($"Core.Me.GetCurrTarget().DistanceToPlayer(): {Core.Me.GetCurrTarget().DistanceToPlayer()}");
             ImGui.Text($"视线阻挡: {视线阻挡(Core.Me.GetCurrTarget())}");
+            ImGui.Text($"净化判断：{净化判断()})");
+            ImGui.Text($"有没有1347u：{Core.Me.HasAura(1347u)})");
+            ImGui.Text($"能不能解净化：{Core.Me.HasCanDispel()})");
+            IBattleChara? 最近目标 = PVPTargetHelper.TargetSelector.Get最近目标();
+            SeString 最近目标名称 = 最近目标?.Name ?? "无";
             ImGui.Text($"最近目标: {最近目标名称}");
-            IBattleChara?最合适目标25米 = PVPTargetHelper.TargetSelector.Get最合适目标(25,1);
+            
+            IBattleChara? 最合适目标25米 = PVPTargetHelper.TargetSelector.Get最合适目标(25, 1);
             SeString 最合适目标25米名称 = 最合适目标25米?.Name ?? "无";
             ImGui.Text($"最合适25米目标: {最合适目标25米名称}");
-        //	ImGui.Text($"技能状态变化:{Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能1冰结之蓝青)}");
+            //	ImGui.Text($"技能状态变化:{Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能1冰结之蓝青)}");
+            
             ImGui.Text($"自己：{Core.Me.Name},{Core.Me.DataId},{Core.Me.Position}");
             ImGui.Text($"坐骑状态：{Svc.Condition[(ConditionFlag)4]}");
             ImGui.Text($"血量百分比：{Core.Me.CurrentHpPercent()}");
@@ -715,13 +980,15 @@ public class PVPHelper
             ImGui.Text($"小队人数：{PartyHelper.CastableParty.Count}");
             ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(Core.Me, 1, PvPRDMSettings.Instance.护盾距离)}");
             ImGui.Text($"20米内小队人数：{PartyHelper.CastableAlliesWithin20.Count}");
-            ImGui.Text($"目标5米内人数：{TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 5)}");
+            IBattleChara? target1 = Core.Me.GetCurrTarget();
+            int nearbyCount = target1 != null ? TargetHelper.GetNearbyEnemyCount(target1, 25, 5) : 0;
+            ImGui.Text($"目标5米内人数：{nearbyCount}");
             ImGui.Text($"LB槽当前数值：{Core.Me.LimitBreakCurrentValue()}");
             ImGui.Text($"上个技能：{Core.Resolve<MemApiSpellCastSuccess>().LastSpell}");
             ImGui.Text($"上个GCD：{Core.Resolve<MemApiSpellCastSuccess>().LastGcd}");
             ImGui.Text($"上个能力技：{Core.Resolve<MemApiSpellCastSuccess>().LastAbility}");
             ImGui.Text($"上个连击技能：{Core.Resolve<MemApiSpell>().GetLastComboSpellId()})");
-            IBattleChara?Get野火目标 = PVPTargetHelper.TargetSelector.Get野火目标();
+            IBattleChara? Get野火目标 = PVPTargetHelper.TargetSelector.Get野火目标();
             SeString 野火目标 = Get野火目标?.Name ?? "无";
             ImGui.Text($"t野火目标：{野火目标})");
             ImGui.Text($"技能变化：{Core.Resolve<MemApiSpell>().CheckActionChange(29102)})");
@@ -742,16 +1009,23 @@ public class PVPHelper
             {
                 Core.Resolve<MemApiMove>().SetRot(GetCameraRotation反向());
             }
+            unsafe static void ExecuteMountByAction()
+            {
+                var actionManager = FFXIVClientStructs.FFXIV.Client.Game.ActionManager.Instance();
+                    actionManager->UseAction(FFXIVClientStructs.FFXIV.Client.Game.ActionType.PvPAction, 29056U);
+            }
             if (ImGui.Button("21"))
             {
-                Core.Resolve<MemApiMove>().SetRot(GetCameraRotation());
+                ExecuteMountByAction();
             }
-            ImGui.Text($"？：{Core.Me.HasAura(3212)}");
-            if (ImGui.Button("21"))
+            var target = Core.Me.GetCurrTarget();
+            if (target == null)
             {
-                
+                ImGui.Text("目标状态列表: 无目标");
+                return;
             }
-
+            var list = target.StatusList;
+            ImGui.Text($"目标状态列表: {(list?.Any() == true ? string.Join("  ", list.Select(s => $"[{s.StatusId}] {s.RemainingTime:F1}s")) : "无")}");
             ImGui.End();
         }
         else
@@ -759,11 +1033,11 @@ public class PVPHelper
             ImGui.Text("你不需要用到调试");
         }
     }
-    
+
     //不作变化
     public static void 进入ACR()
     {
-    //	if(!PvPSettings.Instance.鬼叫) return;
+        //	if(!PvPSettings.Instance.鬼叫) return;
         if (!(通用码权限 || 高级码))
         {
             Core.Resolve<MemApiChatMessage>()
@@ -772,19 +1046,18 @@ public class PVPHelper
                     1500);
         }
         else
-        { 
-        //	Voice.PlayVoiceRandom();
+        {
+            //	Voice.PlayVoiceRandom();
         }
     }
-    
+
     private static DateTime 冲刺time = DateTime.MinValue;
     private static DateTime 崩破time = DateTime.MinValue;
-    
+
     public static void 战斗状态()
     {
-    //	if(PvPSettings.Instance.监控)PVPHelper.监控窗口();
-    //	if(!PvPSettings.Instance.鬼叫) return;
-        
+        //	if(!PvPSettings.Instance.鬼叫) return;
+
         /*DateTime now = DateTime.Now;
         if(Core.Me.HasAura(3202u,3000))
         {
@@ -804,9 +1077,9 @@ public class PVPHelper
             Voice.PlayVoice("冲刺");
             冲刺time = now;
         }*/
-        
+
     }
-    
+
     public class SprintTracker
     {
         private DateTime? _lastSprintTime;  // 使用可空的 DateTime 类型来记录最后一次冲刺的时间
@@ -828,7 +1101,7 @@ public class PVPHelper
                 // 只有从非冲刺状态变为冲刺状态时才记录时间
                 _lastSprintTime = DateTime.Now;
             }
-        
+
             // 更新冲刺状态
             _isSprinting = IsSprinting;
         }
@@ -847,24 +1120,27 @@ public class PVPHelper
             return false;
         }
     }
-    
+
     private static bool 警报 = true;
 
     public static void 监控(JobViewWindow jobViewWindow)
     {
         if (通用码权限 || 高级码)
         {
-            ImGui.Checkbox($"启用监控窗口##{28}", ref PvPSettings.Instance.监控);
-            ImGui.SliderFloat("监控图片宽", ref PvPSettings.Instance.图片宽1, 0, 1000);
-            ImGui.SliderFloat("监控图片高", ref PvPSettings.Instance.图片高1, 0, 1000);
+            ImGui.Checkbox($"启用挨打监控窗口##{28}", ref PvPSettings.Instance.监控);
+            ImGui.SliderFloat("[看着你的人数]人数图片大小", ref PvPSettings.Instance.图片比例, 0, 1000);
+            ImGui.SliderFloat("[看着你的人数]职业图标大小", ref PvPSettings.Instance.图标大小, 0, 1000);
             ImGui.Checkbox($"监控布局紧凑##{29}", ref PvPSettings.Instance.紧凑);
+            ImGui.SameLine();
+            ImGui.Checkbox($"锁定窗口##{38}", ref PvPSettings.Instance.禁止移动窗口);
+           // ImGui.Checkbox($"鼠标穿透##{39}", ref PvPSettings.Instance.鼠标穿透);
+            ImGui.Text("显示看着你的人的 \n名字|血量百分比|距离");
             ImGui.Checkbox($"##{35}", ref PvPSettings.Instance.名字);
             ImGui.SameLine();
             ImGui.Checkbox($"##{36}", ref PvPSettings.Instance.血量);
             ImGui.SameLine();
             ImGui.Checkbox($"##{37}", ref PvPSettings.Instance.距离);
-            ImGui.SameLine();
-            ImGui.Text("显示名字|血量百分比|距离");
+            
             ImGui.Text("紧凑数量");
             ImGui.SameLine();
             ImGui.InputInt($"##{32}", ref PvPSettings.Instance.紧凑数量);
@@ -877,38 +1153,39 @@ public class PVPHelper
             ImGui.InputInt($"##{34}", ref PvPSettings.Instance.警报数量);
             ImGui.Checkbox($"DevList##{31}", ref PvPSettings.Instance.窗口开关);
             if (PvPSettings.Instance.窗口开关) DrawUnitList();
-            监控窗口();
             PvPSettings.Instance.Save();
-            List<IBattleChara> targetMe;
 
-            void Draw图片UnitList()
-            {
-                IDalamudTextureWrap? textureJob;
-                // 遍历字典中的所有单位
-                foreach (var kvp in targetMe)
-                {
-                    IBattleChara unit = kvp;
-                    uint job = (uint)unit.CurrentJob();
-                    // 跳过无效单位（可选）
-                    if (unit == null || unit.IsDead || !unit.IsPlayerCamp()) continue;
-                    if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
-                    {
-                        // 如果成功获取到职业图标，显示该图标
-                        if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
-                    }
+            
+            //这个代码块未使用 我注释掉了
+            // List<IBattleChara> targetMe;
 
-                    ImGui.SameLine();
-                    ImGui.Text($"{unit.Name}");
-                    ImGui.SameLine();
-                    ImGui.Text($"{unit.DistanceToPlayer()}");
-                    // 添加分隔线（可选）
-                    ImGui.Separator();
-                }
+            // void Draw图片UnitList()
+            // {
+            //     IDalamudTextureWrap? textureJob;
+            //     // 遍历字典中的所有单位
+            //     foreach (var kvp in targetMe)
+            //     {
+            //         IBattleChara unit = kvp;
+            //         uint job = (uint)unit.CurrentJob();
+            //         // 跳过无效单位（可选）
+            //         if (unit == null || unit.IsDead || !unit.IsPlayerCamp()) continue;
+            //         if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
+            //         {
+            //             // 如果成功获取到职业图标，显示该图标
+            //             if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
+            //         }
 
-                // 重置列状态
-                ImGui.Columns(1);
-            }
+            //         ImGui.SameLine();
+            //         ImGui.Text($"{unit.Name}");
+            //         ImGui.SameLine();
+            //         ImGui.Text($"{unit.DistanceToPlayer()}");
+            //         // 添加分隔线（可选）
+            //         ImGui.Separator();
+            //     }
 
+            //     // 重置列状态
+            //     ImGui.Columns(1);
+            // }
             void DrawUnitList()
             {
                 // 添加表头（分列显示）
@@ -968,7 +1245,7 @@ public class PVPHelper
                 // 重置列状态
                 ImGui.Columns(1);
             }
-            
+
             // if (HasBuff(Core.Me, 895u) && !HasBuff(Core.Me, 1342u) && IsMoving())
             // {
             //     Core.Get<IMemApiSpell>().Cast(29057u, Core.Me);
@@ -977,107 +1254,107 @@ public class PVPHelper
         else ImGui.Text("请获取权限");
     }
 
-    public static void 监控窗口()
-    {
-        if (PvPSettings.Instance.监控)
-        {
-            ImGui.SetNextWindowSize(new Vector2(
-                PvPSettings.Instance.宽1, 
-                PvPSettings.Instance.高1
-            ), ImGuiCond.FirstUseEver); 
-            
-            // 开始绘制一个窗口，窗口标识为"###targetMe_Window"，使用了(ImGuiWindowFlags)43这个标志
-            ImGui.Begin("###targetMe_Window", ImGuiWindowFlags.None);
-
-            // 获取看着玩家的敌方目标
-            List<IBattleChara> targetMe = PVPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
-
-            // 创建一个默认的字符串格式化处理器
-            DefaultInterpolatedStringHandler defaultInterpolatedStringHandler =
-                new DefaultInterpolatedStringHandler(28, 1);
-
-            // 生成一个图片路径，根据目标数量（最多显示4个敌人）
-            defaultInterpolatedStringHandler.AppendLiteral("Resources\\Images\\Number\\");
-            defaultInterpolatedStringHandler.AppendFormatted((targetMe.Count <= 4) ? ((object)targetMe.Count) : "4+");
-            defaultInterpolatedStringHandler.AppendLiteral(".png");
-
-            // 转换格式化后的路径为字符串
-            string imgPath = defaultInterpolatedStringHandler.ToStringAndClear();
-
-            // 尝试获取目标数量图标
-            IDalamudTextureWrap? texture;
-            if (Core.Resolve<MemApiIcon>().TryGetTexture(imgPath, out texture))
-            {
-                // 如果成功获取到图标，显示它
-                ImGui.Text("    ");
-                ImGui.SameLine();
-                if (texture != null)
-                    ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
-                ImGui.Columns();
-            }
-
-            // 如果开启了警报设置并且目标数量大于0，则显示警报窗口
-            if (PvPSettings.Instance.警报 && targetMe.Count >= PvPSettings.Instance.警报数量)
-            {
-                Core.Resolve<MemApiChatMessage>().Toast2("好像有很多人在看你耶!", 1, 3000); // 显示警报文本
-            }
-
-            // 如果有敌人目标（目标数量大于0）
-            if (targetMe.Count > 0)
-            {
-                int                  i = 1;
-                IDalamudTextureWrap? textureJob;
-
-                // 遍历每一个敌方目标
-                foreach (IBattleChara v in targetMe)
-                {
-                    if (i > PvPSettings.Instance.监控数量)
-                    {
-                        break;
-                    }
-
-                    // 获取当前敌人的职业
-                    uint job = (uint)v.CurrentJob();
-                    // 根据职业获取对应的图标
-                    if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
-                    {
-                        if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 == 0 && i != 1)
-                        {
-                            ImGui.NewLine();
-                        }
-
-                        // 如果成功获取到职业图标，显示该图标
-                        if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
-                        if (PvPSettings.Instance.名字)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"{v.Name}");
-                        }
-
-                        if (PvPSettings.Instance.血量)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"HP百分比:{v.CurrentHpPercent() * 100f}");
-                        }
-
-                        if (PvPSettings.Instance.距离)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"距离:{v.DistanceToPlayer():F1}m");
-                        }
-                    }
-
-                    {
-                        if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 != 0)
-                        {
-                            ImGui.SameLine(0f, 5f); // 设置图标间隔
-                        }
-
-                        i++; // 增加计数器
-                    }
-                }
-            }
-            ImGui.End();
-        }
-    }
+    // public static void 监控窗口()
+    // {
+    //     if (PvPSettings.Instance.监控)
+    //     {
+    //         ImGui.SetNextWindowSize(new Vector2(
+    //             PvPSettings.Instance.宽1,
+    //             PvPSettings.Instance.高1
+    //         ), ImGuiCond.FirstUseEver);
+    //
+    //         // 开始绘制一个窗口，窗口标识为"###targetMe_Window"，使用了(ImGuiWindowFlags)43这个标志
+    //         ImGui.Begin("###targetMe_Window", ImGuiWindowFlags.None);
+    //
+    //         // 获取看着玩家的敌方目标
+    //         List<IBattleChara> targetMe = PVPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
+    //
+    //         // 创建一个默认的字符串格式化处理器
+    //         DefaultInterpolatedStringHandler defaultInterpolatedStringHandler =
+    //             new DefaultInterpolatedStringHandler(28, 1);
+    //
+    //         // 生成一个图片路径，根据目标数量（最多显示4个敌人）
+    //         defaultInterpolatedStringHandler.AppendLiteral("Resources\\Images\\Number\\");
+    //         defaultInterpolatedStringHandler.AppendFormatted((targetMe.Count <= 4) ? ((object)targetMe.Count) : "4+");
+    //         defaultInterpolatedStringHandler.AppendLiteral(".png");
+    //
+    //         // 转换格式化后的路径为字符串
+    //         string imgPath = defaultInterpolatedStringHandler.ToStringAndClear();
+    //
+    //         // 尝试获取目标数量图标
+    //         IDalamudTextureWrap? texture;
+    //         if (Core.Resolve<MemApiIcon>().TryGetTexture(imgPath, out texture))
+    //         {
+    //             // 如果成功获取到图标，显示它
+    //             ImGui.Text("    ");
+    //             ImGui.SameLine();
+    //             if (texture != null)
+    //                 ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
+    //             ImGui.Columns();
+    //         }
+    //
+    //         // 如果开启了警报设置并且目标数量大于0，则显示警报窗口
+    //         if (PvPSettings.Instance.警报 && targetMe.Count >= PvPSettings.Instance.警报数量)
+    //         {
+    //             Core.Resolve<MemApiChatMessage>().Toast2("好像有很多人在看你耶!", 1, 3000); // 显示警报文本
+    //         }
+    //
+    //         // 如果有敌人目标（目标数量大于0）
+    //         if (targetMe.Count > 0)
+    //         {
+    //             int i = 1;
+    //             IDalamudTextureWrap? textureJob;
+    //
+    //             // 遍历每一个敌方目标
+    //             foreach (IBattleChara v in targetMe)
+    //             {
+    //                 if (i > PvPSettings.Instance.监控数量)
+    //                 {
+    //                     break;
+    //                 }
+    //
+    //                 // 获取当前敌人的职业
+    //                 uint job = (uint)v.CurrentJob();
+    //                 // 根据职业获取对应的图标
+    //                 if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
+    //                 {
+    //                     if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 == 0 && i != 1)
+    //                     {
+    //                         ImGui.NewLine();
+    //                     }
+    //
+    //                     // 如果成功获取到职业图标，显示该图标
+    //                     if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
+    //                     if (PvPSettings.Instance.名字)
+    //                     {
+    //                         ImGui.SameLine();
+    //                         ImGui.Text($"{v.Name}");
+    //                     }
+    //
+    //                     if (PvPSettings.Instance.血量)
+    //                     {
+    //                         ImGui.SameLine();
+    //                         ImGui.Text($"HP百分比:{v.CurrentHpPercent() * 100f}");
+    //                     }
+    //
+    //                     if (PvPSettings.Instance.距离)
+    //                     {
+    //                         ImGui.SameLine();
+    //                         ImGui.Text($"距离:{v.DistanceToPlayer():F1}m");
+    //                     }
+    //                 }
+    //
+    //                 {
+    //                     if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 != 0)
+    //                     {
+    //                         ImGui.SameLine(0f, 5f); // 设置图标间隔
+    //                     }
+    //
+    //                     i++; // 增加计数器
+    //                 }
+    //             }
+    //         }
+    //         ImGui.End();
+    //     }
+    // }
 }

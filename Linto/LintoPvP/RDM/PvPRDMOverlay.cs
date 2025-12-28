@@ -9,7 +9,7 @@ public class PvPRDMOverlay
 {
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
             职业配置 赤魔 = new 职业配置();

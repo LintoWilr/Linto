@@ -8,54 +8,54 @@ namespace Linto.LintoPvP.GNB;
 
 public class PvPGNBRotationEventHandler : IRotationEventHandler
 {
-	public void OnTerritoryChanged()
-	{
+    public void OnTerritoryChanged()
+    {
 
-	}
-	public void OnSpellCastSuccess(Slot slot, Spell spell)
-	{
+    }
+    public void OnSpellCastSuccess(Slot slot, Spell spell)
+    {
 
-	}
-	public void OnResetBattle()
-	{
-		PvPMCHBattleData.Instance.Reset();
-	}
-	public async Task OnPreCombat()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
-	public async Task OnNoTarget()
-	{
-		var slot = new Slot();
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
+    }
+    public void OnResetBattle()
+    {
+        PvPMCHBattleData.Instance.Reset();
+    }
+    public async Task OnPreCombat()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
+    public async Task OnNoTarget()
+    {
+        var slot = new Slot();
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
 
-	public void AfterSpell(Slot slot, Spell spell)
-	{
-		uint id = spell.Id;
-	}
-	public void OnBattleUpdate(int currTime)
-	{
-		PVPHelper.战斗状态();
-		PVPTargetHelper.自动选中();
-	}
-	public void OnEnterRotation()
-	{
-		PVPHelper.进入ACR();
-		Share.Pull = true;
-	}
-	public void OnExitRotation()
-	{
-		Share.Pull = false;
-	}
+    public void AfterSpell(Slot slot, Spell spell)
+    {
+        uint id = spell.Id;
+    }
+    public void OnBattleUpdate(int currTime)
+    {
+        PVPHelper.战斗状态();
+        PVPTargetHelper.自动选中();
+    }
+    public void OnEnterRotation()
+    {
+        PVPHelper.进入ACR();
+        Share.Pull = true;
+    }
+    public void OnExitRotation()
+    {
+        Share.Pull = false;
+    }
 }
