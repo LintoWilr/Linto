@@ -317,7 +317,6 @@ public class PVPHelper
     public static void 通用设置配置()
     {
         ImGui.Text("共通配置");
-        ImGui.Checkbox($"诊断模式", ref PvPSettings.Instance.诊断模式);
         ImGui.PushItemWidth(100);
         // ImGui.Checkbox($"播报(玩具功能)##{888}", ref PvPSettings.Instance.播报);
         //
