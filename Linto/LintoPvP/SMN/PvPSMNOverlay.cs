@@ -6,7 +6,7 @@ using Linto.LintoPvP.PVPApi;
 namespace Linto.LintoPvP.SMN;
 
 public class PvPSMNOverlay
-{
+{ 
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
         Share.Pull = true;
@@ -19,7 +19,7 @@ public class PvPSMNOverlay
             }
         }
     }
-
+    
 }
 public static class SMNQt
 {

@@ -1,5 +1,4 @@
 ﻿namespace Linto.LintoPvP.RDM;
-
 public static class RDMSkillID
 {
     public const uint 技能减色混合 = 39213u;
@@ -10,9 +9,9 @@ public static class RDMSkillID
     public const uint buff以太色调 = 4100u;
     public const uint buff以太色调II = 4101u;
     public const uint buff减色混合 = 4102u;
-    public const uint 技能1冰结之蓝青 = 39194u;
-    public const uint 技能2飞石之纯黄 = 39195u;
-    public const uint 技能3闪雷之品红 = 39196u;
+    public const uint 技能1冰结之蓝青= 39194u;
+    public const uint 技能2飞石之纯黄= 39195u;
+    public const uint 技能3闪雷之品红= 39196u;
     public const uint 技能动物彩绘 = 39204u;
     public const uint 技能1绒球彩绘 = 39200u;
     public const uint 技能2翅膀彩绘 = 39201u;

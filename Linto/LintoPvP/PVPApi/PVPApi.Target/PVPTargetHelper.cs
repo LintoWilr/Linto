@@ -1,17 +1,17 @@
 using AEAssist;
-using AEAssist.CombatRoutine;
-using AEAssist.CombatRoutine.Module.Target;
-using AEAssist.Extension;
-using AEAssist.Helper;
-using AEAssist.MemoryApi;
-using Dalamud.Game.ClientState.Objects.Types;
-using ECommons.DalamudServices;
-using Linto.LintoPvP.GNB;
-using Linto.LintoPvP.PVPApi.PVPApi.Target;
+using AEAssist. CombatRoutine;
+using AEAssist. CombatRoutine. Module. Target;
+using AEAssist. Extension;
+using AEAssist. Helper;
+using AEAssist. MemoryApi;
+using Dalamud. Game. ClientState. Objects. Types;
+using ECommons. DalamudServices;
+using Linto. LintoPvP. GNB;
+using Linto. LintoPvP. PVPApi. PVPApi. Target;
 using System;
-using System.Collections.Generic;
+using System. Collections. Generic;
 
-namespace Linto.LintoPvP.PVPApi;
+namespace Linto. LintoPvP. PVPApi;
 
 public class PVPTargetHelper
 	{
@@ -539,266 +539,266 @@ public class PVPTargetHelper
         1320u,//明镜
     };
 
-    /// <summary>
-    /// 检查目标是否免控
-    /// </summary>
-    /// <param name="target">目标</param>
-    /// <returns>免控返回true，否则返回false</returns>
-    public static bool Check目标免控(IBattleChara? target)
-    {
-        return target != null && target.HasAnyAura(免控BUFFList);
-    }
+	/// <summary>
+	/// 检查目标是否免控
+	/// </summary>
+	/// <param name="target">目标</param>
+	/// <returns>免控返回true，否则返回false</returns>
+	public static bool Check目标免控 ( IBattleChara? target )
+		{
+		return target != null && target. HasAnyAura (免控BUFFList);
+		}
 
-    /// <summary>
-    /// 过滤角色 - 优化版本
-    /// </summary>
-    /// <param name="unit">单位</param>
-    /// <param name="filter">过滤器类型</param>
-    /// <param name="actionId">技能ID</param>
-    /// <returns>符合条件返回true，否则返回false</returns>
-    private static bool FilterCharacter(IBattleChara? unit, Filter filter, uint? actionId = null)
-    {
-        if (filter == Filter.None) return true;
-        if (unit == null || !unit.IsTargetable) return false;
+	/// <summary>
+	/// 过滤角色 - 优化版本
+	/// </summary>
+	/// <param name="unit">单位</param>
+	/// <param name="filter">过滤器类型</param>
+	/// <param name="actionId">技能ID</param>
+	/// <returns>符合条件返回true，否则返回false</returns>
+	private static bool FilterCharacter ( IBattleChara? unit, Filter filter, uint? actionId = null )
+		{
+		if (filter == Filter. None) return true;
+		if (unit == null || !unit. IsTargetable) return false;
 
-        // 快速路径：先检查可施法
-        if (actionId.HasValue)
-        {
-            var spellApi = Core.Resolve<MemApiSpell>();
-            if (spellApi == null || !spellApi.CheckActionInRangeOrLoS(actionId.Value, unit))
-                return false;
-        }
+		// 快速路径：先检查可施法
+		if (actionId. HasValue)
+			{
+			var spellApi = Core. Resolve<MemApiSpell> ();
+			if (spellApi == null || !spellApi. CheckActionInRangeOrLoS (actionId. Value, unit))
+				return false;
+			}
 
-        switch (filter)
-        {
-            case Filter.可施法:
-                return true;
-            case Filter.可攻击:
-                return !Check目标不可攻击(unit);
-            case Filter.无无敌:
-                return !(unit.HasAura(免疫状态1) || unit.HasAura(免疫状态4));
-            case Filter.可控制:
-                return !unit.HasAnyAura(免控BUFFList);
-            default:
-                return false;
-        }
-    }
+		switch (filter)
+			{
+			case Filter. 可施法:
+				return true;
+			case Filter. 可攻击:
+				return !Check目标不可攻击 (unit);
+			case Filter. 无无敌:
+				return !( unit. HasAura (免疫状态1) || unit. HasAura (免疫状态4) );
+			case Filter. 可控制:
+				return !unit. HasAnyAura (免控BUFFList);
+			default:
+				return false;
+			}
+		}
 
-    /// <summary>
-    /// 获取全部单位
-    /// </summary>
-    /// <param name="type">单位类型</param>
-    /// <param name="range">范围</param>
-    /// <param name="filter">过滤器</param>
-    /// <param name="actionId">技能ID</param>
-    /// <returns>符合条件的单位字典</returns>
-    public static Dictionary<uint, IBattleChara> Get全部单位(Group type, float range = 50f, Filter filter = Filter.None, uint? actionId = null)
-    {
-        Dictionary<uint, IBattleChara> 全部单位 = TargetMgr.Instance.Units;
-        Dictionary<uint, IBattleChara> dict = new Dictionary<uint, IBattleChara>();
+	/// <summary>
+	/// 获取全部单位
+	/// </summary>
+	/// <param name="type">单位类型</param>
+	/// <param name="range">范围</param>
+	/// <param name="filter">过滤器</param>
+	/// <param name="actionId">技能ID</param>
+	/// <returns>符合条件的单位字典</returns>
+	public static Dictionary<uint, IBattleChara> Get全部单位 ( Group type, float range = 50f, Filter filter = Filter. None, uint? actionId = null )
+		{
+		Dictionary<uint, IBattleChara> 全部单位 = TargetMgr. Instance. Units;
+		Dictionary<uint, IBattleChara> dict = new Dictionary<uint, IBattleChara> ();
 
-        // 遍历所有单位
-        foreach (IBattleChara unit in 全部单位.Values)
-        {
-            // 过滤不符合条件的单位
-            if (!FilterCharacter(unit, filter, actionId) || unit.IsDead || unit.DistanceToPlayer() > range)
-            {
-                continue;
-            }
+		// 遍历所有单位
+		foreach (IBattleChara unit in 全部单位. Values)
+			{
+			// 过滤不符合条件的单位
+			if (!FilterCharacter (unit, filter, actionId) || unit. IsDead || unit. DistanceToPlayer () > range)
+				{
+				continue;
+				}
 
-            // 根据单位类型进行筛选
-            switch (type)
-            {
-                case Group.全部:
-                    AddUnitToDict(dict, unit);
-                    break;
+			// 根据单位类型进行筛选
+			switch (type)
+				{
+				case Group. 全部:
+					AddUnitToDict (dict, unit);
+					break;
 
-                case Group.敌人:
-                    if (unit.ValidAttackUnit())
-                    {
-                        AddUnitToDict(dict, unit);
-                    }
-                    break;
+				case Group. 敌人:
+					if (unit. ValidAttackUnit ())
+						{
+						AddUnitToDict (dict, unit);
+						}
+					break;
 
-                case Group.队友:
-                    if (!unit.ValidAttackUnit())
-                    {
-                        AddUnitToDict(dict, unit);
-                    }
-                    break;
-            }
-        }
+				case Group. 队友:
+					if (!unit. ValidAttackUnit ())
+						{
+						AddUnitToDict (dict, unit);
+						}
+					break;
+				}
+			}
 
-        return dict;
-    }
+		return dict;
+		}
 
-    // 辅助方法：将单位添加到字典中
-    private static void AddUnitToDict(Dictionary<uint, IBattleChara> dict, IBattleChara unit)
-    {
-        uint key = GetGameObjectIdAsUint(unit.GameObjectId);
-        if (!dict.ContainsKey(key))
-        {
-            dict[key] = unit;
-        }
-    }
+	// 辅助方法：将单位添加到字典中
+	private static void AddUnitToDict ( Dictionary<uint, IBattleChara> dict, IBattleChara unit )
+		{
+		uint key = GetGameObjectIdAsUint (unit. GameObjectId);
+		if (!dict. ContainsKey (key))
+			{
+			dict [key] = unit;
+			}
+		}
 
-    // 转换 GameObjectId（ulong）为 uint
-    private static uint GetGameObjectIdAsUint(ulong gameObjectId)
-    {
-        if (gameObjectId > uint.MaxValue)
-        {
-            LogHelper.Error("GameObjectId 超出了 uint 的范围！");
-            return 0;
-        }
+	// 转换 GameObjectId（ulong）为 uint
+	private static uint GetGameObjectIdAsUint ( ulong gameObjectId )
+		{
+		if (gameObjectId > uint. MaxValue)
+			{
+			LogHelper. Error ("GameObjectId 超出了 uint 的范围！");
+			return 0;
+			}
 
-        return (uint)gameObjectId;
-    }
+		return (uint) gameObjectId;
+		}
 
-    /// <summary>
-    /// 获取看着目标的人
-    /// </summary>
-    /// <param name="type">单位类型</param>
-    /// <param name="target">目标</param>
-    /// <param name="range">范围</param>
-    /// <param name="actionId">技能ID</param>
-    /// <returns>看着目标的人列表</returns>
-    public static List<IBattleChara> Get看着目标的人(Group type, IBattleChara target, float range = 50f, uint? actionId = null)
-    {
-        List<IBattleChara> re = new List<IBattleChara>();
+	/// <summary>
+	/// 获取看着目标的人
+	/// </summary>
+	/// <param name="type">单位类型</param>
+	/// <param name="target">目标</param>
+	/// <param name="range">范围</param>
+	/// <param name="actionId">技能ID</param>
+	/// <returns>看着目标的人列表</returns>
+	public static List<IBattleChara> Get看着目标的人 ( Group type, IBattleChara target, float range = 50f, uint? actionId = null )
+		{
+		List<IBattleChara> re = new List<IBattleChara> ();
 
-        // 添加 null 检查
-        if (target == null)
-        {
-            return re;
-        }
+		// 添加 null 检查
+		if (target == null)
+			{
+			return re;
+			}
 
-        Dictionary<uint, IBattleChara> 全部单位 = Get全部单位(type, range, Filter.None, 29415u);
-        foreach (IBattleChara 单位 in 全部单位.Values)
-        {
-            if (单位.CurrentJob() == Jobs.Any) continue;
-            var currTarget = 单位.GetCurrTarget();
-            if (currTarget != null && currTarget.GameObjectId == target.GameObjectId)
-            {
-                float distance = 单位.DistanceToPlayer();
-                if (distance <= range)
-                {
-                    re.Add(单位);
-                }
-            }
-        }
-        return re;
-    }
+		Dictionary<uint, IBattleChara> 全部单位 = Get全部单位 (type, range, Filter. None, 29415u);
+		foreach (IBattleChara 单位 in 全部单位. Values)
+			{
+			if (单位. CurrentJob () == Jobs. Any) continue;
+			var currTarget = 单位. GetCurrTarget ();
+			if (currTarget != null && currTarget. GameObjectId == target. GameObjectId)
+				{
+				float distance = 单位. DistanceToPlayer ();
+				if (distance <= range)
+					{
+					re. Add (单位);
+					}
+				}
+			}
+		return re;
+		}
 
-    /// <summary>
-    /// 检查自身周围6码内是否存在地天状态的敌对玩家
-    /// </summary>
-    /// <returns>存在返回true，否则返回false</returns>
-    public static bool 自身周围6码内存在地天状态敌对玩家()
-    {
-        // 非PvP环境直接返回false
-        if (!Core.Me.IsPvP()) return false;
+	/// <summary>
+	/// 检查自身周围6码内是否存在地天状态的敌对玩家
+	/// </summary>
+	/// <returns>存在返回true，否则返回false</returns>
+	public static bool 自身周围6码内存在地天状态敌对玩家 ()
+		{
+		// 非PvP环境直接返回false
+		if (!Core. Me. IsPvP ()) return false;
 
-        // 检查自身周围6码内的所有敌对玩家
-        foreach (var unit in TargetMgr.Instance.Units.Values)
-        {
-            // 基础过滤条件
-            if (unit == null ||
-                !unit.IsTargetable ||
-                !unit.IsEnemy() ||
-                unit.IsDead)
-                continue;
+		// 检查自身周围6码内的所有敌对玩家
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead)
+				continue;
 
-            // 距离检查 - 6码范围内
-            if (unit.DistanceToPlayer() > 6f)
-                continue;
+			// 距离检查 - 6码范围内
+			if (unit. DistanceToPlayer () > 6f)
+				continue;
 
-            // 视线阻挡检查
-            if (PVPHelper.视线阻挡(unit))
-                continue;
+			// 视线阻挡检查
+			if (PVPHelper. 视线阻挡 (unit))
+				continue;
 
-            // 核心条件：检查地天状态
-            if (unit.HasAura(地天状态))
-            {
-                return true;
-            }
-        }
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				return true;
+				}
+			}
 
-        return false;
-    }
+		return false;
+		}
 
-    /// <summary>
-    /// 获取自身周围6码内所有地天状态的敌对玩家列表
-    /// </summary>
-    /// <returns>地天状态敌对玩家列表</returns>
-    public static List<IBattleChara> 获取自身周围6码内地天状态敌对玩家()
-    {
-        var result = new List<IBattleChara>();
+	/// <summary>
+	/// 获取自身周围6码内所有地天状态的敌对玩家列表
+	/// </summary>
+	/// <returns>地天状态敌对玩家列表</returns>
+	public static List<IBattleChara> 获取自身周围6码内地天状态敌对玩家 ()
+		{
+		var result = new List<IBattleChara> ();
 
-        // 非PvP环境直接返回空列表
-        if (!Core.Me.IsPvP()) return result;
+		// 非PvP环境直接返回空列表
+		if (!Core. Me. IsPvP ()) return result;
 
-        // 检查自身周围6码内的所有敌对玩家
-        foreach (var unit in TargetMgr.Instance.Units.Values)
-        {
-            // 基础过滤条件
-            if (unit == null ||
-                !unit.IsTargetable ||
-                !unit.IsEnemy() ||
-                unit.IsDead)
-                continue;
+		// 检查自身周围6码内的所有敌对玩家
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead)
+				continue;
 
-            // 距离检查 - 6码范围内
-            if (unit.DistanceToPlayer() > 6f)
-                continue;
+			// 距离检查 - 6码范围内
+			if (unit. DistanceToPlayer () > 6f)
+				continue;
 
-            // 视线阻挡检查
-            if (PVPHelper.视线阻挡(unit))
-                continue;
+			// 视线阻挡检查
+			if (PVPHelper. 视线阻挡 (unit))
+				continue;
 
-            // 核心条件：检查地天状态
-            if (unit.HasAura(地天状态))
-            {
-                result.Add(unit);
-            }
-        }
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				result. Add (unit);
+				}
+			}
 
-        return result;
-    }
+		return result;
+		}
 
-    /// <summary>
-    /// 检查指定目标周围6码内是否存在地天状态的敌对玩家
-    /// </summary>
-    /// <param name="target">指定的目标</param>
-    /// <returns>存在返回true，否则返回false</returns>
-    public static bool 目标周围6码内存在地天状态敌对玩家(IBattleChara target)
-    {
-        if (target == null || !Core.Me.IsPvP()) return false;
+	/// <summary>
+	/// 检查指定目标周围6码内是否存在地天状态的敌对玩家
+	/// </summary>
+	/// <param name="target">指定的目标</param>
+	/// <returns>存在返回true，否则返回false</returns>
+	public static bool 目标周围6码内存在地天状态敌对玩家 ( IBattleChara target )
+		{
+		if (target == null || !Core. Me. IsPvP ()) return false;
 
-        foreach (var unit in TargetMgr.Instance.Units.Values)
-        {
-            // 基础过滤条件
-            if (unit == null ||
-                !unit.IsTargetable ||
-                !unit.IsEnemy() ||
-                unit.IsDead ||
-                unit.GameObjectId == target.GameObjectId) // 排除目标自身
-                continue;
+		foreach (var unit in TargetMgr. Instance. Units. Values)
+			{
+			// 基础过滤条件
+			if (unit == null ||
+				!unit. IsTargetable ||
+				!unit. IsEnemy () ||
+				unit. IsDead ||
+				unit. GameObjectId == target. GameObjectId) // 排除目标自身
+				continue;
 
-            // 距离检查 - 与目标的距离在6码内
-            if (target.Distance(unit) > 6f)
-                continue;
+			// 距离检查 - 与目标的距离在6码内
+			if (target. Distance (unit) > 6f)
+				continue;
 
-            // 视线阻挡检查（相对于目标）
-            //if (PVPHelper. 视线阻挡 (unit, target))
-            //	continue;
+			// 视线阻挡检查（相对于目标）
+			//if (PVPHelper. 视线阻挡 (unit, target))
+			//	continue;
 
-            // 核心条件：检查地天状态
-            if (unit.HasAura(地天状态))
-            {
-                return true;
-            }
-        }
+			// 核心条件：检查地天状态
+			if (unit. HasAura (地天状态))
+				{
+				return true;
+				}
+			}
 
-        return false;
-    }
-}
+		return false;
+		}
+	}

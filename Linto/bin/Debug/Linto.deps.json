@@ -1,0 +1,77 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Linto/1.0.0": {
+        "dependencies": {
+          "AEAssist.NET": "1.2.2",
+          "CSCore": "1.2.1.2",
+          "Obfuscar": "2.2.39",
+          "runtimepack.Microsoft.Windows.SDK.NET.Ref": "10.0.26100.57"
+        },
+        "runtime": {
+          "Linto.dll": {}
+        }
+      },
+      "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+        "runtime": {
+          "Microsoft.Windows.SDK.NET.dll": {
+            "assemblyVersion": "10.0.26100.38",
+            "fileVersion": "10.0.26100.55"
+          },
+          "WinRT.Runtime.dll": {
+            "assemblyVersion": "2.2.0.0",
+            "fileVersion": "2.2.0.48161"
+          }
+        }
+      },
+      "AEAssist.NET/1.2.2": {},
+      "CSCore/1.2.1.2": {
+        "runtime": {
+          "lib/net35-client/CSCore.dll": {
+            "assemblyVersion": "1.2.1.2",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      },
+      "Obfuscar/2.2.39": {}
+    }
+  },
+  "libraries": {
+    "Linto/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "runtimepack.Microsoft.Windows.SDK.NET.Ref/10.0.26100.57": {
+      "type": "runtimepack",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "AEAssist.NET/1.2.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-EzdhBtC7IUjWFUU7tYrdi9MsGJA6bb7isHkVeNCDZaxb7L2ek8UCRwsXEnL/O0Dy+CWL9c/Ng/kC8Cjq1RoaOw==",
+      "path": "aeassist.net/1.2.2",
+      "hashPath": "aeassist.net.1.2.2.nupkg.sha512"
+    },
+    "CSCore/1.2.1.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DoQKUcdZLQawo3mOg8CvujJD9YkvTt6NtEu7S+OCo8+ySl8eCeUw4LFyL2E1OcAkPU918HZM6sUNcvIMcXWg6g==",
+      "path": "cscore/1.2.1.2",
+      "hashPath": "cscore.1.2.1.2.nupkg.sha512"
+    },
+    "Obfuscar/2.2.39": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-q122NXirGn4dEw4xSUj6iRAwdCDBhFa5b+byygGzLnrFSsAV1iZ3G/BXW6GkK5TsYdtkD+IgFKA/LnHFbZ/LSw==",
+      "path": "obfuscar/2.2.39",
+      "hashPath": "obfuscar.2.2.39.nupkg.sha512"
+    }
+  }
+}

@@ -3,7 +3,7 @@
     public class SpellsDefine
     {
         public const uint Sprint = 3;
-
+        
         public static HashSet<uint> AbilityAsGcdSet = new()
         {
             StandardStep,

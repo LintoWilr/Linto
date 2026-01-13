@@ -9,7 +9,7 @@ public class PvPGNBOverlay
 {
     public void DrawGeneral(JobViewWindow jobViewWindow)
     {
-
+        
         Share.Pull = true;
         {
             职业配置 绝枪 = new 职业配置();

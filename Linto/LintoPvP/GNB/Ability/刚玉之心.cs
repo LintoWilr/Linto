@@ -50,7 +50,7 @@ public class 刚玉之心 : ISlotResolver
                 specifiedMember.DistanceToPlayer() > 30)
                 return -91;
 
-            IBattleChara? member = PartyHelper.CastableParty.FirstOrDefault(chara =>
+            IBattleChara member = PartyHelper.CastableParty.FirstOrDefault(chara =>
                 chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
 
             if (member == null)
@@ -72,7 +72,7 @@ public class 刚玉之心 : ISlotResolver
     {
         bool 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
         bool 刚玉播报 = PvPGNBSettings.Instance.刚玉播报;
-        IBattleChara? target = null;
+        IBattleChara target = null;
 
         if (刚玉队友)
         {
@@ -97,9 +97,7 @@ public class 刚玉之心 : ISlotResolver
             }
 
             if (target == null)
-            {
                 return;
-            }
         }
         else
         {
@@ -109,8 +107,6 @@ public class 刚玉之心 : ISlotResolver
         slot.Add(new Spell(SpellId, target));
 
         if (刚玉播报)
-        {
             LogHelper.Print($"刚玉目标:{target.Name}");
-        }
     }
 }

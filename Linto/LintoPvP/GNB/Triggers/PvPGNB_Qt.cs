@@ -12,7 +12,7 @@ public class LintoPvPGNBQt : ITriggerAction
     public string ValueName { get; set; } = new("");
     public bool Value { get; set; } = new();
     public string DisplayName => "PvPGNB".Loc();
-public string Remark { get; set; } = string.Empty;
+    public string Remark { get; set; }
     public bool Draw()
     {
         // var qtArray = PvPBLMOverlay.BLMQt.GetQtArray();

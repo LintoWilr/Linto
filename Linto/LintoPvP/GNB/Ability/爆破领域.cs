@@ -14,24 +14,24 @@ public class 爆破领域 : ISlotResolver
     {
         // PVP激活检查
         if (!PVPHelper.CanActive()) return -1;
-
+        
         // 技能可用性检查
         if (!PvPGNBOverlay.GNBQt.GetQt("爆破领域")) return -9;
         if (!29128u.GetSpell().IsReadyWithCanCast()) return -1;
 
         // 距离检查
         if (PVPHelper.通用距离检查(5)) return -5;
-
+        
         // 技能释放条件检查
         if (PVPHelper.通用技能释放Check(29128u, 5) == null) return -5;
-
+        
         IBattleChara target = PVPTargetHelper.目标模式(5, 29128u);
         if (target == null) return -999;
-
+        
         // 血量阈值检查
         float hpThreshold = PvPGNBSettings.Instance.爆破血量 / 100f;
         if (target.CurrentHpPercent() > hpThreshold) return -6;
-
+        
         return 0;
     }
 
