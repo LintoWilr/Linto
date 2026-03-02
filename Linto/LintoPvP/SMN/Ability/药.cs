@@ -1,6 +1,7 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
 
 using Linto.LintoPvP.PVPApi;
@@ -26,7 +27,7 @@ namespace Linto.LintoPvP.SMN.Ability
 			{
 				return -2;
 			}
-			if (Core.Me.CurrentHp<= PvPSMNSettings.Instance.药血量 / 100f)
+			if (Core.Me.CurrentHpPercent() <= PvPSMNSettings.Instance.药血量 / 100f)
 			{
 				return 0;
 			}

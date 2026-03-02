@@ -1,4 +1,5 @@
 ﻿using AEAssist;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using Dalamud.Bindings.ImGui;
 using Linto.LintoPvP.BLM;
@@ -536,7 +537,8 @@ public class 职业配置 : BaseJobConfig
 		权限获取();
 		// 技能1: 喝热水
 		PvPSMNSettings.Instance.药血量 = Math.Clamp(PvPSMNSettings.Instance.药血量, 1, 100);
-		ConfigureSkillInt(29711u, "癒しの水","热水阈值",ref PvPSMNSettings.Instance.药血量,3,10, 1);
+        ImGui.Text($"当前血量：{Core.Me.CurrentHpPercent()},阈值：{PvPSMNSettings.Instance.药血量}，是否吃药{Core.Me.CurrentHpPercent() <= PvPSMNSettings.Instance.药血量 / 100f}");
+        ConfigureSkillInt(29711u, "癒しの水","热水阈值",ref PvPSMNSettings.Instance.药血量,3,10, 1);
 
 		// 技能2: 火神冲
 		PvPSMNSettings.Instance.火神冲 = Math.Clamp(PvPSMNSettings.Instance.火神冲, 0, 28);

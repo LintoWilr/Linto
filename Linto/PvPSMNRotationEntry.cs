@@ -4,6 +4,7 @@ using AEAssist.CombatRoutine.Module.Opener;
 using AEAssist.CombatRoutine.View.JobView;
 using AEAssist.CombatRoutine.View.JobView.HotkeyResolver;
 using Linto.LintoPvP.PVPApi;
+using Linto.LintoPvP.PVPApi.PVPApi.Target;
 using Linto.LintoPvP.SMN;
 using Linto.LintoPvP.SMN.Ability;
 using Linto.LintoPvP.SMN.GCD;
@@ -88,7 +89,9 @@ public class PvPSMNRotationEntry : IRotationEntry
         JobViewWindow.AddQt("自动净化", false);
      //   JobViewWindow.AddHotkey("龙神召唤(选中目标)",new 龙神召唤());
         JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龙神LB", new HotkeyData.龙神LB());
+        JobViewWindow.AddHotkey("凤凰LB", new HotkeyData.凤凰LB());
     }
     private IOpener? GetOpener(uint level)
     {
