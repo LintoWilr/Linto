@@ -12,14 +12,16 @@ public class LintoPvPRDMQt : ITriggerAction
     private int 当前combo = 0;
     private int radioCheck;
 
+#pragma warning disable CS0414 // 保留字段用于未来扩展
     private int radioType;
+#pragma warning restore CS0414
 
 
-    public string ValueName { get; set; } = new("");
-    public bool Value { get; set; } = new();
+    public string ValueName { get; set; } = "";
+    public bool Value { get; set; }
     public string DisplayName => "PvPRDM".Loc();
 
-    public string Remark { get; set; }
+    public string Remark { get; set; } = string.Empty;
 
     public bool Draw()
     {

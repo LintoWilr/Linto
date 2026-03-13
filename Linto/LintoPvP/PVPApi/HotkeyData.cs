@@ -19,13 +19,32 @@ namespace Linto.LintoPvP.PVPApi.PVPApi.Target;
 
 public class HotkeyData
 {
+	// 小工具：统一绘制热键图标，避免每个热键都手写一遍样板代码。
+	private static void DrawActionIcon(Vector2 size, uint actionId, bool useAdjustedIcon = false)
+	{
+		Vector2 iconSize = size * 0.8f;
+		ImGui.SetCursorPos(size * 0.1f);
+		IDalamudTextureWrap? textureWrap;
+		if (!Core.Resolve<MemApiIcon>().GetActionTexture(actionId, out textureWrap, useAdjustedIcon))
+			return;
+		if (textureWrap != null) ImGui.Image(textureWrap.Handle, iconSize);
+	}
+
+	// 小工具：确保 NextSlot 可用，后面的业务逻辑就不用每次重复判空了。
+	private static Slot EnsureNextSlot()
+	{
+		if (AI.Instance.BattleData.NextSlot == null)
+			AI.Instance.BattleData.NextSlot = new Slot();
+		return AI.Instance.BattleData.NextSlot;
+	}
+
 	public class 蛇LB : IHotkeyResolver
 	{
 		public void Draw(Vector2 size)
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39190u, out textureWrap))
 				return;
 			if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -40,39 +59,40 @@ public class HotkeyData
 		{
 			if (AI.Instance.BattleData.NextSlot == null)
 				AI.Instance.BattleData.NextSlot = new Slot();
-			if (!Core.Me.HasLocalPlayerAura(4094u) & Core.Me.InCombat() & Core.Me.LimitBreakCurrentValue() >= 3000 &
-			    Core.Me.GetCurrTarget() != null && PVPTargetHelper.TargetSelector.Get最合适目标(20,39190u) != Core.Me &&
-			    Core.Me.GetCurrTarget().DistanceToPlayer() < 25)
-			{
-				if (PvPSettings.Instance.技能自动选中)
-				{
-					if (PvPSettings.Instance.最合适目标)
-					{
-						if (PVPTargetHelper.TargetSelector.Get最合适目标(20,39190u) != null &&
-						    PVPTargetHelper.TargetSelector.Get最合适目标(20,39190u) != Core.Me)
-						{
-							AI.Instance.BattleData.NextSlot.Add(new Spell(39190u,
-								PVPTargetHelper.TargetSelector.Get最合适目标(20,39190u)));
-						}
-					}
-					else
-					{
-						if (PVPTargetHelper.TargetSelector.Get最近目标() != null &&
-						    PVPTargetHelper.TargetSelector.Get最合适目标(20,39190u) != Core.Me)
-						{
-							AI.Instance.BattleData.NextSlot.Add(new Spell(39190u,
-								PVPTargetHelper.TargetSelector.Get最近目标()));
-						}
 
-					}
-				}
-				else
+			// 这里先做一层“快速拦截”，条件不满足就直接走，不往下绕圈子。
+			var currentTarget = Core.Me.GetCurrTarget();
+			var canUseLb = !Core.Me.HasLocalPlayerAura(4094u) & Core.Me.InCombat() & Core.Me.LimitBreakCurrentValue() >= 3000;
+			if (!canUseLb || currentTarget == null || currentTarget.DistanceToPlayer() >= 25)
+			{
+				return;
+			}
+
+			var bestTarget = PVPTargetHelper.TargetSelector.Get最合适目标(20, 39190u);
+			if (bestTarget == Core.Me)
+			{
+				return;
+			}
+
+			if (!PvPSettings.Instance.技能自动选中)
+			{
+				AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, currentTarget));
+				return;
+			}
+
+			if (PvPSettings.Instance.最合适目标)
+			{
+				if (bestTarget != null)
 				{
-					if (Core.Me.GetCurrTarget() != null)
-					{
-						AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, Core.Me.GetCurrTarget()));
-					}
+					AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, bestTarget));
 				}
+				return;
+			}
+
+			var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
+			if (nearestTarget != null)
+			{
+				AI.Instance.BattleData.NextSlot.Add(new Spell(39190u, nearestTarget));
 			}
 		}
 	}
@@ -83,14 +103,14 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29415u, out textureWrap, true))
 				return;
 			if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
 		}
 
 		public void DrawExternal(Vector2 size, bool isActive) =>
-			SpellHelper.DrawSpellInfo(new Spell(29415u, Core.Me.GetCurrTarget()), size, isActive);
+			SpellHelper.DrawSpellInfo(new Spell(29415u, Core.Me.GetCurrTarget() ?? Core.Me), size, isActive);
 
 		public int Check() => 0;
 
@@ -98,24 +118,31 @@ public class HotkeyData
 		{
 			if (AI.Instance.BattleData.NextSlot == null)
 				AI.Instance.BattleData.NextSlot = new Slot();
-			if (Core.Me.LimitBreakCurrentValue() >= 3000)
+			if (Core.Me.LimitBreakCurrentValue() < 3000)
 			{
-				if (PvPMCHSettings.Instance.智能魔弹)
-				{
-					if (PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u) is { IsTargetable: true })
-					{
-						AI.Instance.BattleData.NextSlot.Add(new Spell(29415u,
-							PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u)));
-						Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u)?.Name} 释放 魔弹射手,距离你{PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u).DistanceToPlayer()}米!", 1, 3000);
-					}
-				}
-				else
-				{
-					AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, Core.Me.GetCurrTarget()));
-					Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {Core.Me.GetCurrTarget()?.Name} 释放 魔弹射手,距离你{Core.Me.GetCurrTarget().DistanceToPlayer()}米!", 1, 3000);
-				}
-
+				return;
 			}
+
+			if (PvPMCHSettings.Instance.智能魔弹)
+			{
+				// 智能模式下只算一次最优目标，避免同一帧里反复取值前后不一致。
+				var bestTarget = PVPTargetHelper.TargetSelector.Get最合适目标(50, 29415u);
+				if (bestTarget is { IsTargetable: true })
+			{
+					AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, bestTarget));
+					Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {bestTarget.Name} 释放 魔弹射手,距离你{bestTarget.DistanceToPlayer()}米!", 1, 3000);
+				}
+				return;
+			}
+
+			var currentTarget = Core.Me.GetCurrTarget();
+			if (currentTarget == null)
+			{
+				return;
+			}
+
+			AI.Instance.BattleData.NextSlot.Add(new Spell(29415u, currentTarget));
+			Core.Resolve<MemApiChatMessage>().Toast2($"正在尝试对 {currentTarget.Name} 释放 魔弹射手,距离你{currentTarget.DistanceToPlayer()}米!", 1, 3000);
 		}
 	}
     public class 龙神LB : IHotkeyResolver
@@ -126,13 +153,13 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(LBID, out textureWrap, true))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
         }
-        public void DrawExternal(Vector2 size, bool isActive) =>
-            SpellHelper.DrawSpellInfo(new Spell(LBID, Core.Me.GetCurrTarget()), size, isActive);
+		public void DrawExternal(Vector2 size, bool isActive) =>
+			SpellHelper.DrawSpellInfo(new Spell(LBID, Core.Me.GetCurrTarget() ?? Core.Me), size, isActive);
         public int Check() => 0;
 
         public void Run()
@@ -161,13 +188,13 @@ public class HotkeyData
         {
             Vector2 size1 = size * 0.8f;
             ImGui.SetCursorPos(size * 0.1f);
-            IDalamudTextureWrap textureWrap;
+            IDalamudTextureWrap? textureWrap;
             if (!Core.Resolve<MemApiIcon>().GetActionTexture(LBID, out textureWrap, true))
                 return;
             if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
         }
-        public void DrawExternal(Vector2 size, bool isActive) =>
-            SpellHelper.DrawSpellInfo(new Spell(LBID, Core.Me.GetCurrTarget()), size, isActive);
+		public void DrawExternal(Vector2 size, bool isActive) =>
+			SpellHelper.DrawSpellInfo(new Spell(LBID, Core.Me.GetCurrTarget() ?? Core.Me), size, isActive);
         public int Check() => 0;
 
         public void Run()
@@ -232,7 +259,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29404u, out textureWrap))
 				return;
 			if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -258,7 +285,9 @@ public class HotkeyData
 		{
 			if (AI.Instance.BattleData.NextSlot == null)
 				AI.Instance.BattleData.NextSlot = new Slot();
-			AI.Instance.BattleData.NextSlot.Add(new Spell(29404u, Core.Me.GetCurrTarget()));
+			var target = Core.Me.GetCurrTarget();
+			if (target != null)
+				AI.Instance.BattleData.NextSlot.Add(new Spell(29404u, target));
 		}
 	}
 	public class 画家LB : IHotkeyResolver
@@ -267,7 +296,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39215u, out textureWrap))
 				return;
 			if (textureWrap != null) ImGui.Image(textureWrap.Handle, size1);
@@ -287,6 +316,36 @@ public class HotkeyData
 				AI.Instance.BattleData.NextSlot.Add(new Spell(39215u, Core.Me));
 			}
 		}
+
+		private static Vector3 Get画家LBPosition(Vector3 origin, Vector3 target, float maxDistance)
+		{
+			// 提取 XZ 平面坐标（忽略 Y 轴高度）
+			var originXZ = new Vector2(origin.X, origin.Z);
+			var targetXZ = new Vector2(target.X, target.Z);
+
+			// 计算平方距离（避免开根号，提升性能）
+			float distanceSquared = Vector2.DistanceSquared(originXZ, targetXZ);
+
+			// 如果超出最大距离，计算朝向目标的最大距离位置
+			if (distanceSquared > maxDistance * maxDistance)
+			{
+				// 归一化方向向量（避免零向量）
+				Vector2 direction = targetXZ - originXZ;
+				if (direction.LengthSquared() < float.Epsilon)
+					direction = Vector2.Zero; // 兜底：无方向时设为零向量
+				else
+					direction = Vector2.Normalize(direction);
+
+				// 计算 XZ 平面的最大有效位置
+				targetXZ = originXZ + (direction * maxDistance);
+
+				// 保留目标的 Y 轴高度，返回新位置
+				return new Vector3(targetXZ.X, target.Y, targetXZ.Y);
+			}
+
+			// 未超出距离，直接返回目标位置
+			return target;
+		}
 	}
 	public class 绝枪LB : IHotkeyResolver
 	{
@@ -294,7 +353,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29130u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -327,7 +386,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29537u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -378,7 +437,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29401u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -404,7 +463,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (Core.Me.HasLocalPlayerAura(3245u))
 			{
 				if (!Core.Resolve<MemApiIcon>().GetActionTexture(29697u, out textureWrap))
@@ -452,7 +511,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (Core.Me.HasLocalPlayerAura(3245u))
 			{
 				if (!Core.Resolve<MemApiIcon>().GetActionTexture(29702u, out textureWrap))
@@ -498,13 +557,13 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(41498u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
 		}
 		public void DrawExternal(Vector2 size, bool isActive) =>
-			SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget), size, isActive);
+			SpellHelper.DrawSpellInfo(new Spell(41498u, Core.Me.GetCurrTarget() ?? Core.Me), size, isActive);
 
 		public int Check()
 		{
@@ -522,7 +581,12 @@ public class HotkeyData
 					AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, Core.Me));
 				else
 				{
-					AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, Core.Me.GetCurrTarget()));
+					var currentTarget = Core.Me.GetCurrTarget();
+					if (currentTarget == null)
+					{
+						return;
+					}
+					AI.Instance.BattleData.NextSlot.Add(new Spell(41498u, currentTarget));
 				}
 		}
 	}
@@ -532,7 +596,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29399u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -550,7 +614,9 @@ public class HotkeyData
 		{
 			if (AI.Instance.BattleData.NextSlot == null)
 				AI.Instance.BattleData.NextSlot = new Slot();
-			AI.Instance.BattleData.NextSlot.Add(new Spell(29399,Core.Me.GetCurrTarget()));
+			var target = Core.Me.GetCurrTarget();
+			if (target != null)
+				AI.Instance.BattleData.NextSlot.Add(new Spell(29399, target));
 		}
 	}
 	public class 后跳 : IHotkeyResolver
@@ -559,7 +625,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29494u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -585,7 +651,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(39210u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -611,7 +677,7 @@ public class HotkeyData
 		{
 			Vector2 size1 = size * 0.8f;
 			ImGui.SetCursorPos(size * 0.1f);
-			IDalamudTextureWrap textureWrap;
+			IDalamudTextureWrap? textureWrap;
 			if (!Core.Resolve<MemApiIcon>().GetActionTexture(29660u, out textureWrap))
 				return;
 			ImGui.Image(textureWrap.Handle, size1);
@@ -629,7 +695,9 @@ public class HotkeyData
 		{
 			if (AI.Instance.BattleData.NextSlot == null)
 				AI.Instance.BattleData.NextSlot = new Slot();
-			AI.Instance.BattleData.NextSlot.Add(new Spell(29660u,Core.Me.GetCurrTarget));
+			var target = Core.Me.GetCurrTarget();
+			if (target != null)
+				AI.Instance.BattleData.NextSlot.Add(new Spell(29660u, target));
 		}
 	}
 	public class 喵 : IHotkeyResolver

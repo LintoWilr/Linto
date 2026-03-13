@@ -102,14 +102,14 @@ public class PVPHelper
 
     public static Spell 不等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+		var spell = (new Spell(id, target ?? Core.Me));
         spell.WaitServerAcq = false;
         return spell;
     }
 
     public static Spell 等服务器Spell(uint id, IBattleChara? target)
     {
-        var spell = (new Spell(id, target));
+		var spell = (new Spell(id, target ?? Core.Me));
         spell.WaitServerAcq = true;
         return spell;
     }
@@ -262,7 +262,9 @@ public class PVPHelper
         return true;
     }
     
+#pragma warning disable CS0414 // 保留字段用于未来功能
     private static IBattleChara? Target;
+#pragma warning restore CS0414
     
     public static bool HasBuff(IBattleChara? BattleChara, uint buffId)
     {
@@ -609,7 +611,11 @@ public class PVPHelper
     public static void 通用技能释放 ( Slot slot, uint skillid, int 距离 )
     {
         slot.maxDuration = 300;
-        slot.Add(通用技能释放Check(skillid, 距离));
+		var spell = 通用技能释放Check(skillid, 距离);
+		if (spell != null)
+		{
+			slot.Add(spell);
+		}
     }
 
     public static bool 通用距离检查(int 距离)
@@ -715,7 +721,7 @@ public class PVPHelper
             ImGui.Text($"小队人数：{PartyHelper.CastableParty.Count}");
             ImGui.Text($"25米内敌方人数：{TargetHelper.GetNearbyEnemyCount(Core.Me, 1, PvPRDMSettings.Instance.护盾距离)}");
             ImGui.Text($"20米内小队人数：{PartyHelper.CastableAlliesWithin20.Count}");
-            ImGui.Text($"目标5米内人数：{TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget(), 25, 5)}");
+            ImGui.Text($"目标 5 米内人数：{TargetHelper.GetNearbyEnemyCount(Core.Me.GetCurrTarget()!, 25, 5)}");
             ImGui.Text($"LB槽当前数值：{Core.Me.LimitBreakCurrentValue()}");
             ImGui.Text($"上个技能：{Core.Resolve<MemApiSpellCastSuccess>().LastSpell}");
             ImGui.Text($"上个GCD：{Core.Resolve<MemApiSpellCastSuccess>().LastGcd}");
@@ -883,6 +889,7 @@ public class PVPHelper
             PvPSettings.Instance.Save();
             List<IBattleChara> targetMe;
 
+    #pragma warning disable CS8321 // 保留用于未来可能的调试功能
             void Draw图片UnitList()
             {
                 IDalamudTextureWrap? textureJob;
@@ -898,7 +905,7 @@ public class PVPHelper
                         // 如果成功获取到职业图标，显示该图标
                         if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
                     }
-
+    
                     ImGui.SameLine();
                     ImGui.Text($"{unit.Name}");
                     ImGui.SameLine();
@@ -906,10 +913,11 @@ public class PVPHelper
                     // 添加分隔线（可选）
                     ImGui.Separator();
                 }
-
+    
                 // 重置列状态
                 ImGui.Columns(1);
             }
+    #pragma warning restore CS8321
 
             void DrawUnitList()
             {

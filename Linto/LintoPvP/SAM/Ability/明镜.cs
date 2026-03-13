@@ -29,7 +29,8 @@ public class 明镜 : ISlotResolver
 		{
 			return -3;
 		}
-		if (!Core.Me.GetCurrTarget().CanAttack())
+		var currentTarget = Core.Me.GetCurrTarget();
+		if (currentTarget == null || !currentTarget.CanAttack())
 		{
 			return -3;
 		}

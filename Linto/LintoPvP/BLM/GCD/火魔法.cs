@@ -217,11 +217,12 @@ public class 核爆 : ISlotResolver
 		}
 		if (PvPBLMSettings.Instance.最佳AOE)
 		{
-			if((TargetHelper.GetMostCanTargetObjects(29651u, PvPBLMSettings.Instance.最佳人数))==null)
+			var bestTarget = TargetHelper.GetMostCanTargetObjects(29651u, PvPBLMSettings.Instance.最佳人数);
+			if(bestTarget==null)
 			{
 				return -99;
 			}
-			if (Core.Me.Distance(TargetHelper.GetMostCanTargetObjects(29651u, PvPBLMSettings.Instance.最佳人数)) > 25+PvPSettings.Instance.长臂猿)
+			if (Core.Me.Distance(bestTarget) > 25+PvPSettings.Instance.长臂猿)
 			{
 				return -5;
 			}
@@ -237,7 +238,12 @@ public class 核爆 : ISlotResolver
 	{
 		if (PvPBLMSettings.Instance.最佳AOE)
 		{
-			slot.Add(new Spell(29651u, TargetHelper.GetMostCanTargetObjects(29651u, PvPBLMSettings.Instance.最佳人数)));
+			var bestTarget = TargetHelper.GetMostCanTargetObjects(29651u, PvPBLMSettings.Instance.最佳人数);
+			if (bestTarget == null)
+			{
+				return;
+			}
+			slot.Add(new Spell(29651u, bestTarget));
 		}
 		else PVPHelper.通用技能释放(slot,29651u,25);
 	}

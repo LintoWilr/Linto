@@ -33,8 +33,8 @@ namespace Linto.LintoPvP.BRD.Ability
                    PartyHelper.Party[PvPBRDSettings.Instance.光阴对象].DistanceToPlayer() > 30) 
                     return -9;
                     
-                IBattleChara member = PartyHelper.CastableParty.FirstOrDefault(chara => chara.HasCanDispel());
-                if (member == null) return -9;
+				IBattleChara? member = PartyHelper.CastableParty.FirstOrDefault(chara => chara.HasCanDispel());
+				if (member == null) return -9;
                 if (member.DistanceToPlayer() > 30) return -6;
             }
             else
@@ -48,7 +48,7 @@ namespace Linto.LintoPvP.BRD.Ability
         {
             bool 光阴队友 = PvPBRDSettings.Instance.光阴队友;
             bool 光阴播报 = PvPBRDSettings.Instance.光阴播报;
-            IBattleChara target;
+			IBattleChara? target;
             
             if (光阴队友)
             {

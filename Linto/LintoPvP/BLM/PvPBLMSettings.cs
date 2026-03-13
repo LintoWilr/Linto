@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.BLM;
 
 public class PvPBLMSettings
 {
-	public static PvPBLMSettings Instance;
+	public static PvPBLMSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 
 	public int 药血量 = 70;
 	public int 昏沉 = 0;
@@ -42,7 +42,7 @@ public class PvPBLMSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

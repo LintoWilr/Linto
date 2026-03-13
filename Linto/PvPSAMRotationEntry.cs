@@ -56,7 +56,7 @@ public class PvP崩破大王Entry : IRotationEntry
         rot.AddOpener(GetOpener);
         return rot;
     }
-    public static JobViewWindow JobViewWindow { get; private set; }
+    public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
         return PvP崩破大王Entry.JobViewWindow;

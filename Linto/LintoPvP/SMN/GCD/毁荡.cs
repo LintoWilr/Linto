@@ -31,7 +31,8 @@ public class 毁荡 : ISlotResolver
 				return -10;
 			}
 		}
-		if (Core.Me.Distance(Core.Me.GetCurrTarget()) > 22+SettingMgr.GetSetting<GeneralSettings>().AttackRange)
+		var currentTarget = Core.Me.GetCurrTarget();
+		if (currentTarget == null || Core.Me.Distance(currentTarget) > 22+SettingMgr.GetSetting<GeneralSettings>().AttackRange)
 		{
 			return -5;
 		}

@@ -82,7 +82,9 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
         {
             if (fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
             {
-                string value = fi.GetValue(null).ToString();
+                string? value = fi.GetValue(null) as string;
+                if (string.IsNullOrEmpty(value)) continue;
+                
                 string key = value.ToLower();
                 string fieldName = fi.Name.ToLower();
 
@@ -103,36 +105,61 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
         }
 
         var lowerArgs = args.Trim().ToLower();
-        //LogHelper.Print($"2: 参数小写处理后：{lowerArgs}"); // 新增：打印处理后的参数
-        if (lowerArgs.EndsWith("_qt"))
+        // 按后缀分流：qt/hk/gt 三种命令互不干扰，后面维护起来也更直观。
+        if (TryHandleQtCommand(lowerArgs)) return;
+        if (TryHandleHotkeyCommand(lowerArgs)) return;
+        if (TryHandleCustomCommand(lowerArgs)) return;
+
+        LogHelper.Print($"不支持的命令格式: {args}");
+    }
+
+    private bool TryHandleQtCommand(string lowerArgs)
+    {
+        if (!lowerArgs.EndsWith("_qt"))
         {
-            var keyPart = lowerArgs[..^3];
-            var matchedKey = GetMatchingQtKey(keyPart);
-            ToggleQtSetting(matchedKey);
-            return;
+            return false;
         }
 
-        if (lowerArgs.EndsWith("_hk"))
+        var keyPart = lowerArgs[..^3];
+        var matchedKey = GetMatchingQtKey(keyPart);
+        if (string.IsNullOrEmpty(matchedKey))
         {
-            var keyPart = lowerArgs[..^3];
-
-            //LogHelper.Print($"3: {keyPart}");
-            if (hotkeyDictionary.TryGetValue(keyPart, out var canonical))
-            {
-                ExecuteHotkey(GetHotkeyResolver(canonical));
-
-                return;
-            }
-            ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
-            return;
+            LogHelper.Print($"未知 QT 参数: {keyPart}");
+            return true;
         }
-        // 新增：处理 _gt 宏命令
-        if (lowerArgs.EndsWith("_gt"))
+
+        ToggleQtSetting(matchedKey);
+        return true;
+    }
+
+    private bool TryHandleHotkeyCommand(string lowerArgs)
+    {
+        if (!lowerArgs.EndsWith("_hk"))
         {
-            var keyPart = lowerArgs[..^3];
-            ExecuteCustomCommand(keyPart);
-            return;
+            return false;
         }
+
+        var keyPart = lowerArgs[..^3];
+        if (hotkeyDictionary.TryGetValue(keyPart, out var canonical))
+        {
+            ExecuteHotkey(GetHotkeyResolver(canonical));
+            return true;
+        }
+
+        ChatHelper.SendMessage($"未知 Hotkey 参数: {keyPart}");
+        return true;
+    }
+
+    private bool TryHandleCustomCommand(string lowerArgs)
+    {
+        if (!lowerArgs.EndsWith("_gt"))
+        {
+            return false;
+        }
+
+        var keyPart = lowerArgs[..^3];
+        ExecuteCustomCommand(keyPart);
+        return true;
     }
     // 新增：自定义命令执行方法
     private void ExecuteCustomCommand(string commandKey)

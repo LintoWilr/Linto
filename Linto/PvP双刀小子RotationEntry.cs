@@ -53,7 +53,7 @@ public class PvP双刀小子Entry : IRotationEntry
         rot.AddOpener(GetOpener);
         return rot;
     }
-    public static JobViewWindow JobViewWindow { get; private set; }
+    public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
         return PvP双刀小子Entry.JobViewWindow;

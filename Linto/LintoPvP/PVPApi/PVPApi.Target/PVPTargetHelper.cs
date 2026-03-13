@@ -109,7 +109,7 @@ public class PVPTargetHelper
 		// 快速路径：如果不需要自动选中，直接返回当前目标
 		if (!PvPSettings. Instance. 技能自动选中)
 			{
-			return Core. Me. GetCurrTarget ();
+			return Core. Me. GetCurrTarget ()!;
 			}
 
 		// 野火优先级检查
@@ -124,9 +124,30 @@ public class PVPTargetHelper
 			}
 
 		// 根据设置选择目标模式
-		return PvPSettings. Instance. 最合适目标
+		var selectedTarget = PvPSettings. Instance. 最合适目标
 			? TargetSelector. Get最合适目标 (距离 + PvPSettings. Instance. 长臂猿, 技能id)
 			: TargetSelector. Get最近目标 (技能id);
+		return selectedTarget ?? Core. Me;
+		}
+
+	public static bool Check目标罩子 ( IBattleChara? target )
+		{
+		return TargetSelector. Check目标罩子 (target);
+		}
+
+	public static bool Check目标免控 ( IBattleChara? target )
+		{
+		return TargetSelector. Check目标免控 (target);
+		}
+
+	public static List<IBattleChara> Get看着目标的人 ( Group type, IBattleChara target, float range = 50f, uint? actionId = null )
+		{
+		return TargetSelector. Get看着目标的人 (type, target, range, actionId);
+		}
+
+	public static List<IBattleChara> 获取自身周围6码内地天状态敌对玩家 ()
+		{
+		return TargetSelector. 获取自身周围6码内地天状态敌对玩家 ();
 		}
 
 	/// <summary>
@@ -361,7 +382,7 @@ public class PVPTargetHelper
 		public static IBattleChara Get多斩Target ( int 多斩count, uint? actionId = null )
 			{
 			if (!Core. Me. IsPvP () || Core. Me. LimitBreakCurrentValue () < 4000)
-				return null;
+				return null!;
 
 			var spellApi = Core. Resolve<MemApiSpell> ();
 			var validEnemies = new List<IBattleChara> ();
@@ -390,7 +411,7 @@ public class PVPTargetHelper
 					}
 				}
 
-			if (validEnemies. Count == 0) return null;
+			if (validEnemies. Count == 0) return null!;
 
 			// 寻找满足多斩条件的目标
 			foreach (var target in validEnemies)
@@ -404,12 +425,12 @@ public class PVPTargetHelper
 						{
 						nearbyValidCount++;
 						if (nearbyValidCount >= 多斩count)
-							return target. IsTargetable ? target : null;
+							return target. IsTargetable ? target : null!;
 						}
 					}
 				}
 
-			return null;
+			return null!;
 			}
 
 		/// <summary>
@@ -418,45 +439,44 @@ public class PVPTargetHelper
 		/// <param name="actionId">技能ID用于范围和视线检查</param>
 		/// <returns>符合条件的目标敌人，如果没有则返回 null。</returns>
 		public static IBattleChara Get斩铁目标 ( uint? actionId = null )
-			{
+		{
 			if (!Core. Me. IsPvP () || Core. Me. LimitBreakCurrentValue () < 4000)
-				return null;
-
+				return null!;
+		
 			var spellApi = Core. Resolve<MemApiSpell> ();
-
-			// 快速找到第一个符合条件的就返回 (25米范围内)
+		
+			// 快速找到第一个符合条件的就返回 (25 米范围内)
 			foreach (var enemy in GetEnemiesInRange (25))
-				{
+			{
 				if (enemy == null || !enemy. IsTargetable) continue;
-
+		
 				float totalHpPercentage = enemy. CurrentHpPercent () + ( enemy. ShieldPercentage / 100f );
-
+		
 				if (totalHpPercentage <= 1.0f &&
 					enemy. HasLocalPlayerAura (崩破) &&
 					!enemy. HasAura (免疫状态1) &&
 					!enemy. HasAura (免疫状态2) &&
 					!enemy. HasAura (免疫状态3))
-					{
+				{
 					if (actionId. HasValue)
-						{
+					{
 						if (spellApi != null && spellApi. CheckActionInRangeOrLoS (actionId. Value, enemy))
 							return enemy;
-						}
+					}
 					else
-						{
+					{
 						return enemy;
-						}
 					}
 				}
-
-			return null;
 			}
+		
+			return null!;
+
 		}
 
-	/// <summary>
-	/// 上一次AOE目标搜索时间点
-	/// </summary>
+#pragma warning disable CS0414 // 保留字段用于未来功能扩展
 	private static long 上一次AOE目标搜索时间点;
+#pragma warning restore CS0414
 
 	/// <summary>
 	/// 检查目标是否有罩子（龟壳）
@@ -802,3 +822,5 @@ public class PVPTargetHelper
 		return false;
 		}
 	}
+
+}

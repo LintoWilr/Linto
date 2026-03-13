@@ -24,7 +24,8 @@ public class 溃烂爆发 : ISlotResolver
 		{
 			return -1;
 		}
-		if (Core.Me.GetCurrTarget().CurrentHpPercent() > PvPSMNSettings.Instance.溃烂阈值)
+		var currentTarget = Core.Me.GetCurrTarget();
+		if (currentTarget == null || currentTarget.CurrentHpPercent() > PvPSMNSettings.Instance.溃烂阈值)
 		{
 			return -5;
 		}

@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.VPR;
 
 public class PvPVPRSettings
 {
-	public static PvPVPRSettings Instance;
+	public static PvPVPRSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 
 	public int 药血量 = 70;
 	public int AOE数量 = 1;
@@ -42,7 +42,7 @@ public class PvPVPRSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

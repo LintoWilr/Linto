@@ -8,9 +8,9 @@ namespace Linto.LintoPvP.GNB;
 
 public class PvPGNBSettings
 {
-	public static PvPGNBSettings? Instance;
+	public static PvPGNBSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 
 	public int 爆破血量 = 70;
 	public int 药血量 = 70;
@@ -43,7 +43,7 @@ public class PvPGNBSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

@@ -7,7 +7,9 @@ namespace Linto.LintoPvP.BRD;
 
 public class PvPBRDOverlay
 {
+#pragma warning disable CS0414 // 保留字段用于未来调试功能
     private static bool 调试窗口 = false;
+#pragma warning restore CS0414
     public void DrawGeneral(JobViewWindow jobViewWindow)
     {
         

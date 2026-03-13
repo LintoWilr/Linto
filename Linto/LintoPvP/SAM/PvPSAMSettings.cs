@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.SAM;
 
 public class PvPSAMSettings
 {
-	public static PvPSAMSettings Instance;
+	public static PvPSAMSettings Instance { get; set; } = new();
 
-	private static string path;
+	private static string path = "";
 
 	public int 药血量 = 70;
 	public int AOE数量 = 1;
@@ -44,7 +44,8 @@ public class PvPSAMSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		if (string.IsNullOrEmpty(path)) return;
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

@@ -50,8 +50,8 @@ public class 刚玉之心 : ISlotResolver
                 specifiedMember.DistanceToPlayer() > 30)
                 return -91;
 
-            IBattleChara member = PartyHelper.CastableParty.FirstOrDefault(chara =>
-                chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
+			IBattleChara? member = PartyHelper.CastableParty.FirstOrDefault(chara =>
+				chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
 
             if (member == null)
                 return -92;
@@ -72,7 +72,7 @@ public class 刚玉之心 : ISlotResolver
     {
         bool 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
         bool 刚玉播报 = PvPGNBSettings.Instance.刚玉播报;
-        IBattleChara target = null;
+		IBattleChara? target = null;
 
         if (刚玉队友)
         {

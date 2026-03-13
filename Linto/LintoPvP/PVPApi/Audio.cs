@@ -1,10 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+using System;
 using AEAssist.Helper;
-using CSCore;
-using CSCore.Codecs.MP3;
-using CSCore.SoundOut;
 using Linto;
 
 namespace Audio;
@@ -13,48 +8,16 @@ public class Voice
 {
 	public class AudioPlayer
 	{
-		private ISoundOut outputDevice;
-
-		private IWaveSource audioSource;
-
 		public DateTime LastPlayTime { get; set; }
 
 		public void PlayEmbeddedAudio(string resourceName)
 		{
-			StopAudio();
-			try
-			{
-				Assembly assembly = Assembly.GetExecutingAssembly();
-				using Stream audioStream = assembly.GetManifestResourceStream(resourceName);
-				if (audioStream == null || audioStream.Length == 0)
-				{
-					throw new ArgumentException("未找到资源 '" + resourceName + "' 或该资源为空。");
-				}
-				audioSource = (IWaveSource)new Mp3MediafoundationDecoder(audioStream);
-				outputDevice = (ISoundOut)new WasapiOut();
-				outputDevice.Initialize(audioSource);
-				outputDevice.Play();
-				outputDevice.Volume = (float)(0.015 * (double)PvPSettings.Instance.Volume);
-			}
-			catch (Exception ex)
-			{
-				LogHelper.Print("播放嵌入音频时发生错误: " + ex.Message);
-			}
+			LogHelper.Print("音频播放功能已临时禁用。");
 		}
 
 		public void StopAudio()
 		{
-			if (outputDevice != null)
-			{
-				outputDevice.Stop();
-				((IDisposable)outputDevice).Dispose();
-				outputDevice = null;
-			}
-			if (audioSource != null)
-			{
-				((IDisposable)audioSource).Dispose();
-				audioSource = null;
-			}
+			
 		}
 	}
 
@@ -97,29 +60,6 @@ public class Voice
 
 	public static void LoadVoice()
 	{
-		Assembly assembly = Assembly.GetExecutingAssembly();
-		string[] manifestResourceNames = assembly.GetManifestResourceNames();
-		foreach (string resource in manifestResourceNames)
-		{
-			
-		}
-		AppDomain.CurrentDomain.AssemblyResolve += delegate(object? sender, ResolveEventArgs args)
-		{
-			if (args.Name.Contains("CSCore"))
-			{
-				using (Stream stream = assembly.GetManifestResourceStream("Linto.Resources.CSCore.dll"))
-				{
-					if (stream == null)
-					{
-						LogHelper.Print("无法加载CSCore");
-						return null;
-					}
-					byte[] array = new byte[stream.Length];
-					stream.Read(array, 0, array.Length);
-					return Assembly.Load(array);
-				}
-			}
-			return null;
-		};
+		LogHelper.Print("音频加载流程已临时禁用。");
 	}
 }

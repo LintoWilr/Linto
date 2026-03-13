@@ -27,7 +27,7 @@ public class PvPBRDRotationEntry : IRotationEntry
     {
         settingUI.Draw();
     }
-    public static JobViewWindow JobViewWindow;
+    public static JobViewWindow JobViewWindow = null!;
     private PvPBRDOverlay _lazyOverlay =  new PvPBRDOverlay();
     public List<SlotResolverData> SlotResolvers = new()
     {

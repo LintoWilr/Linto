@@ -292,7 +292,6 @@
     <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
     <ItemGroup>
-      <PackageReference Include="CSCore" Version="1.2.1.2" />
       <PackageReference Include="Obfuscar" Version="2.2.39">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

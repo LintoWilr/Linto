@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.SMN;
 
 public class PvPSMNSettings
 {
-	public static PvPSMNSettings Instance;
+	public static PvPSMNSettings Instance { get; set; } = new();
 
-	private static string path;
+	private static string path = "";
 
 	public int 药血量 = 70;
 	public int 火神冲 = 5;
@@ -42,7 +42,8 @@ public class PvPSMNSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		if (string.IsNullOrEmpty(path)) return;
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

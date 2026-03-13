@@ -61,7 +61,7 @@ public class PvPBLMEntry : IRotationEntry
         rot.AddOpener(GetOpener);
         return rot;
     }
-    public static JobViewWindow JobViewWindow { get; private set; }
+    public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
         return PvPBLMEntry.JobViewWindow;

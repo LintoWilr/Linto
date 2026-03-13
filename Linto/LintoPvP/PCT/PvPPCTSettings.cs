@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.PCT;
 
 public class PvPPCTSettings
 {
-	public static PvPPCTSettings Instance;
+	public static PvPPCTSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 
 	public int 药血量 = 70;
 	public int 减色切换 = 4000;
@@ -38,7 +38,7 @@ public class PvPPCTSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

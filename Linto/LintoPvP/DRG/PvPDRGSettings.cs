@@ -7,8 +7,8 @@ namespace Linto.LintoPvP.DRG;
 
 public class PvPDRGSettings
 {
-	public static PvPDRGSettings Instance;
-	private static string path;
+	public static PvPDRGSettings Instance = new();
+	private static string path = string.Empty;
 	public int 药血量 = 70;
 	public bool 樱花缭乱龙血;
 	public bool 死者之岸樱花;
@@ -47,7 +47,7 @@ public class PvPDRGSettings
 	}
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

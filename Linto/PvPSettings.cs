@@ -5,9 +5,9 @@ namespace Linto;
 
 public class PvPSettings
 {
-	public static PvPSettings Instance;
+	public static PvPSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 	public bool 监控 = false;
 	public bool 警报 = true;
 	public bool 播报 = true;
@@ -62,7 +62,7 @@ public class PvPSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

@@ -7,9 +7,9 @@ namespace Linto.LintoPvP.RDM;
 
 public class PvPRDMSettings
 {
-	public static PvPRDMSettings Instance;
+	public static PvPRDMSettings Instance = new();
 
-	private static string path;
+	private static string path = string.Empty;
 
 	public int 药血量 = 70;
 	public int 鼓励人数 = 0;
@@ -41,7 +41,7 @@ public class PvPRDMSettings
 
 	public void Save()
 	{
-		Directory.CreateDirectory(Path.GetDirectoryName(path));
+		Directory.CreateDirectory(Path.GetDirectoryName(path)!);
 		File.WriteAllText(path, JsonHelper.ToJson((object)this));
 	}
 }

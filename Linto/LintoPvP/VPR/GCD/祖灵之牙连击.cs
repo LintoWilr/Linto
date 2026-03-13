@@ -33,7 +33,11 @@ public class 祖灵之牙连击 : ISlotResolver
 	{
 		if(!PvPVPROverlay.VPRQt.GetQt("连击"))
 		{
-			TargetHelper.GetEnemyCountInsideRect(Core.Me, Core.Me.GetCurrTarget(), 5, 5);
+			var currentTarget = Core.Me.GetCurrTarget();
+			if (currentTarget != null)
+			{
+				TargetHelper.GetEnemyCountInsideRect(Core.Me, currentTarget, 5, 5);
+			}
 			return -1;
 		}
 		if (!PVPHelper.CanActive())
