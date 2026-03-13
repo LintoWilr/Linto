@@ -40,6 +40,8 @@ public class PvPSettings
 	public bool 名字  = true;
 	public bool 血量  = true;
 	public bool 距离  = true;
+	public bool 监控透明背景 = true;
+	public bool 监控点击穿透 = false;
 	public static void Build(string settingPath)
 	{
 		path = Path.Combine(settingPath, "PvPSettings.json");

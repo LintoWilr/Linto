@@ -550,6 +550,47 @@ public class PVPHelper
         ImGui.Text($"{描述文字}:");
         ImGui.Columns(1);
     }
+
+	// 小工具：把“自动选目标”的共用逻辑收口，后面改目标策略只改这一个地方。
+	private static IBattleChara? 获取自动目标(uint skillid, int 距离)
+	{
+		if (PvPSettings.Instance.最合适目标)
+		{
+			var bestTarget = PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿, skillid);
+			if (bestTarget != null && bestTarget != Core.Me)
+			{
+				return bestTarget;
+			}
+		}
+
+		var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
+		if (nearestTarget != null && nearestTarget != Core.Me)
+		{
+			return nearestTarget;
+		}
+
+		return null;
+	}
+
+	private static bool 目标超出距离(IBattleChara? target, int 距离)
+	{
+		return target == null || target == Core.Me || target.DistanceToPlayer() > 距离;
+	}
+
+	// 小工具：两种距离检查（通用/固定）只是距离上限不同，检查框架其实是一致的。
+	private static bool 目标距离检查(int 距离, bool 使用长臂猿)
+	{
+		int finalDistance = 使用长臂猿 ? 距离 + PvPSettings.Instance.长臂猿 : 距离;
+
+		if (PvPSettings.Instance.技能自动选中)
+		{
+			var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
+			return 目标超出距离(nearestTarget, finalDistance);
+		}
+
+		var currentTarget = Core.Me.GetCurrTarget();
+		return 目标超出距离(currentTarget, finalDistance);
+	}
     
     public static Spell? 通用技能释放Check(uint skillid, int 距离)
     {
@@ -566,36 +607,20 @@ public class PVPHelper
         {
             if (PvPSettings.Instance.技能自动选中)
             {
-                if (PvPSettings.Instance.最合适目标 &&
-                    (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u) != null &&
-                     PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u) != Core.Me))
+                var autoTarget = 获取自动目标(29405u, 距离);
+                if (autoTarget != null)
                 {
-                    return 等服务器Spell(skillid,
-                        PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,29405u));
-                }
-
-                var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
-                if (nearestTarget != null && nearestTarget != Core.Me)
-                {
-                    return 等服务器Spell(skillid, nearestTarget);
+                    return 等服务器Spell(skillid, autoTarget);
                 }
             }
         }
 
         if (PvPSettings.Instance.技能自动选中)
         {
-            if (PvPSettings.Instance.最合适目标 &&
-                (PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid) != null &&
-                 PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid) != Core.Me))
+            var autoTarget = 获取自动目标(skillid, 距离);
+            if (autoTarget != null)
             {
-                return 等服务器Spell(skillid,
-                    PVPTargetHelper.TargetSelector.Get最合适目标(距离 + PvPSettings.Instance.长臂猿,skillid));
-            }
-
-            var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
-            if (nearestTarget != null && nearestTarget != Core.Me)
-            {
-                return 等服务器Spell(skillid, nearestTarget);
+                return 等服务器Spell(skillid, autoTarget);
             }
         }
         
@@ -620,48 +645,12 @@ public class PVPHelper
 
     public static bool 通用距离检查(int 距离)
     {
-        var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
-        var currentTarget = Core.Me.GetCurrTarget();
-        
-        if (PvPSettings.Instance.技能自动选中)
-        {
-            if (nearestTarget == null || nearestTarget == Core.Me ||
-                nearestTarget.DistanceToPlayer() > 距离 + PvPSettings.Instance.长臂猿)
-            {
-                return true;
-            }
-        }
-        else if (!PvPSettings.Instance.技能自动选中 &&
-                 (currentTarget == null || currentTarget == Core.Me ||
-                  currentTarget.DistanceToPlayer() > 距离 + PvPSettings.Instance.长臂猿))
-        {
-            return true;
-        }
-
-        return false;
+		return 目标距离检查(距离, true);
     }
     
     public static bool 固定距离检查(int 距离)
     {
-        var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
-        var currentTarget = Core.Me.GetCurrTarget();
-        
-        if (PvPSettings.Instance.技能自动选中)
-        {
-            if (nearestTarget == null || nearestTarget == Core.Me ||
-                nearestTarget.DistanceToPlayer() > 距离)
-            {
-                return true;
-            }
-        }
-        else if (!PvPSettings.Instance.技能自动选中 &&
-                 (currentTarget == null || currentTarget == Core.Me ||
-                  currentTarget.DistanceToPlayer() > 距离))
-        {
-            return true;
-        }
-
-        return false;
+		return 目标距离检查(距离, false);
     }
     
     public static void 配置(JobViewWindow jobViewWindow)
@@ -863,6 +852,9 @@ public class PVPHelper
         if (通用码权限 || 高级码)
         {
             ImGui.Checkbox($"启用监控窗口##{28}", ref PvPSettings.Instance.监控);
+            ImGui.Checkbox($"监控透明背景##{281}", ref PvPSettings.Instance.监控透明背景);
+            ImGui.SameLine();
+            ImGui.Checkbox($"监控点击穿透##{282}", ref PvPSettings.Instance.监控点击穿透);
             ImGui.SliderFloat("监控图片宽", ref PvPSettings.Instance.图片宽1, 0, 1000);
             ImGui.SliderFloat("监控图片高", ref PvPSettings.Instance.图片高1, 0, 1000);
             ImGui.Checkbox($"监控布局紧凑##{29}", ref PvPSettings.Instance.紧凑);
@@ -885,7 +877,6 @@ public class PVPHelper
             ImGui.InputInt($"##{34}", ref PvPSettings.Instance.警报数量);
             ImGui.Checkbox($"DevList##{31}", ref PvPSettings.Instance.窗口开关);
             if (PvPSettings.Instance.窗口开关) DrawUnitList();
-            监控窗口();
             PvPSettings.Instance.Save();
             List<IBattleChara> targetMe;
 
@@ -989,105 +980,139 @@ public class PVPHelper
 
     public static void 监控窗口()
     {
-        if (PvPSettings.Instance.监控)
+        if (!PvPSettings.Instance.监控)
         {
-            ImGui.SetNextWindowSize(new Vector2(
-                PvPSettings.Instance.宽1, 
-                PvPSettings.Instance.高1
-            ), ImGuiCond.FirstUseEver); 
-            
-            // 开始绘制一个窗口，窗口标识为"###targetMe_Window"，使用了(ImGuiWindowFlags)43这个标志
-            ImGui.Begin("###targetMe_Window", ImGuiWindowFlags.None);
+            return;
+        }
 
-            // 获取看着玩家的敌方目标
-            List<IBattleChara> targetMe = PVPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
+        ImGui.SetNextWindowSize(new Vector2(PvPSettings.Instance.宽1, PvPSettings.Instance.高1), ImGuiCond.FirstUseEver);
+        ImGuiWindowFlags windowFlags = ImGuiWindowFlags.None;
+        if (PvPSettings.Instance.监控透明背景)
+        {
+            windowFlags |= ImGuiWindowFlags.NoBackground;
+        }
 
-            // 创建一个默认的字符串格式化处理器
-            DefaultInterpolatedStringHandler defaultInterpolatedStringHandler =
-                new DefaultInterpolatedStringHandler(28, 1);
+        if (PvPSettings.Instance.监控点击穿透)
+        {
+            windowFlags |= ImGuiWindowFlags.NoInputs
+                           | ImGuiWindowFlags.NoMouseInputs
+                           | ImGuiWindowFlags.NoNav
+                           | ImGuiWindowFlags.NoNavInputs;
+        }
 
-            // 生成一个图片路径，根据目标数量（最多显示4个敌人）
-            defaultInterpolatedStringHandler.AppendLiteral("Resources\\Images\\Number\\");
-            defaultInterpolatedStringHandler.AppendFormatted((targetMe.Count <= 4) ? ((object)targetMe.Count) : "4+");
-            defaultInterpolatedStringHandler.AppendLiteral(".png");
+        if (!PvPSettings.Instance.监控透明背景)
+        {
+            ImGui.PushStyleColor(ImGuiCol.WindowBg, new Vector4(0f, 0f, 0f, 0.65f));
+        }
+        else
+        {
+            ImGui.PushStyleColor(ImGuiCol.TitleBg, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.TitleBgActive, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.TitleBgCollapsed, new Vector4(0f, 0f, 0f, 0f));
+        }
 
-            // 转换格式化后的路径为字符串
-            string imgPath = defaultInterpolatedStringHandler.ToStringAndClear();
+        ImGui.Begin("###targetMe_Window", windowFlags);
 
-            // 尝试获取目标数量图标
-            IDalamudTextureWrap? texture;
-            if (Core.Resolve<MemApiIcon>().TryGetTexture(imgPath, out texture))
-            {
-                // 如果成功获取到图标，显示它
-                ImGui.Text("    ");
-                ImGui.SameLine();
-                if (texture != null)
-                    ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
-                ImGui.Columns();
-            }
+        // 先拿“有多少人正在看你”，后面的图标、告警、列表都围绕这个结果走。
+        List<IBattleChara> targetMe = PVPTargetHelper.Get看着目标的人(Group.敌人, Core.Me);
 
-            // 如果开启了警报设置并且目标数量大于0，则显示警报窗口
-            if (PvPSettings.Instance.警报 && targetMe.Count >= PvPSettings.Instance.警报数量)
-            {
-                Core.Resolve<MemApiChatMessage>().Toast2("好像有很多人在看你耶!", 1, 3000); // 显示警报文本
-            }
+        绘制监控数量图标(targetMe.Count);
+        处理监控警报(targetMe.Count);
+        绘制监控目标列表(targetMe);
 
-            // 如果有敌人目标（目标数量大于0）
-            if (targetMe.Count > 0)
-            {
-                int                  i = 1;
-                IDalamudTextureWrap? textureJob;
+        ImGui.End();
 
-                // 遍历每一个敌方目标
-                foreach (IBattleChara v in targetMe)
-                {
-                    if (i > PvPSettings.Instance.监控数量)
-                    {
-                        break;
-                    }
-
-                    // 获取当前敌人的职业
-                    uint job = (uint)v.CurrentJob();
-                    // 根据职业获取对应的图标
-                    if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
-                    {
-                        if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 == 0 && i != 1)
-                        {
-                            ImGui.NewLine();
-                        }
-
-                        // 如果成功获取到职业图标，显示该图标
-                        if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
-                        if (PvPSettings.Instance.名字)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"{v.Name}");
-                        }
-
-                        if (PvPSettings.Instance.血量)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"HP百分比:{v.CurrentHpPercent() * 100f}");
-                        }
-
-                        if (PvPSettings.Instance.距离)
-                        {
-                            ImGui.SameLine();
-                            ImGui.Text($"距离:{v.DistanceToPlayer():F1}m");
-                        }
-                    }
-
-                    {
-                        if (PvPSettings.Instance.紧凑 && i % PvPSettings.Instance.紧凑数量 != 0)
-                        {
-                            ImGui.SameLine(0f, 5f); // 设置图标间隔
-                        }
-
-                        i++; // 增加计数器
-                    }
-                }
-            }
-            ImGui.End();
+        if (!PvPSettings.Instance.监控透明背景)
+        {
+            ImGui.PopStyleColor();
+        }
+        else
+        {
+            ImGui.PopStyleColor(3);
         }
     }
+
+	private static void 绘制监控数量图标(int targetCount)
+	{
+		DefaultInterpolatedStringHandler pathBuilder = new DefaultInterpolatedStringHandler(28, 1);
+		pathBuilder.AppendLiteral("Resources\\Images\\Number\\");
+		pathBuilder.AppendFormatted((targetCount <= 4) ? ((object)targetCount) : "4+");
+		pathBuilder.AppendLiteral(".png");
+		string imgPath = pathBuilder.ToStringAndClear();
+
+		IDalamudTextureWrap? texture;
+		if (!Core.Resolve<MemApiIcon>().TryGetTexture(imgPath, out texture))
+		{
+			return;
+		}
+
+		ImGui.Text("    ");
+		ImGui.SameLine();
+		if (texture != null)
+			ImGui.Image(texture.Handle, new Vector2(PvPSettings.Instance.图片宽1, PvPSettings.Instance.图片高1));
+		ImGui.Columns();
+	}
+
+	private static void 处理监控警报(int targetCount)
+	{
+		if (PvPSettings.Instance.警报 && targetCount >= PvPSettings.Instance.警报数量)
+		{
+			Core.Resolve<MemApiChatMessage>().Toast2("好像有很多人在看你耶!", 1, 3000);
+		}
+	}
+
+	private static void 绘制监控目标列表(List<IBattleChara> targetMe)
+	{
+		if (targetMe.Count <= 0)
+		{
+			return;
+		}
+
+		int i = 1;
+		int compactCount = Math.Max(1, PvPSettings.Instance.紧凑数量);
+		IDalamudTextureWrap? textureJob;
+
+		foreach (IBattleChara v in targetMe)
+		{
+			if (i > PvPSettings.Instance.监控数量)
+			{
+				break;
+			}
+
+			uint job = (uint)v.CurrentJob();
+			if (Core.Resolve<MemApiIcon>().TryGetTexture($"Resources\\jobs\\{job}.png", out textureJob))
+			{
+				if (PvPSettings.Instance.紧凑 && i % compactCount == 0 && i != 1)
+				{
+					ImGui.NewLine();
+				}
+
+				if (textureJob != null) ImGui.Image(textureJob.Handle, new Vector2(50f, 50f));
+				if (PvPSettings.Instance.名字)
+				{
+					ImGui.SameLine();
+					ImGui.Text($"{v.Name}");
+				}
+
+				if (PvPSettings.Instance.血量)
+				{
+					ImGui.SameLine();
+					ImGui.Text($"HP百分比:{v.CurrentHpPercent() * 100f}");
+				}
+
+				if (PvPSettings.Instance.距离)
+				{
+					ImGui.SameLine();
+					ImGui.Text($"距离:{v.DistanceToPlayer():F1}m");
+				}
+			}
+
+			if (PvPSettings.Instance.紧凑 && i % compactCount != 0)
+			{
+				ImGui.SameLine(0f, 5f);
+			}
+
+			i++;
+		}
+	}
 }
