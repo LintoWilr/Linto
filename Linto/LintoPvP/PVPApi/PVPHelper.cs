@@ -732,11 +732,13 @@ public class PVPHelper
             ImGui.Text($"IsReadyWithCanCast：{29649u.GetSpell().IsReadyWithCanCast()})");
             if (ImGui.Button("null"))
             {
-                Svc.Targets.Target = null;
+                Core.Me.SetTarget(null);
+                //Svc.Targets.Target = null;
             }
             if (ImGui.Button("最远"))
             {
-                Svc.Targets.Target = PVPTargetHelper.TargetSelector.Get最远目标();
+                Core.Me.SetTarget(PVPTargetHelper.TargetSelector.Get最远目标());
+                //Svc.Targets.Target = PVPTargetHelper.TargetSelector.Get最远目标();
             }
             if (ImGui.Button("1"))
             {
