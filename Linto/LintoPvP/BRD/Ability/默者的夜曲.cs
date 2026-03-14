@@ -9,6 +9,8 @@ namespace Linto.LintoPvP.BRD.Ability;
 public class 默者的夜曲 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29395u;
+	private const int SkillRange = 15;
 
 	public int Check()
 	{
@@ -20,34 +22,34 @@ public class 默者的夜曲 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29395u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
-		if (PVPHelper.通用距离检查(15))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29395u,15)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
 		if (PvPSettings.Instance.技能自动选中)
 		{
+			var bestTarget = PVPTargetHelper.TargetSelector.Get最合适目标(SkillRange + PvPSettings.Instance.长臂猿,SkillId);
 			if (PvPSettings.Instance.最合适目标 &&
-			    (PVPTargetHelper.TargetSelector.Get最合适目标(15 + PvPSettings.Instance.长臂猿,29395u) != null &&
-			     PVPTargetHelper.TargetSelector.Get最合适目标(15 + PvPSettings.Instance.长臂猿,29395u) != Core.Me))
+			    (bestTarget != null && bestTarget != Core.Me))
 			{
-				if (PVPTargetHelper.Check目标免控(PVPTargetHelper.TargetSelector.Get最合适目标(15 + PvPSettings.Instance.长臂猿,29395u)))
+				if (PVPTargetHelper.Check目标免控(bestTarget))
 				{
 					return -3;
 				}
 			}
 			
-			if ((PVPTargetHelper.TargetSelector.Get最近目标() != null &&
-			     PVPTargetHelper.TargetSelector.Get最近目标() != Core.Me))
+			var nearestTarget = PVPTargetHelper.TargetSelector.Get最近目标();
+			if ((nearestTarget != null && nearestTarget != Core.Me))
 			{
-				if (PVPTargetHelper.Check目标免控(PVPTargetHelper.TargetSelector.Get最近目标()))
+				if (PVPTargetHelper.Check目标免控(nearestTarget))
 				{
 					return -3;
 				}
@@ -65,6 +67,6 @@ public class 默者的夜曲 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29395u,15);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

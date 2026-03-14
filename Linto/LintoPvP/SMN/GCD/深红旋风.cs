@@ -8,6 +8,7 @@ namespace Linto.LintoPvP.SMN.GCD;
 public class 深红旋风 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29667u;
 
 	public int Check()
 	{
@@ -23,7 +24,7 @@ public class 深红旋风 : ISlotResolver
 		{
 			return -5 ;
 		}
-		if (!(29667u).GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -32,6 +33,6 @@ public class 深红旋风 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(29667u),PvPSMNSettings.Instance.火神冲);
+		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(SkillId),PvPSMNSettings.Instance.火神冲);
 	}
 }

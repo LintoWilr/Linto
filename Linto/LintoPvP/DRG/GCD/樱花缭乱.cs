@@ -9,6 +9,7 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 樱花缭乱 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 龙血Aura = 3177u;
 
 	public int Check() //29490 樱花缭乱
 	{
@@ -30,7 +31,7 @@ public class 樱花缭乱 : ISlotResolver
 		}
 		if (PvPDRGSettings.Instance.樱花缭乱龙血)
 		{
-			if (!Core.Me.HasAura(3177))
+			if (!Core.Me.HasAura(龙血Aura))
 			{
 				return -8;
 			}

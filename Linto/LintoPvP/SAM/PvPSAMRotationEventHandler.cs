@@ -33,7 +33,6 @@ public class PvPSAMRotationEventHandler : IRotationEventHandler
 	
 	public async Task OnNoTarget()
 	{
-		var slot = new Slot();
 		PVPTargetHelper.自动选中();
 		if (PvPSettings.Instance.无目标坐骑)
 		{
@@ -44,10 +43,14 @@ public class PvPSAMRotationEventHandler : IRotationEventHandler
 
 	public void AfterSpell(Slot slot, Spell spell)
 	{
-		uint id = spell.Id;
+		var id = spell.Id;
 		if (id == 29537u&&PvPSettings.Instance.播报)
 		{
-			Core.Resolve<MemApiChatMessage>().Toast2($"{Core.Me.Name}对 {PVPTargetHelper.TargetSelector.Get斩铁目标().Name} 使用了 斩铁剑！", 1, 1500);
+			var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
+			if (target != null)
+			{
+				Core.Resolve<MemApiChatMessage>().Toast2($"{Core.Me.Name}对 {target.Name} 使用了 斩铁剑！", 1, 1500);
+			}
 		}
 	}
 	public void OnBattleUpdate(int currTime)

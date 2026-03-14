@@ -10,6 +10,10 @@ namespace Linto.LintoPvP.MCH.Ability;
 public class 分析 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29414u;
+	private const uint 分析中光环 = 3158u;
+	private const uint 分析可用技能 = 29405u;
+	private const int SkillRange = 25;
 	public int Check()
 	{
 		if (!PvPMCHOverlay.MCHQt.GetQt("分析"))
@@ -20,30 +24,30 @@ public class 分析 : ISlotResolver
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29414,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (SpellHelper.GetSpell(29414u).Charges < 1 )
+		if (SpellHelper.GetSpell(SkillId).Charges < 1 )
 		{
 			return -1;
 		}
 		if (PvPMCHSettings.Instance.分析可用)
 		{
-			if (!29405u.GetSpell().IsReadyWithCanCast())
+			if (!分析可用技能.GetSpell().IsReadyWithCanCast())
 			{
 				return -8;
 			}
 		}
-		if (Core.Me.HasAura(3158))
+		if (Core.Me.HasAura(分析中光环))
 		{
 			return -99;
 		}
-		if(Core.Resolve<MemApiSpellCastSuccess>().LastSpell==29414U)
+		if(Core.Resolve<MemApiSpellCastSuccess>().LastSpell==SkillId)
 		{
 			return -99;
 		}
@@ -52,6 +56,6 @@ public class 分析 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		slot.Add(PVPHelper.等服务器Spell(29414U,Core.Me));
+		slot.Add(PVPHelper.等服务器Spell(SkillId,Core.Me));
 	}
 }

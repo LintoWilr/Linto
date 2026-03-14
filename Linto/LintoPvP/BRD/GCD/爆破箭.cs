@@ -9,6 +9,9 @@ namespace Linto.LintoPvP.BRD.GCD;
 public class 爆破箭 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29394u;
+	private const uint RequiredAura = 3142u;
+	private const int SkillRange = 25;
 	public int Check()
 	{
 		if(!PvPBRDOverlay.BRDQt.GetQt("爆破箭"))
@@ -19,11 +22,11 @@ public class 爆破箭 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!Core.Me.HasAura(3142))
+		if (!Core.Me.HasAura(RequiredAura))
 		{
 			return -9;
 		}
-		if (!29394u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -31,11 +34,11 @@ public class 爆破箭 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29394u,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -43,6 +46,6 @@ public class 爆破箭 : ISlotResolver
 	}
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29394u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

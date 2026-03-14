@@ -10,9 +10,14 @@ namespace Linto.LintoPvP.MCH.GCD;
 public class 回转飞锯 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29408u;
+	private const int SkillRange = 25;
+	private const uint RequiredAura = 3153u;
+	private const uint 分析Buff = 3158u;
+	private const uint 分析技能 = 29414u;
 	public uint 机工变化()
 	{
-		return Core.Resolve<MemApiSpell>().CheckActionChange(29408u);
+		return Core.Resolve<MemApiSpell>().CheckActionChange(SkillId);
 	}
 	public int Check()
 	{
@@ -28,23 +33,24 @@ public class 回转飞锯 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(机工变化(),25)==null)
+		var changedSkill = 机工变化();
+		if (PVPHelper.通用技能释放Check(changedSkill,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (机工变化()!=29408u||!Core.Me.HasAura(3153)||!29408u.GetSpell().IsReadyWithCanCast())
+		if (changedSkill!=SkillId||!Core.Me.HasAura(RequiredAura)||!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
 		if (PvPMCHSettings.Instance.回转飞锯分析)
 		{
-			if (!Core.Me.HasAura(3158))
+			if (!Core.Me.HasAura(分析Buff))
 			{
-				if (SpellHelper.GetSpell(29414u).Charges > 0.5)
+				if (SpellHelper.GetSpell(分析技能).Charges > 0.5)
 				{
 					return -23;
 				}
@@ -55,7 +61,7 @@ public class 回转飞锯 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29408u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }
 

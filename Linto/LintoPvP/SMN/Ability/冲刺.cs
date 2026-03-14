@@ -18,6 +18,7 @@ public class 冲刺 : ISlotResolver
 		}
 		if (Core.Me.HasAura(1342u))
 		{
+			// 冲刺光环存在时做节流，避免短时间重复触发。
 			if ((DateTime.Now - lastAuraTime).TotalSeconds < PvPSettings.Instance.冲刺)
 			{
 				return -8;

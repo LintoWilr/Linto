@@ -10,6 +10,9 @@ namespace Linto.LintoPvP.SAM.GCD;
 public class 雪月花 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 技能雪月花 = 41454u;
+	private const uint 必要Buff = 3203u;
+	private const int SkillRange = 8;
 
 	public int Check() //41454 雪月花
 	{
@@ -36,15 +39,15 @@ public class 雪月花 : ISlotResolver
 		{
 			return -8;
 		}
-		if (PVPHelper.通用距离检查(8))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41454,8)==null)
+		if (PVPHelper.通用技能释放Check(技能雪月花,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (!Core.Me.HasAura(3203u))
+		if (!Core.Me.HasAura(必要Buff))
 		{
 			return -2;
 		}
@@ -53,14 +56,16 @@ public class 雪月花 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41454,8);
+		PVPHelper.通用技能释放(slot,技能雪月花,SkillRange);
 	}
 }
 public class 回返雪月花 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
-	public uint 技能雪月花 = 41454u;
-	public uint 技能回返雪月花 = 41455u;
+	private const uint 技能雪月花 = 41454u;
+	private const uint 技能回返雪月花 = 41455u;
+	private const uint 判定技能 = 29531u;
+	private const int SkillRange = 8;
 	public int Check()//41455 回返斩浪 
 	{
 		if(!PvPSAMOverlay.SAMQt.GetQt("斩浪"))
@@ -71,11 +76,11 @@ public class 回返雪月花 : ISlotResolver
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(8))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29531,8)==null)
+		if (PVPHelper.通用技能释放Check(判定技能,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -88,6 +93,6 @@ public class 回返雪月花 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,技能回返雪月花,8);
+		PVPHelper.通用技能释放(slot,技能回返雪月花,SkillRange);
 	}
 }

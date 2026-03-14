@@ -7,6 +7,7 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 武神枪 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29491u;
 
 	public int Check()//29491 武神枪 
 	{
@@ -18,7 +19,7 @@ public class 武神枪 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29491u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}

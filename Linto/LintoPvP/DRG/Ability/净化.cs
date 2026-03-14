@@ -7,6 +7,7 @@ namespace Linto.LintoPvP.DRG;
 public class 净化 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint 净化技能 = 29056u;
 
 
 	public int Check()
@@ -24,6 +25,6 @@ public class 净化 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		slot.Add(PVPHelper.等服务器Spell(29056u,Core.Me));
+		slot.Add(PVPHelper.等服务器Spell(净化技能,Core.Me));
 	}
 }

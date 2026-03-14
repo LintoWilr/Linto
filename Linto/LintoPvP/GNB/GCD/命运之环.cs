@@ -13,6 +13,7 @@ public class 命运之环 : ISlotResolver
 
 	public int Check()//41511 命运之环
 	{
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(41511);
 		if(!PvPGNBOverlay.GNBQt.GetQt("命运之环"))
 		{
 			return -1;
@@ -25,7 +26,7 @@ public class 命运之环 : ISlotResolver
 		{
 			return -3;
 		}
-		if (!Core.Resolve<MemApiSpell>().CheckActionChange(41511).GetSpell().IsReadyWithCanCast())
+		if (!changedAction.GetSpell().IsReadyWithCanCast())
 		{
 			return -4;
 		}

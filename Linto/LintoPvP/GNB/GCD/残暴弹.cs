@@ -13,6 +13,7 @@ public class 残暴弹 : ISlotResolver
 
 	public int Check()//29099
 	{
+		var comboAction = Core.Resolve<MemApiSpell>().CheckActionChange(29102);
 		if(!PvPGNBOverlay.GNBQt.GetQt("爆发击连击"))
 		{
 			return -1;
@@ -25,7 +26,7 @@ public class 残暴弹 : ISlotResolver
 		{
 			return -5;
 		}
-		if (Core.Resolve<MemApiSpell>().CheckActionChange(29102)!=29102u)
+		if (comboAction!=29102u)
 		{
 			return -4;
 		}

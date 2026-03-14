@@ -9,6 +9,9 @@ namespace Linto.LintoPvP.SMN.GCD;
 public class 山崩 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29671u;
+	private const uint CheckSkillId = 41483u;
+	private const int SkillRange = 8;
 
 	public int Check()
 	{
@@ -21,7 +24,7 @@ public class 山崩 : ISlotResolver
 			return -1;
 		}
 
-		if (!(29671u).GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -29,11 +32,11 @@ public class 山崩 : ISlotResolver
 		{
 			return -6;
 		}
-		if (PVPHelper.通用距离检查(8))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41483u,8)==null)
+		if (PVPHelper.通用技能释放Check(CheckSkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -42,6 +45,6 @@ public class 山崩 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29671u,8);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

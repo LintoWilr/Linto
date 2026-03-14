@@ -9,7 +9,7 @@ namespace Linto.LintoPvP.SAM.Ability
 	public class 药 : ISlotResolver
 	{
 		public SlotMode SlotMode { get; } = SlotMode.Always;
-		public uint 技能药 = 29711u;
+		private const uint 技能药 = 29711u;
 		public int Check()
 		{
 			if (!PvPSAMOverlay.SAMQt.GetQt("喝热水"))
@@ -20,7 +20,7 @@ namespace Linto.LintoPvP.SAM.Ability
 			{
 				return -3;
 			}
-			if (!29711u.GetSpell().IsReadyWithCanCast()||Core.Me.CurrentMp<2500)
+			if (!技能药.GetSpell().IsReadyWithCanCast()||Core.Me.CurrentMp<2500)
 			{
 				return -2;
 			}
@@ -33,7 +33,7 @@ namespace Linto.LintoPvP.SAM.Ability
 
 		public void Build(Slot slot)
 		{
-			slot.Add(PVPHelper.等服务器Spell(29711,Core.Me));
+			slot.Add(PVPHelper.等服务器Spell(技能药,Core.Me));
 		}
 	}
 }

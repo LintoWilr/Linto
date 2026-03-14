@@ -8,7 +8,7 @@ namespace Linto.LintoPvP.VPR.GCD;
 public class 飞蛇之尾 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
-	public uint 技能飞蛇之尾 = 39168u;
+	private const uint 技能飞蛇之尾 = 39168u;
 	private int 技能距离 => 18 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
 	public int Check()
 	{
@@ -37,6 +37,6 @@ public class 飞蛇之尾 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,技能飞蛇之尾,20);
+		PVPHelper.通用技能释放(slot,技能飞蛇之尾,技能距离);
 	}
 }

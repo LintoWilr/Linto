@@ -7,7 +7,7 @@ namespace Linto.LintoPvP.RDM.Ability;
 public class 净化 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能净化 = 29056;
+	private const uint 技能净化 = 29056u;
 	public int Check()
 	{
 		if (!PvPRDMOverlay.RDMQt.GetQt("自动净化"))
@@ -26,6 +26,7 @@ public class 净化 : ISlotResolver
 	}
 	public void Build(Slot slot)
 	{
+		// 保持原有行为：这里继续沿用当前项目中的既有技能号。
 		slot.Add(PVPHelper.等服务器Spell(20956u,Core.Me));
 	}
 }

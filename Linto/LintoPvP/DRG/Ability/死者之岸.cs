@@ -9,13 +9,16 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 死者之岸 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint 龙血Aura = 3177u;
+	private const uint 天龙Aura = 3178u;
+	private const uint 苍穹Aura = 3176u;
 	public int Check()//29492 死者之岸 
 	{
 		if(!DRGQt.GetQt("死者之岸"))
 		{
 			return -1;
 		}
-		if (!Core.Me.HasAura(3177))
+		if (!Core.Me.HasAura(龙血Aura))
 		{
 			return -8;
 		}
@@ -28,8 +31,8 @@ public class 死者之岸 : ISlotResolver
 			return -3;
 		}
 		if ((PvPDRGSettings.Instance.死者之岸樱花&&DRGSkillID.樱花缭乱.GetSpell().IsReadyWithCanCast())||
-		    (PvPDRGSettings.Instance.死者之岸天龙&&Core.Me.HasAura(3178))||
-		    (PvPDRGSettings.Instance.死者之岸苍穹刺&&Core.Me.HasAura(3176)))
+		    (PvPDRGSettings.Instance.死者之岸天龙&&Core.Me.HasAura(天龙Aura))||
+		    (PvPDRGSettings.Instance.死者之岸苍穹刺&&Core.Me.HasAura(苍穹Aura)))
 		{
 			return -8;
 		}

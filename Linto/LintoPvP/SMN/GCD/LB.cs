@@ -11,6 +11,8 @@ namespace Linto.LintoPvP.SMN.GCD;
 public class LB : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29662u;
+	private const uint RequiredAura = 3169u;
 	public int Check()
 	{
 		if(!PVPHelper.通用权限())
@@ -29,7 +31,7 @@ public class LB : ISlotResolver
 		{
 			return 1;
 		}
-		if(Core.Me.HasAura(3169u))
+		if(Core.Me.HasAura(RequiredAura))
 		{
 			return 0;
 		}
@@ -38,6 +40,6 @@ public class LB : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		slot.Add(SpellHelper.GetSpell(29662u));
+		slot.Add(SpellHelper.GetSpell(SkillId));
 	}
 }

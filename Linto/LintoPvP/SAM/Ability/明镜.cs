@@ -9,7 +9,7 @@ namespace Linto.LintoPvP.SAM.Ability;
 public class 明镜 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能明镜 = 29536u;
+	private const uint 技能明镜 = 29536u;
 
 	public int Check()//29536 明镜
 	{
@@ -39,6 +39,6 @@ public class 明镜 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		slot.Add(PVPHelper.等服务器Spell(29536u,Core.Me));
+		slot.Add(PVPHelper.等服务器Spell(技能明镜,Core.Me));
 	}
 }

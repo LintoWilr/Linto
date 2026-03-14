@@ -10,6 +10,9 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 苍穹刺 : ISlotResolver 
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29489u;
+	private const uint 苍穹Aura = 3176u;
+	private const uint 龙血Aura = 3177u;
 	public int Check()//苍穹刺 29489
 	{
 		if(!DRGQt.GetQt("苍穹刺"))
@@ -20,7 +23,7 @@ public class 苍穹刺 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29489u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -36,13 +39,13 @@ public class 苍穹刺 : ISlotResolver
 		{
 			return -6 ;
 		}
-		if (!Core.Me.HasAura(3176))
+		if (!Core.Me.HasAura(苍穹Aura))
 		{
 			return -10;
 		}
 		if (PvPDRGSettings.Instance.苍穹刺龙血)
 		{
-			if (!Core.Me.HasAura(3177))
+			if (!Core.Me.HasAura(龙血Aura))
 			{
 				return -8;
 			}

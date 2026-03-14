@@ -7,6 +7,8 @@ namespace Linto.LintoPvP.MCH.GCD;
 public class 霰弹枪 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29404u;
+	private const int SkillRange = 12;
 
 	public int Check()
 	{
@@ -18,7 +20,7 @@ public class 霰弹枪 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29404u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -26,11 +28,11 @@ public class 霰弹枪 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用距离检查(12))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29404,12)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -39,6 +41,6 @@ public class 霰弹枪 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29404u,12);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

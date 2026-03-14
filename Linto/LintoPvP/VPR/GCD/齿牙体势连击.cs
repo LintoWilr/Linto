@@ -10,12 +10,14 @@ namespace Linto.LintoPvP.VPR.GCD;
 public class 齿牙体势连击 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
-	public uint 技能连击1咬噬尖齿 = 39157u;
-	public uint 技能连击2猛袭利齿 = 39159u;
-	public uint 技能连击3咬击獠齿 = 39161u;
-	public uint 技能连击4切割尖齿 = 39158u;
-	public uint 技能连击5疾速利齿 = 39160u;
-	public uint 技能连击6啮噬獠齿 = 39163u;
+	private const uint 技能连击1咬噬尖齿 = 39157u;
+	private const uint 技能连击2猛袭利齿 = 39159u;
+	private const uint 技能连击3咬击獠齿 = 39161u;
+	private const uint 技能连击4切割尖齿 = 39158u;
+	private const uint 技能连击5疾速利齿 = 39160u;
+	private const uint 技能连击6啮噬獠齿 = 39163u;
+	private const uint LB技能 = 39190u;
+	private const int 连击距离 = 5;
 	private int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
 	// public uint 技能满月 = 29527u;
 	// public uint 技能樱花 = 29528u;
@@ -43,11 +45,11 @@ public class 齿牙体势连击 : ISlotResolver
 		{
 			return -4;
 		}
-		if(39190u.RecentlyUsed(1500))
+		if(LB技能.RecentlyUsed(1500))
 		{
 			return -44;
 		}
-		if (PVPHelper.通用距离检查(5))
+		if (PVPHelper.通用距离检查(连击距离))
 		{
 			return -5 ;
 		}
@@ -56,35 +58,36 @@ public class 齿牙体势连击 : ISlotResolver
 	
 	public void Build(Slot slot)
 	{
+		var lastCombo = Core.Resolve<MemApiSpell>().GetLastComboSpellId();
 		//普攻连击6
-		if ((Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 技能连击5疾速利齿))
+		if (lastCombo == 技能连击5疾速利齿)
 		{
-			PVPHelper.通用技能释放(slot,技能连击6啮噬獠齿,5);
+			PVPHelper.通用技能释放(slot,技能连击6啮噬獠齿,连击距离);
 		}
 		//普攻连击5
-		else if ((Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 技能连击4切割尖齿))
+		else if (lastCombo == 技能连击4切割尖齿)
 		{
-			PVPHelper.通用技能释放(slot,技能连击5疾速利齿,5);
+			PVPHelper.通用技能释放(slot,技能连击5疾速利齿,连击距离);
 		}
 		//普攻连击4
-		else if ((Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 技能连击3咬击獠齿))
+		else if (lastCombo == 技能连击3咬击獠齿)
 		{
-			PVPHelper.通用技能释放(slot,技能连击4切割尖齿,5);
+			PVPHelper.通用技能释放(slot,技能连击4切割尖齿,连击距离);
 		}
 		//普攻连击3
-		else if ((Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 技能连击2猛袭利齿))
+		else if (lastCombo == 技能连击2猛袭利齿)
 		{
-			PVPHelper.通用技能释放(slot,技能连击3咬击獠齿,5);
+			PVPHelper.通用技能释放(slot,技能连击3咬击獠齿,连击距离);
 		}
 		//普攻连击2
-		else if ((Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 技能连击1咬噬尖齿))
+		else if (lastCombo == 技能连击1咬噬尖齿)
 		{
-			PVPHelper.通用技能释放(slot,技能连击2猛袭利齿,5);
+			PVPHelper.通用技能释放(slot,技能连击2猛袭利齿,连击距离);
 		}
 		//普攻连击1
 		else
 		{
-			PVPHelper.通用技能释放(slot,技能连击1咬噬尖齿,5);
+			PVPHelper.通用技能释放(slot,技能连击1咬噬尖齿,连击距离);
 		}
 	}
 }

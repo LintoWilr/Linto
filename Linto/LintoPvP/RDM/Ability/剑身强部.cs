@@ -9,6 +9,7 @@ namespace Linto.LintoPvP.RDM.Ability
 	public class 剑身强部 : ISlotResolver
 	{
 		public SlotMode SlotMode { get; } = SlotMode.Always;
+		private const uint SkillId = 41496u;
 		public int Check()
 		{
 			if (!PvPRDMOverlay.RDMQt.GetQt("剑身强部"))
@@ -19,7 +20,7 @@ namespace Linto.LintoPvP.RDM.Ability
 			{
 				return -3;
 			}
-			if (!41496u.GetSpell().IsReadyWithCanCast())
+			if (!SkillId.GetSpell().IsReadyWithCanCast())
 			{
 				return -2;
 			}
@@ -33,12 +34,15 @@ namespace Linto.LintoPvP.RDM.Ability
 
 		public void Build(Slot slot)
 		{
-			slot.Add(PVPHelper.等服务器Spell(41496u,Core.Me));
+			slot.Add(PVPHelper.等服务器Spell(SkillId,Core.Me));
 		}
 	}
 	public class 荆棘环绕 : ISlotResolver
 	{
 		public SlotMode SlotMode { get; } = SlotMode.Always;
+		private const uint SkillId = 41493u;
+		private const uint RequiredAura = 4321u;
+		private const int SkillRange = 25;
 		public int Check()
 		{
 			if (!PvPRDMOverlay.RDMQt.GetQt("剑身强部"))
@@ -49,19 +53,15 @@ namespace Linto.LintoPvP.RDM.Ability
 			{
 				return -3;
 			}
-			if (!Core.Me.HasAura(4321u))
+			if (!Core.Me.HasAura(RequiredAura))
 			{
 				return -3;
 			}
-			if (!PVPHelper.CanActive())
-			{
-				return -2;
-			}
-			if (PVPHelper.通用距离检查(25))
+			if (PVPHelper.通用距离检查(SkillRange))
 			{
 				return -5 ;
 			}
-			if (PVPHelper.通用技能释放Check(41493u,25)==null)
+			if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 			{
 				return -6 ;
 			}
@@ -69,7 +69,7 @@ namespace Linto.LintoPvP.RDM.Ability
 		}
 		public void Build(Slot slot)
 		{
-			PVPHelper.通用技能释放(slot,41493u,25);
+			PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 		}
 	}
 }

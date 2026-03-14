@@ -13,6 +13,7 @@ public class 续剑 : ISlotResolver
 	public SlotMode SlotMode { get; }
 	public int Check() //29106 续剑
 	{
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(29106u);
 		if(!PvPGNBOverlay.GNBQt.GetQt("续剑"))
 		{
 			return -1;
@@ -37,7 +38,7 @@ public class 续剑 : ISlotResolver
 				return -5;
 				}
 			}
-		if (PVPHelper.通用技能释放Check(Core.Resolve<MemApiSpell>().CheckActionChange(29106u),5)==null)
+		if (PVPHelper.通用技能释放Check(changedAction,5)==null)
 		{
 			return -5;
 		}
@@ -53,9 +54,10 @@ public class 续剑 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(29106u);
 		if(Core.Me.HasLocalPlayerAura(4293))
-			slot.Add(SpellHelper.GetSpell(Core.Resolve<MemApiSpell>().CheckActionChange(29106u),SpellTargetType.Self));
-		PVPHelper.通用技能释放(slot,Core.Resolve<MemApiSpell>().CheckActionChange(29106u),5);
+			slot.Add(SpellHelper.GetSpell(changedAction,SpellTargetType.Self));
+		PVPHelper.通用技能释放(slot,changedAction,5);
 	}
 	
 }

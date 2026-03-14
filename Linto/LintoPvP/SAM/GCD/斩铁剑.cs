@@ -9,6 +9,8 @@ namespace Linto.LintoPvP.SAM.GCD;
 public class 斩铁剑 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29537u;
+	private const float MaxDistance = 25f;
 	public int Check() //29537 斩铁
 	{
 		if(!(PVPHelper.高级码||PVPHelper.通用码权限))
@@ -28,14 +30,16 @@ public class 斩铁剑 : ISlotResolver
 		}
 		if(!PvPSAMSettings.Instance.多斩模式)
 		{
-			if (PVPTargetHelper.TargetSelector.Get斩铁目标()==null||PVPTargetHelper.TargetSelector.Get斩铁目标().DistanceToPlayer()>25)
+			var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
+			if (target==null||target.DistanceToPlayer()>MaxDistance)
 			{
 				return -3;
 			}
 		}
 		if(PvPSAMSettings.Instance.多斩模式)
 		{
-			if (PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数)==null||PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数).DistanceToPlayer()>25)
+			var target = PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数);
+			if (target==null||target.DistanceToPlayer()>MaxDistance)
 			{
 				return -3;
 			}
@@ -58,19 +62,21 @@ public class 斩铁剑 : ISlotResolver
 	{
 		if (PvPSAMSettings.Instance.多斩模式)
 		{
+			var target = PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数);
 			if (PvPSAMSettings.Instance.斩铁调试)
 			{
-				LogHelper.Print($"尝试斩铁目标：{PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数)}");
+				LogHelper.Print($"尝试斩铁目标：{target}");
 			}
-			slot.Add(PVPHelper.等服务器Spell(29537u,PVPTargetHelper.TargetSelector.Get多斩Target(PvPSAMSettings.Instance.多斩人数)));
+			slot.Add(PVPHelper.等服务器Spell(SkillId,target));
 		}
 		else
 		{
+			var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
 			if (PvPSAMSettings.Instance.斩铁调试)
 			{
-				LogHelper.Print($"尝试斩铁目标：{PVPTargetHelper.TargetSelector.Get斩铁目标()}");
+				LogHelper.Print($"尝试斩铁目标：{target}");
 			}
-			slot.Add(PVPHelper.等服务器Spell(29537u, PVPTargetHelper.TargetSelector.Get斩铁目标()));
+			slot.Add(PVPHelper.等服务器Spell(SkillId, target));
 		}
 	}
 }

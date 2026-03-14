@@ -9,6 +9,9 @@ namespace Linto.LintoPvP.SMN.Ability;
 public class 龙神迸发 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 41484u;
+	private const uint RequiredAura = 3228u;
+	private const int SkillRange = 25;
 
 
 	public int Check()
@@ -21,19 +24,19 @@ public class 龙神迸发 : ISlotResolver
 		{
 			return -1;
 		}
-		if(!Core.Me.HasAura(3228u))
+		if(!Core.Me.HasAura(RequiredAura))
 		{
 			return -2;
 		}
-		if (!(41484u).GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41484u,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -42,6 +45,6 @@ public class 龙神迸发 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41484u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

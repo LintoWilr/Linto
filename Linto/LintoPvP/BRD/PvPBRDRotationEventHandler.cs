@@ -30,7 +30,6 @@ public class PvPBRDRotationEventHandler : IRotationEventHandler
 	}
 	public async Task OnNoTarget()
 	{
-		var slot = new Slot();
 		PVPTargetHelper.自动选中();
 		if (PvPSettings.Instance.无目标坐骑)
 		{
@@ -41,7 +40,7 @@ public class PvPBRDRotationEventHandler : IRotationEventHandler
 
 	public void AfterSpell(Slot slot, Spell spell)
 	{
-		uint id = spell.Id;
+		_ = spell.Id;
 	}
 	public void OnBattleUpdate(int currTime)
 	{

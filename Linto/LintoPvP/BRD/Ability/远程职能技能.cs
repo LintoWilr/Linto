@@ -11,8 +11,8 @@ namespace Linto.LintoPvP.BRD.Ability;
 public class 速度之星 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 速度之星u = 43249;
-	public uint 速度之星buff = 4489u;
+	private const uint 速度之星u = 43249u;
+	private const uint 速度之星buff = 4489u;
 	public int Check()
 	{
 		if (!PvPBRDOverlay.BRDQt.GetQt("职能技能"))
@@ -45,9 +45,9 @@ public class 速度之星 : ISlotResolver
 public class 勇气 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 勇气u = 43250;
-	public uint 勇气释放buff = 4490u;
-	public uint 勇气buff = 4479u;
+	private const uint 勇气u = 43250u;
+	private const uint 勇气释放buff = 4490u;
+	private const uint 勇气buff = 4479u;
 	public uint 钻头变化()
 	{
 		return Core.Resolve<MemApiSpell>().CheckActionChange(29408u);
@@ -69,10 +69,6 @@ public class 勇气 : ISlotResolver
 		if (!勇气u.GetSpell().IsReadyWithCanCast())
 		{
 			return -1;
-		}
-		if (PVPHelper.check坐骑())
-		{
-			return -5;
 		}
 		if (PVPHelper.check坐骑())
 		{

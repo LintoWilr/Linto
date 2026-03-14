@@ -10,6 +10,8 @@ namespace Linto.LintoPvP.SMN.Ability;
 public class 溃烂爆发 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 41483u;
+	private const int SkillRange = 25;
 	public int Check()
 	{
 		if (!SMNQt.GetQt("坏死爆发"))
@@ -20,7 +22,7 @@ public class 溃烂爆发 : ISlotResolver
 		{
 			return -1;
 		}
-		if (SpellHelper.GetSpell(41483u).Charges < 1 )
+		if (SpellHelper.GetSpell(SkillId).Charges < 1 )
 		{
 			return -1;
 		}
@@ -29,11 +31,11 @@ public class 溃烂爆发 : ISlotResolver
 		{
 			return -5;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41483u,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -42,6 +44,6 @@ public class 溃烂爆发 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41483u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

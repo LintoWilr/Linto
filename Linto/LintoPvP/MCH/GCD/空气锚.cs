@@ -10,6 +10,11 @@ namespace Linto.LintoPvP.MCH.GCD;
 public class 空气锚 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29407u;
+	private const uint RequiredAura = 3152u;
+	private const int SkillRange = 25;
+	private const uint 分析Buff = 3158u;
+	private const uint 分析技能 = 29414u;
 
 	public int Check()
 	{
@@ -21,7 +26,7 @@ public class 空气锚 : ISlotResolver
 		{
 			return -233; 
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
@@ -29,23 +34,23 @@ public class 空气锚 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用技能释放Check(29407u,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (!Core.Me.HasAura(3152u))
+		if (!Core.Me.HasAura(RequiredAura))
 		{
 			return -2;
 		}
-		if (!29407u.GetSpell().IsReadyWithCanCast()||Core.Resolve<MemApiSpell>().CheckActionChange(29407u)!=29407u)
+		if (!SkillId.GetSpell().IsReadyWithCanCast()||Core.Resolve<MemApiSpell>().CheckActionChange(SkillId)!=SkillId)
 		{
 			return -2;
 		}
 		if (PvPMCHSettings.Instance.空气锚分析)
 		{
-			if (!Core.Me.HasAura(3158))
+			if (!Core.Me.HasAura(分析Buff))
 			{
-				if (SpellHelper.GetSpell(29414u).Charges > 0.5)
+				if (SpellHelper.GetSpell(分析技能).Charges > 0.5)
 				{
 					return -23;
 				}
@@ -56,6 +61,6 @@ public class 空气锚 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29407u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

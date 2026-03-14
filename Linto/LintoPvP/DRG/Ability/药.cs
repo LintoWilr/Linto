@@ -8,6 +8,7 @@ namespace Linto.LintoPvP.DRG
 	public class 药 : ISlotResolver
 	{
 		public SlotMode SlotMode { get; } = SlotMode.Always;
+		private const uint 药技能 = 29711u;
 
 
 		public int Check()
@@ -20,7 +21,7 @@ namespace Linto.LintoPvP.DRG
 			{
 				return -3;
 			}
-			if (!29711u.GetSpell().IsReadyWithCanCast()||Core.Me.CurrentMp<2500)
+			if (!药技能.GetSpell().IsReadyWithCanCast()||Core.Me.CurrentMp<2500)
 			{
 				return -2;
 			}
@@ -33,7 +34,7 @@ namespace Linto.LintoPvP.DRG
 
 		public void Build(Slot slot)
 		{
-			slot.Add(PVPHelper.等服务器Spell(29711,Core.Me));
+			slot.Add(PVPHelper.等服务器Spell(药技能,Core.Me));
 		}
 	}
 }

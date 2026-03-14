@@ -9,6 +9,9 @@ namespace Linto.LintoPvP.MCH.Ability;
 public class 野火 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29409u;
+	private const uint RequiredAura = 3149u;
+	private const int SkillRange = 12;
 	public int Check()
 	{
 		if (!PvPMCHOverlay.MCHQt.GetQt("野火"))
@@ -19,21 +22,21 @@ public class 野火 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29409u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(12))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29409,12)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
 		if (PvPMCHSettings.Instance.过热野火)
 		{
-			if (!Core.Me.HasAura(3149u))
+			if (!Core.Me.HasAura(RequiredAura))
 			{
 				return -9;
 			}
@@ -43,6 +46,6 @@ public class 野火 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29409u,12);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

@@ -12,6 +12,9 @@ namespace Linto.LintoPvP.SMN.GCD;
 public class 毁荡 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29664u;
+	private const uint 毁绝Buff = 4399u;
+	private const int SpellRange = 5;
 
 	public int Check()
 	{
@@ -24,7 +27,7 @@ public class 毁荡 : ISlotResolver
 		{
 			return -233;
 		}
-		if (!Core.Me.HasLocalPlayerAura(4399U))
+		if (!Core.Me.HasLocalPlayerAura(毁绝Buff))
 		{
 			if(MoveHelper.IsMoving())
 			{
@@ -36,7 +39,7 @@ public class 毁荡 : ISlotResolver
 		{
 			return -5;
 		}
-		if (!(29664u).GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -45,7 +48,7 @@ public class 毁荡 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(29664u),5);
+		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(SkillId),SpellRange);
 	}
 }
 

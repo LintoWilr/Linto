@@ -9,7 +9,7 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 冲刺 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能净化 = 29056;
+	private const uint 冲刺技能 = 29057u;
 	public int Check()
 	{
 		if (!DRGQt.GetQt("冲刺"))
@@ -18,6 +18,7 @@ public class 冲刺 : ISlotResolver
 		}
 		if (Core.Me.HasAura(1342u))
 		{
+			// 冲刺光环存在时直接拦截，避免短时间重复触发。
 			return -2;
 		}
 		if (!PVPHelper.CanActive())
@@ -36,6 +37,6 @@ public class 冲刺 : ISlotResolver
 	}
 	public void Build(Slot slot)
 	{
-		slot.Add(new Spell(29057u,Core.Me));
+		slot.Add(new Spell(冲刺技能,Core.Me));
 	}
 }

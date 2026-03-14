@@ -9,6 +9,7 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 龙眼雷电 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 29486u;
 
 	public int Check()//29486 龙眼雷电
 	{
@@ -24,10 +25,10 @@ public class 龙眼雷电 : ISlotResolver
 		{
 			return -3;
 		}
-        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == 29486)
-        {
-            return -3;
-        }
+		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() == SkillId)
+		{
+			return -3;
+		}
         if (PVPHelper.通用距离检查(DRGSkillID.龙眼雷电距离))
         {
 	        return -5 ;

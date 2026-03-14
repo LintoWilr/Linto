@@ -10,6 +10,11 @@ namespace Linto.LintoPvP.MCH.GCD;
 public class 毒菌冲击 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29406u;
+	private const uint RequiredAura = 3151u;
+	private const int SkillRange = 12;
+	private const uint 分析Buff = 3158u;
+	private const uint 分析技能 = 29414u;
 
 	public int Check()
 	{
@@ -21,7 +26,7 @@ public class 毒菌冲击 : ISlotResolver
 		{
 			return -1;
 		}
-		if (PVPHelper.通用距离检查(12))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
@@ -29,25 +34,25 @@ public class 毒菌冲击 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用技能释放Check(29406,12)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (!Core.Me.HasAura(3151))
+		if (!Core.Me.HasAura(RequiredAura))
 		{
 			return -9;
 		}
 		if (PvPMCHSettings.Instance.毒菌分析)
 		{
-			if (!Core.Me.HasAura(3158))
+			if (!Core.Me.HasAura(分析Buff))
 			{
-				if (SpellHelper.GetSpell(29414u).Charges > 0.5)
+				if (SpellHelper.GetSpell(分析技能).Charges > 0.5)
 				{
 					return -23;
 				}
 			}
 		}
-		if (!29406u.GetSpell().IsReadyWithCanCast()|| Core.Resolve<MemApiSpell>().CheckActionChange(29406u)!=29406u)
+		if (!SkillId.GetSpell().IsReadyWithCanCast()|| Core.Resolve<MemApiSpell>().CheckActionChange(SkillId)!=SkillId)
 		{
 			return -2;
 		}
@@ -56,6 +61,6 @@ public class 毒菌冲击 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29406u,12);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

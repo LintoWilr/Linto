@@ -10,6 +10,7 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 龙牙龙爪 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 前置连击技能 = 29486u;
 
 	public int Check()//29487
 	{
@@ -25,10 +26,10 @@ public class 龙牙龙爪 : ISlotResolver
 		{
 			return -3;
 		}
-        if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 29486)
-        {
-            return -3;
-        }
+		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 前置连击技能)
+		{
+			return -3;
+		}
         if (PVPHelper.通用距离检查(DRGSkillID.龙牙龙爪距离))
         {
 	        return -5 ;

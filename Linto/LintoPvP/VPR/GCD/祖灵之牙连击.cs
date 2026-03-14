@@ -11,12 +11,15 @@ namespace Linto.LintoPvP.VPR.GCD;
 public class 祖灵之牙连击 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
-	public uint 技能连击1祖灵之牙一式= 39169u;
-	public uint 技能连击2祖灵之牙二式= 39170u;
-	public uint 技能连击3祖灵之牙三式= 39171u;
-	public uint 技能连击4祖灵之牙四式= 39172u;
-	public uint 技能祖灵之蛇四式= 39182u;
-	public uint 技能祖灵之牙四式= 39172u;
+	private const uint 技能连击1祖灵之牙一式 = 39169u;
+	private const uint 技能连击2祖灵之牙二式 = 39170u;
+	private const uint 技能连击3祖灵之牙三式 = 39171u;
+	private const uint 技能连击4祖灵之牙四式 = 39172u;
+	private const uint 技能祖灵之蛇四式 = 39182u;
+	private const uint 技能祖灵之牙四式 = 39172u;
+	private const uint 开大Buff = 4094u;
+	private const uint LB技能 = 39190u;
+	private const int 连击距离 = 5;
 	private int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
 	// public uint 技能满月 = 29527u;
 	// public uint 技能樱花 = 29528u;
@@ -44,7 +47,7 @@ public class 祖灵之牙连击 : ISlotResolver
 		{
 			return -2;
 		}
-		if (!Core.Me.HasLocalPlayerAura(4094u))//开大
+		if (!Core.Me.HasLocalPlayerAura(开大Buff))//开大
 		{
 			return -3;
 		}
@@ -56,7 +59,7 @@ public class 祖灵之牙连击 : ISlotResolver
 		{
 			return -5 ;
 		}
-		if(39190u.RecentlyUsed(800))
+		if(LB技能.RecentlyUsed(800))
 		{
 			return -44;
 		}
@@ -69,25 +72,26 @@ public class 祖灵之牙连击 : ISlotResolver
 	
 	public void Build(Slot slot)
 	{
+		var lastGcd = Core.Resolve<MemApiSpellCastSuccess>().LastGcd;
 		//LB连击4
-		if ((Core.Resolve<MemApiSpellCastSuccess>().LastGcd== 技能连击3祖灵之牙三式))
+		if (lastGcd == 技能连击3祖灵之牙三式)
 		{
-			PVPHelper.通用技能释放(slot,技能连击4祖灵之牙四式,5);
+			PVPHelper.通用技能释放(slot,技能连击4祖灵之牙四式,连击距离);
 		}
 		//LB连击3
-		else if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd == 技能连击2祖灵之牙二式)
+		else if (lastGcd == 技能连击2祖灵之牙二式)
 		{
-			PVPHelper.通用技能释放(slot,技能连击3祖灵之牙三式,5);
+			PVPHelper.通用技能释放(slot,技能连击3祖灵之牙三式,连击距离);
 		}
 		//LB连击2
-		else if (Core.Resolve<MemApiSpellCastSuccess>().LastGcd==技能连击1祖灵之牙一式)
+		else if (lastGcd == 技能连击1祖灵之牙一式)
 		{
-			PVPHelper.通用技能释放(slot,技能连击2祖灵之牙二式,5);
+			PVPHelper.通用技能释放(slot,技能连击2祖灵之牙二式,连击距离);
 		}
 		//LB连击1
 		else
 		{
-			PVPHelper.通用技能释放(slot,技能连击1祖灵之牙一式,5);
+			PVPHelper.通用技能释放(slot,技能连击1祖灵之牙一式,连击距离);
 		}
 	}
 	

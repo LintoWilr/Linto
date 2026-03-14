@@ -9,6 +9,8 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 恐惧咆哮 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint 龙血Aura = 3177u;
+	private const uint SkillId = 29496u;
 
 	public static bool 龙血()
 	{
@@ -26,7 +28,7 @@ public class 恐惧咆哮 : ISlotResolver
 		}
 		if (龙血())
 		{
-			if (!Core.Me.HasAura(3177))
+			if (!Core.Me.HasAura(龙血Aura))
 			{
 				return -8;
 			}
@@ -36,7 +38,7 @@ public class 恐惧咆哮 : ISlotResolver
 		{
 			return -3;
 		}
-		if (!29496u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -5;
 		}
@@ -45,8 +47,6 @@ public class 恐惧咆哮 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		{
-			slot.Add(PVPHelper.等服务器Spell(DRGSkillID.恐惧咆哮,Core.Me));
-		}
+		slot.Add(PVPHelper.等服务器Spell(DRGSkillID.恐惧咆哮,Core.Me));
 	}
 }

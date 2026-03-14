@@ -10,8 +10,8 @@ namespace Linto.LintoPvP.MCH.Ability;
 public class 速度之星 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 速度之星u = 43249;
-	public uint 速度之星buff = 4489u;
+	private const uint 速度之星u = 43249u;
+	private const uint 速度之星buff = 4489u;
 	public int Check()
 	{
 		if (!PvPMCHOverlay.MCHQt.GetQt("职能技能"))
@@ -44,12 +44,16 @@ public class 速度之星 : ISlotResolver
 public class 勇气 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 勇气u = 43250;
-	public uint 勇气释放buff = 4490u;
-	public uint 勇气buff = 4479u;
+	private const uint 勇气u = 43250u;
+	private const uint 勇气释放buff = 4490u;
+	private const uint 勇气buff = 4479u;
+	private const uint 钻头基础技能 = 29408u;
+	private const uint 钻头可用变化1 = 29405u;
+	private const uint 钻头可用变化2 = 29408u;
+	private const uint 勇气前置光环 = 3153u;
 	public uint 钻头变化()
 	{
-		return Core.Resolve<MemApiSpell>().CheckActionChange(29408u);
+		return Core.Resolve<MemApiSpell>().CheckActionChange(钻头基础技能);
 	}
 	public int Check()
 	{
@@ -73,16 +77,13 @@ public class 勇气 : ISlotResolver
 		{
 			return -5;
 		}
-		if (PVPHelper.check坐骑())
+		var changedSkill = 钻头变化();
+		if (!(changedSkill==钻头可用变化1||
+		      changedSkill==钻头可用变化2))
 		{
 			return -5;
 		}
-		if (!(钻头变化()==29405u||
-		      钻头变化()==29408u))
-		{
-			return -5;
-		}
-		if (!Core.Me.HasAura(3153)||钻头变化().GetSpell().Charges < 0.5)
+		if (!Core.Me.HasAura(勇气前置光环)||changedSkill.GetSpell().Charges < 0.5)
 		{
 			return -2;
 		}

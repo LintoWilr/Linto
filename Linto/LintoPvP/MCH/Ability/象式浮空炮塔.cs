@@ -7,6 +7,8 @@ namespace Linto.LintoPvP.MCH.Ability;
 public class 象式浮空炮塔 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29412u;
+	private const int SkillRange = 25;
 
 	public int Check()
 	{
@@ -18,11 +20,11 @@ public class 象式浮空炮塔 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!29412u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
@@ -30,7 +32,7 @@ public class 象式浮空炮塔 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用技能释放Check(29412,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -39,6 +41,6 @@ public class 象式浮空炮塔 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29412,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

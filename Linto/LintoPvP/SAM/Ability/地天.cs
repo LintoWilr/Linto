@@ -10,7 +10,7 @@ namespace Linto.LintoPvP.SAM.Ability;
 public class 地天 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能地天 = 29533u;
+	private const uint 技能地天 = 29533u;
 	public int Check()//29533 必杀剑·地天
 	{
 		if (!PvPSAMOverlay.SAMQt.GetQt("地天"))
@@ -39,12 +39,15 @@ public class 地天 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		slot.Add(PVPHelper.等服务器Spell(29533u,Core.Me));
+		slot.Add(PVPHelper.等服务器Spell(技能地天,Core.Me));
 	}
 }
 public class 残心 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 技能残心 = 41577u;
+	private const uint RequiredAura = 1318u;
+	private const int SkillRange = 8;
 
 	public int Check() //41577
 	{
@@ -64,15 +67,15 @@ public class 残心 : ISlotResolver
 		{
 			return -9;
 		}
-		if (PVPHelper.通用距离检查(8))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41577,8)==null)
+		if (PVPHelper.通用技能释放Check(技能残心,SkillRange)==null)
 		{
 			return -6 ;
 		}
-		if (!Core.Me.HasAura(1318u))
+		if (!Core.Me.HasAura(RequiredAura))
 		{
 			return -2;
 		}
@@ -81,6 +84,6 @@ public class 残心 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41577,8);
+		PVPHelper.通用技能释放(slot,技能残心,SkillRange);
 	}
 }

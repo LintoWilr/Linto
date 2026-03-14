@@ -10,6 +10,10 @@ namespace Linto.LintoPvP.SMN.GCD;
 public class 深红强袭 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 前置连击技能 = 29667u;
+	private const uint ReadySkillId = 29668u;
+	private const uint CheckSkillId = 41483u;
+	private const int SkillRange = 25;
 
 	public int Check()
 	{
@@ -22,19 +26,19 @@ public class 深红强袭 : ISlotResolver
 		{
 			return -1;
 		}
-		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId()!=29667u)
+		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId()!=前置连击技能)
 		{
 			return -5;
 		}
-		if (!(29668u).GetSpell().IsReadyWithCanCast())
+		if (!ReadySkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -6;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41483u,25)==null)
+		if (PVPHelper.通用技能释放Check(CheckSkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -43,6 +47,6 @@ public class 深红强袭 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(29668u),25);
+		PVPHelper.通用技能释放(slot,SkillDecision.技能变化(ReadySkillId),SkillRange);
 	}
 }

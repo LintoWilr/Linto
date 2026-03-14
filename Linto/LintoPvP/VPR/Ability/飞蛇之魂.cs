@@ -9,8 +9,8 @@ namespace Linto.LintoPvP.VPR.Ability;
 public class 飞蛇之魂 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	private uint 技能飞蛇之魂 = 39189u;
-	private uint 技能飞蛇之尾 = 39168u;
+	private const uint 技能飞蛇之魂 = 39189u;
+	private const uint 技能飞蛇之尾 = 39168u;
 	public int Check()
 	{
 		if (!PvPVPROverlay.VPRQt.GetQt("飞蛇之魂"))

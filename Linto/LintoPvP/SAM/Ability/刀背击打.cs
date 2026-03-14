@@ -8,7 +8,8 @@ namespace Linto.LintoPvP.SAM.Ability;
 public class 刀背击打 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能刀背击打 = 29535u;
+	private const uint 技能刀背击打 = 29535u;
+	private const int SkillRange = 5;
 	public int Check()//29535 刀背击打
 	{
 		if (!PvPSAMOverlay.SAMQt.GetQt("刀背击打"))
@@ -27,11 +28,11 @@ public class 刀背击打 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用距离检查(5))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(29535,5)==null)
+		if (PVPHelper.通用技能释放Check(技能刀背击打,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -40,6 +41,6 @@ public class 刀背击打 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,技能刀背击打,5);
+		PVPHelper.通用技能释放(slot,技能刀背击打,SkillRange);
 	}
 }

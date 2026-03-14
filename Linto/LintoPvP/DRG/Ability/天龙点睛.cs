@@ -10,6 +10,9 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 天龙点睛 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29495u;
+	private const uint 天龙Aura = 3178u;
+	private const uint 龙血Aura = 3177u;
 	public static bool 龙血()=>PvPDRGSettings.Instance.天龙龙血;
 	public int Check()//29495 天龙点睛
 	{
@@ -17,7 +20,7 @@ public class 天龙点睛 : ISlotResolver
 		{
 			return -9;
 		}
-		if (!29495u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -25,13 +28,13 @@ public class 天龙点睛 : ISlotResolver
 		{
 			return -3;
 		}
-		if (!Core.Me.HasAura(3178))
+		if (!Core.Me.HasAura(天龙Aura))
 		{
 			return -10;
 		}
 		if (龙血())
 		{
-			if (!Core.Me.HasAura(3177))
+			if (!Core.Me.HasAura(龙血Aura))
 			{
 				return -8;
 			}

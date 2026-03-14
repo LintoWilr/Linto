@@ -7,6 +7,8 @@ namespace Linto.LintoPvP.MCH.GCD;
 public class 全金属爆发 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 41469u;
+	private const int SkillRange = 25;
 
 	public int Check()
 	{
@@ -18,11 +20,11 @@ public class 全金属爆发 : ISlotResolver
 		{
 			return -233; 
 		}
-		if (!41469u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -5;
 		}
-		if (PVPHelper.通用距离检查(25))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
@@ -30,7 +32,7 @@ public class 全金属爆发 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用技能释放Check(41469u,25)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -45,6 +47,6 @@ public class 全金属爆发 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41469u,25);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

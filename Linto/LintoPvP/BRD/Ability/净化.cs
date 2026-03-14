@@ -7,7 +7,7 @@ namespace Linto.LintoPvP.BRD.Ability;
 public class 净化 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
-	public uint 技能净化 = 29056;
+	private const uint 技能净化 = 29056u;
 	public int Check()
 	{
 		if (!PvPBRDOverlay.BRDQt.GetQt("自动净化"))
@@ -26,6 +26,6 @@ public class 净化 : ISlotResolver
 	}
 	public void Build(Slot slot)
 	{
-		slot.Add(PVPHelper.等服务器Spell(29056u,Core.Me));
+		slot.Add(PVPHelper.等服务器Spell(技能净化,Core.Me));
 	}
 }

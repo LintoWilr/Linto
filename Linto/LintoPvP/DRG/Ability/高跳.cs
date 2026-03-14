@@ -9,6 +9,8 @@ namespace Linto.LintoPvP.DRG.Ability;
 public class 高跳 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint SkillId = 29493u;
+	private const uint 龙血Aura = 3177u;
 	
 	static bool 龙血()
 	{
@@ -25,7 +27,7 @@ public class 高跳 : ISlotResolver
 		{
 			return -9;
 		}
-		if (!29493u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -35,7 +37,7 @@ public class 高跳 : ISlotResolver
 		}
 		if (龙血())
 		{
-			if (!Core.Me.HasAura(3177))
+			if (!Core.Me.HasAura(龙血Aura))
 			{
 				return -8;
 			}

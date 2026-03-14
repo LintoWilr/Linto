@@ -9,6 +9,7 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 龙尾大回旋 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 前置连击技能 = 29487u;
 
 	public int Check()//29488 龙尾大回旋
 	{
@@ -24,7 +25,7 @@ public class 龙尾大回旋 : ISlotResolver
 		{
 			return -3;
 		}
-		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 29487u)
+		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 前置连击技能)
 		{
 			return -3;
 		}

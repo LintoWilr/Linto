@@ -7,6 +7,8 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 渡星冲 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint SkillId = 41450u;
+	private const int SkillRange = 20;
 
 	public int Check()//41449
 	{
@@ -22,11 +24,11 @@ public class 渡星冲 : ISlotResolver
 		{
 			return -3;
 		}
-		if (PVPHelper.通用距离检查(20))
+		if (PVPHelper.通用距离检查(SkillRange))
 		{
 			return -5 ;
 		}
-		if (PVPHelper.通用技能释放Check(41450,20)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
 		{
 			return -6 ;
 		}
@@ -35,6 +37,6 @@ public class 渡星冲 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,41450,20);
+		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
 	}
 }

@@ -20,13 +20,15 @@ namespace Linto.LintoPvP.GNB.Ability
 			{
 				return -3;
 			}
-			if (Core.Me.CurrentMp<2500)
-			{
-				return -2;
-			}
-			if (Core.Me.CurrentHpPercent() <= PvPGNBSettings.Instance.药血量 / 100f)
-			{
-				return 0;
+		if (Core.Me.CurrentMp<2500)
+		{
+			return -2;
+		}
+
+		// 只有血量低于设定阈值才喝药，避免平白覆盖可用资源。
+		if (Core.Me.CurrentHpPercent() <= PvPGNBSettings.Instance.药血量 / 100f)
+		{
+			return 0;
 			}
 			return -1;
 		}

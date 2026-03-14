@@ -7,6 +7,7 @@ namespace Linto.LintoPvP.GNB.Ability;
 
 public class 粗分斩 : ISlotResolver
 {
+	private const uint SkillId = 29123u;
 	public SlotMode SlotMode { get; } = SlotMode.Always;
 
 	public int Check()//29123 粗分斩
@@ -19,11 +20,11 @@ public class 粗分斩 : ISlotResolver
 		{
 			return -9;
 		}
-		if (SpellHelper.GetSpell(29123u).Charges < 1 )
+		if (SpellHelper.GetSpell(SkillId).Charges < 1 )
 		{
 			return -1;
 		}
-		if (!29123u.GetSpell().IsReadyWithCanCast())
+		if (!SkillId.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
@@ -35,7 +36,7 @@ public class 粗分斩 : ISlotResolver
 		{
 			return -5;
 		}
-		if (PVPHelper.通用技能释放Check(29123u,PvPGNBSettings.Instance.粗分斩最大距离)==null)
+		if (PVPHelper.通用技能释放Check(SkillId,PvPGNBSettings.Instance.粗分斩最大距离)==null)
 		{
 			return -5;
 		}
@@ -44,6 +45,6 @@ public class 粗分斩 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,29123u,PvPGNBSettings.Instance.粗分斩最大距离);
+		PVPHelper.通用技能释放(slot,SkillId,PvPGNBSettings.Instance.粗分斩最大距离);
 	}
 }

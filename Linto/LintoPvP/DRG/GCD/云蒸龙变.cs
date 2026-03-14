@@ -9,6 +9,7 @@ namespace Linto.LintoPvP.DRG.GCD;
 public class 云蒸龙变 : ISlotResolver
 {
 	public SlotMode SlotMode { get; }
+	private const uint 前置连击技能 = 29488u;
 
 	public int Check()//41449
 	{
@@ -24,7 +25,7 @@ public class 云蒸龙变 : ISlotResolver
 		{
 			return -3;
 		}
-		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 29488u)
+		if (Core.Resolve<MemApiSpell>().GetLastComboSpellId() != 前置连击技能)
 		{
 			return -3;
 		}
