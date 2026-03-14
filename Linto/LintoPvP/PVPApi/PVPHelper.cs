@@ -25,7 +25,7 @@ using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 namespace Linto.LintoPvP.PVPApi;
 
 public class PVPHelper
-{ 
+{
     //抄来的
     public static Vector3 向量位移(Vector3 position, float facingRadians, float distance) 
     {
@@ -683,7 +683,8 @@ public class PVPHelper
     public static void PvP调试窗口()
     {
         //不作变化
-        if(Svc.ClientState.LocalContentId==18014469511346939)
+        if (Svc.ClientState.LocalContentId == 18014469511346939 ||
+            Svc.ClientState.LocalContentId == 19014409514216330)
         {
             ImGui.Begin("调试窗口");
             ImGui.Text($"gcd:{GCDHelper.GetGCDCooldown()}");
@@ -913,10 +914,12 @@ public class PVPHelper
             void DrawUnitList()
             {
                 // 添加表头（分列显示）
-                ImGui.Columns(7); // 分为7列
+                ImGui.Columns(8); // 分为8列
                 ImGui.Text("ID");
                 ImGui.NextColumn();
                 ImGui.Text("名称");
+                ImGui.NextColumn();
+                ImGui.Text("CID");
                 ImGui.NextColumn();
                 ImGui.Text("职业");
                 ImGui.NextColumn();
@@ -947,15 +950,19 @@ public class PVPHelper
                     ImGui.Text($"{unit.Name}");
                     ImGui.NextColumn();
 
-                    // 第三列：职业（假设 CurrentJob 是枚举）
+                    // 第三列：本地CID
+                    ImGui.Text($"{Svc.ClientState.LocalContentId}");
+                    ImGui.NextColumn();
+
+                    // 第四列：职业（假设 CurrentJob 是枚举）
                     ImGui.Text($"{unit.CurrentJob()}");
                     ImGui.NextColumn();
 
-                    // 第四列
+                    // 第五列
                     ImGui.Text($"{unit.CurrentHpPercent()}");
                     ImGui.NextColumn();
 
-                    // 第五列：距离玩家距离
+                    // 第六列：距离玩家距离
                     ImGui.Text($"{unit.DistanceToPlayer():F1}m");
                     ImGui.NextColumn();
                     ImGui.Text($"{unit.GetCurrTarget()?.Name}");
@@ -1009,6 +1016,12 @@ public class PVPHelper
             ImGui.PushStyleColor(ImGuiCol.TitleBg, new Vector4(0f, 0f, 0f, 0f));
             ImGui.PushStyleColor(ImGuiCol.TitleBgActive, new Vector4(0f, 0f, 0f, 0f));
             ImGui.PushStyleColor(ImGuiCol.TitleBgCollapsed, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.Border, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.Button, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.ButtonHovered, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleColor(ImGuiCol.ButtonActive, new Vector4(0f, 0f, 0f, 0f));
+            ImGui.PushStyleVar(ImGuiStyleVar.WindowBorderSize, 0f);
+            ImGui.PushStyleVar(ImGuiStyleVar.FrameBorderSize, 0f);
         }
 
         ImGui.Begin("###targetMe_Window", windowFlags);
@@ -1028,7 +1041,8 @@ public class PVPHelper
         }
         else
         {
-            ImGui.PopStyleColor(3);
+            ImGui.PopStyleVar(2);
+            ImGui.PopStyleColor(7);
         }
     }
 
@@ -1115,4 +1129,25 @@ public class PVPHelper
 			i++;
 		}
 	}
+}
+
+public sealed class 监控UI代理 : IRotationUI
+{
+    private readonly IRotationUI _inner;
+
+    public 监控UI代理(IRotationUI inner)
+    {
+        _inner = inner;
+    }
+
+    public void OnDrawUI()
+    {
+        _inner.OnDrawUI();
+        PVPHelper.监控窗口();
+    }
+
+    public void Update()
+    {
+        _inner.Update();
+    }
 }

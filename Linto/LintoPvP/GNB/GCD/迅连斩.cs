@@ -32,10 +32,8 @@ public class 迅连斩 : ISlotResolver
 		{
 			return -5;
 		}
-		if (PVPHelper.通用技能释放Check(29100u,5)==null)
-		{
-			return -5;
-		}
+
+		// 这里要保证动作变化仍是爆发击连击链。
 		if (Core.Resolve<MemApiSpell>().CheckActionChange(29102)!=29102u)
 		{
 			return -4;

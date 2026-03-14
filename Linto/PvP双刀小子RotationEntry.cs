@@ -20,6 +20,9 @@ public class PvP双刀小子Entry : IRotationEntry
     public void Dispose()
     {
     }
+    public void DrawOverlay()
+    {
+    }
     public string OverlayTitle { get; } = "PvP双刀小子";
     public string AuthorName { get; set; } = "Linto PvP";
     public List<SlotResolverData> SlotResolvers = new()
@@ -56,7 +59,7 @@ public class PvP双刀小子Entry : IRotationEntry
     public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
-        return PvP双刀小子Entry.JobViewWindow;
+        return new 监控UI代理(PvP双刀小子Entry.JobViewWindow);
     }
     private PvPVPRSettingUI settingUI = new();
     public void OnDrawSetting()

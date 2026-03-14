@@ -20,6 +20,9 @@ public class PvP董慧敏Entry : IRotationEntry
     public void Dispose()
     {
     }
+    public void DrawOverlay()
+    {
+    }
     
     public string OverlayTitle { get; } = "PvP董慧敏";
     public string AuthorName { get; set; } = "Linto PvP";
@@ -61,7 +64,7 @@ public class PvP董慧敏Entry : IRotationEntry
     public IRotationUI GetRotationUI()
     {
         
-        return PvP董慧敏Entry.JobViewWindow;
+        return new 监控UI代理(PvP董慧敏Entry.JobViewWindow);
     }
     private PvPPCTSettingUI settingUI = new();
     public void OnDrawSetting()

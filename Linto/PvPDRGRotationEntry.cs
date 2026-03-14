@@ -20,7 +20,7 @@ public class PvPDRGRotationEntry : IRotationEntry
     }
     public IRotationUI GetRotationUI()
     {
-        return PvPDRGRotationEntry.JobViewWindow;
+        return new 监控UI代理(PvPDRGRotationEntry.JobViewWindow);
     }
     private PvPDRGSettingUI settingUI = new();
     public void OnDrawSetting()

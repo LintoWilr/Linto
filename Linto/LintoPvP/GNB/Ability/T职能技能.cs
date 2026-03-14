@@ -13,9 +13,11 @@ namespace Linto.LintoPvP.GNB.Ability;
 public class T职能技能 : ISlotResolver
 {
 	public SlotMode SlotMode { get; } = SlotMode.Always;
+	private const uint ActionId = 43259u;
 	
 	public int Check()//43259 职能技能
 	{
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(ActionId);
 		if (!PVPHelper.CanActive())
 		{
 			return -1;
@@ -24,11 +26,11 @@ public class T职能技能 : ISlotResolver
 		{
 			return -9;
 		}
-		if (!Core.Resolve<MemApiSpell>().CheckActionChange(43259u).GetSpell().IsReadyWithCanCast())
+		if (!changedAction.GetSpell().IsReadyWithCanCast())
 		{
 			return -2;
 		}
-		if (Core.Resolve<MemApiSpell>().CheckActionChange(43259u)==43243u)
+		if (changedAction==43243u)
 		{
 			if (PVPHelper.通用距离检查(10))
 			{
@@ -39,7 +41,7 @@ public class T职能技能 : ISlotResolver
 				return -5;
 			}
 		}
-		if (Core.Resolve<MemApiSpell>().CheckActionChange(43259u)==43245u)
+		if (changedAction==43245u)
 		{
 			if (PVPHelper.通用距离检查(5))
 			{
@@ -55,18 +57,19 @@ public class T职能技能 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		if (Core.Resolve<MemApiSpell>().CheckActionChange(43259u)==43244u)
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(ActionId);
+		if (changedAction==43244u)
 		{
-			slot.Add(new Spell(Core.Resolve<MemApiSpell>().CheckActionChange(43259u), Core.Me));
+			slot.Add(new Spell(changedAction, Core.Me));
 			
 		}
-		else if(Core.Resolve<MemApiSpell>().CheckActionChange(43259u)==43243u)
+		else if(changedAction==43243u)
 		{
-			PVPHelper.通用技能释放(slot,Core.Resolve<MemApiSpell>().CheckActionChange(43259u),10);
+			PVPHelper.通用技能释放(slot,changedAction,10);
 		}
 		else
 		{
-			PVPHelper.通用技能释放(slot,Core.Resolve<MemApiSpell>().CheckActionChange(43259u),5);
+			PVPHelper.通用技能释放(slot,changedAction,5);
 		}
 	}
 }

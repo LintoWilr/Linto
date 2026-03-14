@@ -19,6 +19,7 @@ public class 冲刺 : ISlotResolver
 		}
 		if (Core.Me.HasAura(1342u))
 		{
+			// 冲刺状态下走一个本地冷却节流，避免每帧重复触发。
 			if ((DateTime.Now - lastAuraTime).TotalSeconds < PvPSettings.Instance.冲刺)
 			{
 				return -8;

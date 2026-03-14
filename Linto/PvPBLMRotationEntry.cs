@@ -17,6 +17,9 @@ public class PvPBLMEntry : IRotationEntry
     public void Dispose()
     {
     }
+    public void DrawOverlay()
+    {
+    }
     public string OverlayTitle { get; } = "PvP黑魔";
     public string AuthorName { get; set; } = "Linto PvP";
     public List<SlotResolverData> SlotResolvers = new()
@@ -64,7 +67,7 @@ public class PvPBLMEntry : IRotationEntry
     public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
-        return PvPBLMEntry.JobViewWindow;
+        return new 监控UI代理(PvPBLMEntry.JobViewWindow);
     }
     private PvPBLMSettingUI settingUI = new();
     public void OnDrawSetting()

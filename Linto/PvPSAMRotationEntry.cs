@@ -19,6 +19,9 @@ public class PvP崩破大王Entry : IRotationEntry
     public void Dispose()
     {
     }
+    public void DrawOverlay()
+    {
+    }
     public string OverlayTitle { get; } = "PvP崩破大王";
     public string AuthorName { get; set; } = "Linto PvP";
     public List<SlotResolverData> SlotResolvers = new()
@@ -59,7 +62,7 @@ public class PvP崩破大王Entry : IRotationEntry
     public static JobViewWindow JobViewWindow { get; private set; } = null!;
     public IRotationUI GetRotationUI()
     {
-        return PvP崩破大王Entry.JobViewWindow;
+        return new 监控UI代理(PvP崩破大王Entry.JobViewWindow);
     }
     private PvPSamSettingUI settingUI = new();
     public void OnDrawSetting()

@@ -21,7 +21,7 @@ public class PvPMCHRotationEntry : IRotationEntry
     }
     public IRotationUI GetRotationUI()
     {
-        return PvPMCHRotationEntry.JobViewWindow;
+        return new 监控UI代理(PvPMCHRotationEntry.JobViewWindow);
     }
     private PvPMCHSettingUI settingUI = new();
     public void OnDrawSetting()

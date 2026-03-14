@@ -13,6 +13,7 @@ public class 烈牙连击 : ISlotResolver
 
 	public int Check()//29102 烈牙
 	{
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(29102);
 		if(!PvPGNBOverlay.GNBQt.GetQt("烈牙连击"))
 		{
 			return -1;
@@ -21,7 +22,7 @@ public class 烈牙连击 : ISlotResolver
 		{
 			return -1;
 		}
-		if (!Core.Resolve<MemApiSpell>().CheckActionChange(29102).GetSpell().IsReadyWithCanCast())
+		if (!changedAction.GetSpell().IsReadyWithCanCast())
 		{
 			return -3;
 		}
@@ -29,7 +30,7 @@ public class 烈牙连击 : ISlotResolver
 		{
 			return -5;
 		}
-		if (PVPHelper.通用技能释放Check(Core.Resolve<MemApiSpell>().CheckActionChange(29102),5)==null)
+		if (PVPHelper.通用技能释放Check(changedAction,5)==null)
 		{
 			return -5;
 		}
@@ -38,6 +39,7 @@ public class 烈牙连击 : ISlotResolver
 
 	public void Build(Slot slot)
 	{
-		PVPHelper.通用技能释放(slot,Core.Resolve<MemApiSpell>().CheckActionChange(29102),5);
+		var changedAction = Core.Resolve<MemApiSpell>().CheckActionChange(29102);
+		PVPHelper.通用技能释放(slot,changedAction,5);
 	}
 }
