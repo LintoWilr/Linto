@@ -1,4 +1,4 @@
-﻿namespace Linto.LintoPvP.MCH;
+namespace Linto.LintoPvP.MCH;
 
 // 直接定义好 方便编码
 public static class QTKey

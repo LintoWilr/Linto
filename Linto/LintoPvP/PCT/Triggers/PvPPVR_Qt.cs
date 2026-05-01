@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using AEAssist.CombatRoutine.Trigger;
 using ECommons.LanguageHelpers;
@@ -13,7 +13,7 @@ public class LintoPvPPCTQt : ITriggerAction
     private int radioCheck;
 
 #pragma warning disable CS0414 // 保留字段用于未来扩展
-    private int radioType;
+    private readonly int radioType;
 #pragma warning restore CS0414
 
 

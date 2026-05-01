@@ -6,41 +6,38 @@ namespace Linto.LintoPvP.MCH.Ability;
 
 public class 象式浮空炮塔 : ISlotResolver
 {
-	public SlotMode SlotMode { get; } = SlotMode.Always;
-	private const uint SkillId = 29412u;
-	private const int SkillRange = 25;
+    public SlotMode SlotMode { get; } = SlotMode.Always;
+    private const uint SkillId = 29412u;
+    private const int SkillRange = 25;
 
-	public int Check()
-	{
-		if (!PvPMCHOverlay.MCHQt.GetQt("浮空炮"))
-		{
-			return -9;
-		}
-		if (!PVPHelper.CanActive())
-		{
-			return -1;
-		}
-		if (!SkillId.GetSpell().IsReadyWithCanCast())
-		{
-			return -2;
-		}
-		if (PVPHelper.通用距离检查(SkillRange))
-		{
-			return -5 ;
-		}
-		if (GCDHelper.GetGCDCooldown()<200)
-		{
-			return -3;
-		}
-		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
-		{
-			return -6 ;
-		}
-		return 0;
-	}
+    public int Check()
+    {
+        if (!PvPMCHOverlay.MCHQt.GetQt("浮空炮"))
+        {
+            return -9;
+        }
+        if (!PVPHelper.CanActive())
+        {
+            return -1;
+        }
+        if (!SkillId.GetSpell().IsReadyWithCanCast())
+        {
+            return -2;
+        }
+        if (PVPHelper.通用距离检查(SkillRange))
+        {
+            return -5;
+        }
+        if (GCDHelper.GetGCDCooldown() < 200)
+        {
+            return -3;
+        }
+        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
+        {
+            return -6;
+        }
+        return 0;
+    }
 
-	public void Build(Slot slot)
-	{
-		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
-	}
+    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }

@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using AEAssist.CombatRoutine.Trigger;
 using ECommons.LanguageHelpers;
@@ -12,7 +12,7 @@ public class LintoPvPMCHQt : ITriggerAction
     private int 当前combo = 0;
     private int radioCheck;
 
-    private int radioType;
+    private readonly int radioType;
 
 
     public string ValueName { get; set; } = new("");

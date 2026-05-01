@@ -13,57 +13,52 @@ namespace Linto.LintoPvP.MCH;
 
 public class PvPMCHRotationEventHandler : IRotationEventHandler
 {
-	public void OnTerritoryChanged()
-	{
+    public void OnTerritoryChanged()
+    {
 
-	}
-	public void OnSpellCastSuccess(Slot slot, Spell spell)
-	{
+    }
+    public void OnSpellCastSuccess(Slot slot, Spell spell)
+    {
 
-	}
-	public void OnResetBattle()
-	{
-		PvPMCHBattleData.Instance.Reset();
-	}
-	public async Task OnPreCombat()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
-	public async Task OnNoTarget()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
+    }
+    public void OnResetBattle() => PvPMCHBattleData.Instance.Reset();
+    public async Task OnPreCombat()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
+    public async Task OnNoTarget()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
 
-	public void AfterSpell(Slot slot, Spell spell)
-	{
-		_ = spell.Id;
-	}
+    public void AfterSpell(Slot slot, Spell spell) => _ = spell.Id;
     public void BeforeSpell(Slot slot, Spell spell)
     {
-        if(Core.Me.GetCurrTarget()==null)return;
-        var 距离 = Core.Me.GetCurrTarget().DistanceToPlayer();
+        var currentTarget = Core.Me.GetCurrTarget();
+        if (currentTarget == null) return;
+        var 距离 = currentTarget.DistanceToPlayer();
         if (PvPSettings.Instance.诊断模式)
-            LogHelper.Print(AI.Instance.BattleData.CurrBattleTimeInSec + ",释放技能:" + spell.Name + ":" + spell.Id + 
-                $"目标：{Core.Me.GetCurrTarget().Name},血量：{Core.Me.GetCurrTarget().CurrentHp}，距离：{距离}");
+            LogHelper.Print(AI.Instance.BattleData.CurrBattleTimeInSec + ",释放技能:" + spell.Name + ":" + spell.Id +
+                $"目标：{currentTarget.Name},血量：{currentTarget.CurrentHp}，距离：{距离}");
     }
     public void OnBattleUpdate(int currTime)
-	{
-		PVPHelper.战斗状态();
-		PVPTargetHelper.自动选中();
-	}
+    {
+        PVPHelper.战斗状态();
+        PVPTargetHelper.自动选中();
+    }
     #region 宏支持相关
 
-    public Dictionary<string, string>? qtKeyDictionary;
+    public Dictionary<string, string> qtKeyDictionary = new(StringComparer.OrdinalIgnoreCase);
 
     public Dictionary<string, string?> hotkeyDictionary = new(StringComparer.OrdinalIgnoreCase)
     {
@@ -81,16 +76,14 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
         {
             if (fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
             {
-                string? value = fi.GetValue(null) as string;
+                var value = fi.GetValue(null) as string;
                 if (string.IsNullOrEmpty(value)) continue;
-                
-                string key = value.ToLower();
-                string fieldName = fi.Name.ToLower();
 
-                if (!qtKeyDictionary.ContainsKey(key))
-                    qtKeyDictionary.Add(key, value);
-                if (!qtKeyDictionary.ContainsKey(fieldName))
-                    qtKeyDictionary.Add(fieldName, value);
+                var key = value.ToLower();
+                var fieldName = fi.Name.ToLower();
+
+                qtKeyDictionary.TryAdd(key, value);
+                qtKeyDictionary.TryAdd(fieldName, value);
             }
         }
     }
@@ -149,7 +142,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
         return true;
     }
 
-    private bool TryHandleCustomCommand(string lowerArgs)
+    private static bool TryHandleCustomCommand(string lowerArgs)
     {
         if (!lowerArgs.EndsWith("_gt"))
         {
@@ -161,7 +154,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
         return true;
     }
     // 新增：自定义命令执行方法
-    private void ExecuteCustomCommand(string commandKey)
+    private static void ExecuteCustomCommand(string commandKey)
     {
         // 根据需要添加你的自定义命令逻辑
         switch (commandKey.ToLower())
@@ -175,20 +168,20 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
                 break;
         }
     }
-    private void ToggleQtSetting(string qtKey)
+    private static void ToggleQtSetting(string qtKey)
     {
-        bool current = PvPMCHRotationEntry.JobViewWindow.GetQt(qtKey);
+        var current = PvPMCHRotationEntry.JobViewWindow.GetQt(qtKey);
         PvPMCHRotationEntry.JobViewWindow.SetQt(qtKey, !current);
         LogHelper.Print($"QT \"{qtKey}\" 已设置为 {(!current).ToString().ToLower()}。");
     }
 
-    private void ExecuteHotkey(IHotkeyResolver? resolver)
+    private static void ExecuteHotkey(IHotkeyResolver? resolver)
     {
         if (resolver == null) { LogHelper.Print("快捷键解析器未正确初始化。"); return; }
         if (resolver.Check() >= 0) resolver.Run();
         else LogHelper.Print("无法执行该快捷键命令，可能条件不满足或技能不可用。");
     }
-    private IHotkeyResolver? GetHotkeyResolver(string? skillName)
+    private static IHotkeyResolver? GetHotkeyResolver(string? skillName)
     {
         // 先判空，避免传入null导致switch报错
         if (string.IsNullOrEmpty(skillName))
@@ -222,7 +215,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     }
     #endregion
     public void OnEnterRotation()
-	{
+    {
         try
         {
             LogHelper.Print("欢迎使用Linto的机工PVPACR。");
@@ -238,9 +231,6 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
             LogHelper.PrintError($"初始化失败: {ex.Message}");
         }
 
-	}
-	public void OnExitRotation()
-	{
-		Share.Pull = false;
-	}
+    }
+    public void OnExitRotation() => Share.Pull = false;
 }
