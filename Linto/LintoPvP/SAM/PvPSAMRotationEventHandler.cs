@@ -8,63 +8,57 @@ namespace Linto.LintoPvP.SAM;
 
 public class PvPSAMRotationEventHandler : IRotationEventHandler
 {
-	public void OnTerritoryChanged()
-	{
+    public void OnTerritoryChanged()
+    {
 
-	}
-	public void OnSpellCastSuccess(Slot slot, Spell spell)
-	{
+    }
+    public void OnSpellCastSuccess(Slot slot, Spell spell)
+    {
 
-	}
-	public void OnResetBattle()
-	{
-		PvPSAMBattleData.Instance.Reset();
-	}
-	public async Task OnPreCombat()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
+    }
+    public void OnResetBattle() => PvPSAMBattleData.Instance.Reset();
+    public async Task OnPreCombat()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
 
-	
-	public async Task OnNoTarget()
-	{
-		PVPTargetHelper.自动选中();
-		if (PvPSettings.Instance.无目标坐骑)
-		{
-			MountHandler.无目标坐骑();
-		}
-		await Task.CompletedTask;
-	}
 
-	public void AfterSpell(Slot slot, Spell spell)
-	{
-		var id = spell.Id;
-		if (id == 29537u&&PvPSettings.Instance.播报)
-		{
-			var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
-			if (target != null)
-			{
-				Core.Resolve<MemApiChatMessage>().Toast2($"{Core.Me.Name}对 {target.Name} 使用了 斩铁剑！", 1, 1500);
-			}
-		}
-	}
-	public void OnBattleUpdate(int currTime)
-	{
-		PVPHelper.战斗状态();
-		PVPTargetHelper.自动选中();
-	}
-	public void OnEnterRotation()
-	{
-		PVPHelper.进入ACR();
-		Share.Pull = true;
-	}
-	public void OnExitRotation()
-	{
-		Share.Pull = false;
-	}
+    public async Task OnNoTarget()
+    {
+        PVPTargetHelper.自动选中();
+        if (PvPSettings.Instance.无目标坐骑)
+        {
+            MountHandler.无目标坐骑();
+        }
+        await Task.CompletedTask;
+    }
+
+    public void AfterSpell(Slot slot, Spell spell)
+    {
+        var id = spell.Id;
+        if (id == 29537u && PvPSettings.Instance.播报)
+        {
+            var target = PVPTargetHelper.TargetSelector.Get斩铁目标();
+            if (target != null)
+            {
+                Core.Resolve<MemApiChatMessage>().Toast2($"{Core.Me.Name}对 {target.Name} 使用了 斩铁剑！", 1, 1500);
+            }
+        }
+    }
+    public void OnBattleUpdate(int currTime)
+    {
+        PVPHelper.战斗状态();
+        PVPTargetHelper.自动选中();
+    }
+    public void OnEnterRotation()
+    {
+        PVPHelper.进入ACR();
+        Share.Pull = true;
+    }
+    public void OnExitRotation() => Share.Pull = false;
 }

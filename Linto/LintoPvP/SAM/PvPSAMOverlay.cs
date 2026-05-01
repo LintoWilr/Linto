@@ -8,15 +8,15 @@ namespace Linto.LintoPvP.SAM;
 public class PvPSAMOverlay
 {
 #pragma warning disable CS0414 // 保留字段用于未来调试功能
-    private static bool 调试窗口 = false;
-    private static bool 更新日志 = false;
+    private static readonly bool 调试窗口 = false;
+    private static readonly bool 更新日志 = false;
 #pragma warning restore CS0414
     public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
-        
+
         Share.Pull = true;
         {
-            职业配置 盘子 = new 职业配置();
+            var 盘子 = new 职业配置();
             盘子.配置武士技能();
             if (ImGui.CollapsingHeader("调试窗口"))
             {
@@ -89,42 +89,24 @@ public class PvPSAMOverlay
     public static class SAMQt
     {
         /// 获取指定名称qt的bool值
-        public static bool GetQt(string qtName)
-        {
-            return PvP崩破大王Entry.JobViewWindow.GetQt(qtName);
-        }
+        public static bool GetQt(string qtName) => PvP崩破大王Entry.JobViewWindow.GetQt(qtName);
 
         /// 反转指定qt的值
         /// <returns>成功返回true，否则返回false</returns>
-        public static bool ReverseQt(string qtName)
-        {
-            return PvP崩破大王Entry.JobViewWindow.ReverseQt(qtName);
-        }
+        public static bool ReverseQt(string qtName) => PvP崩破大王Entry.JobViewWindow.ReverseQt(qtName);
 
         /// 设置指定qt的值
         /// <returns>成功返回true，否则返回false</returns>
-        public static bool SetQt(string qtName, bool qtValue)
-        {
-            return PvP崩破大王Entry.JobViewWindow.SetQt(qtName, qtValue);
-        }
+        public static bool SetQt(string qtName, bool qtValue) => PvP崩破大王Entry.JobViewWindow.SetQt(qtName, qtValue);
 
         /// 给指定qt设置新的默认值
-        public static void NewDefault(string qtName, bool newDefault)
-        {
-            PvP崩破大王Entry.JobViewWindow.NewDefault(qtName, newDefault);
-        }
+        public static void NewDefault(string qtName, bool newDefault) => PvP崩破大王Entry.JobViewWindow.NewDefault(qtName, newDefault);
 
         /// 将当前所有Qt状态记录为新的默认值，
         /// 通常用于战斗重置后qt还原到倒计时时间点的状态
-        public static void SetDefaultFromNow()
-        {
-            PvP崩破大王Entry.JobViewWindow.SetDefaultFromNow();
-        }
+        public static void SetDefaultFromNow() => PvP崩破大王Entry.JobViewWindow.SetDefaultFromNow();
 
         /// 返回包含当前所有qt名字的数组
-        public static string[] GetQtArray()
-        {
-            return PvP崩破大王Entry.JobViewWindow.GetQtArray();
-        }
+        public static string[] GetQtArray() => PvP崩破大王Entry.JobViewWindow.GetQtArray();
     }
 }

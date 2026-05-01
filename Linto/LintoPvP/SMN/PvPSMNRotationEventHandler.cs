@@ -15,11 +15,8 @@ public class PvPSMNRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle()
-    {
-        PvPSMNBattleData.Instance.Reset();
-    }
-	
+    public void OnResetBattle() => PvPSMNBattleData.Instance.Reset();
+
 
     public async Task OnPreCombat()
     {
@@ -42,10 +39,7 @@ public class PvPSMNRotationEventHandler : IRotationEventHandler
         await Task.CompletedTask;
     }
 
-    public void AfterSpell(Slot slot, Spell spell)
-    {
-        _ = spell.Id;
-    }
+    public void AfterSpell(Slot slot, Spell spell) => _ = spell.Id;
     public void OnBattleUpdate(int currTime)
     {
         PVPHelper.战斗状态();
@@ -56,8 +50,5 @@ public class PvPSMNRotationEventHandler : IRotationEventHandler
         PVPHelper.进入ACR();
         Share.Pull = true;
     }
-    public void OnExitRotation()
-    {
-        Share.Pull = false;
-    }
+    public void OnExitRotation() => Share.Pull = false;
 }

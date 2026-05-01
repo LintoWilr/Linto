@@ -2,10 +2,7 @@ namespace Linto.LintoPvP.SAM;
 
 public class PvPSAMBattleData
 {
-	public static PvPSAMBattleData Instance = new PvPSAMBattleData();
+    public static PvPSAMBattleData Instance = new();
 
-	public void Reset()
-	{
-		Instance = new PvPSAMBattleData();
-	}
+    public void Reset() => Instance = new PvPSAMBattleData();
 }

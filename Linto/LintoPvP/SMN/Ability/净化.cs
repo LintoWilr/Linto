@@ -7,27 +7,25 @@ namespace Linto.LintoPvP.SMN.Ability;
 
 public class 净化 : ISlotResolver
 {
-	public SlotMode SlotMode { get; } = SlotMode.Always;
-	private const uint 技能净化 = 29056u;
-	public int Check()
-	{
-		if (!SMNQt.GetQt("自动净化"))
-		{
-			return -9;
-		}
-		if (!技能净化.GetSpell().IsReadyWithCanCast())
-		{
-			return -2;
-		}
-		if (PVPHelper.净化判断())
-		{
-			return 1;
-		}
-		return -3;
-	}
-	public void Build(Slot slot)
-	{
-		// 保持原有行为：沿用当前项目里既有的技能号。
-		slot.Add(PVPHelper.不等服务器Spell(20956u,Core.Me));
-	}
+    public SlotMode SlotMode { get; } = SlotMode.Always;
+    private const uint 技能净化 = 29056u;
+    public int Check()
+    {
+        if (!SMNQt.GetQt("自动净化"))
+        {
+            return -9;
+        }
+        if (!技能净化.GetSpell().IsReadyWithCanCast())
+        {
+            return -2;
+        }
+        if (PVPHelper.净化判断())
+        {
+            return 1;
+        }
+        return -3;
+    }
+    public void Build(Slot slot) =>
+        // 保持原有行为：沿用当前项目里既有的技能号。
+        slot.Add(PVPHelper.不等服务器Spell(20956u, Core.Me));
 }
