@@ -10,8 +10,8 @@ namespace Linto.LintoPvP.PCT.GCD;
 public class 动物彩绘 : ISlotResolver
 {
     public SlotMode SlotMode { get; }
-    public uint 动物彩绘变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物彩绘);
-    public uint 动物构想变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物构想);
+    public static uint 动物彩绘变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物彩绘);
+    public static uint 动物构想变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物构想);
     public int Check()
     {
         if (!PvPPCTOverlay.PCTQt.GetQt("动物彩绘"))

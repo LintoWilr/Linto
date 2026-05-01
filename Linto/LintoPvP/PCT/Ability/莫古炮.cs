@@ -10,7 +10,7 @@ namespace Linto.LintoPvP.PCT.Ability;
 public class 莫古力炮 : ISlotResolver
 {
     public SlotMode SlotMode { get; } = SlotMode.Always;
-    public uint 莫古力炮变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能莫古力激流);
+    public static uint 莫古力炮变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能莫古力激流);
     public int Check()
     {
         if (!PvPPCTOverlay.PCTQt.GetQt("莫古力炮"))

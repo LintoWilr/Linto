@@ -9,7 +9,7 @@ namespace Linto.LintoPvP.PCT.Ability;
 
 public class 切换减色 : ISlotResolver
 {
-    public uint 减色状态() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能减色混合);
+    public static uint 减色状态() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能减色混合);
     public int Check()
     {
         if (!PvPPCTOverlay.PCTQt.GetQt("切换减色"))

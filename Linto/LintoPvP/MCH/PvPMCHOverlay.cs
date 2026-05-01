@@ -10,7 +10,7 @@ public class PvPMCHOverlay
 #pragma warning disable CS0414 // 保留字段用于未来调试功能
     private static readonly bool 调试窗口 = false;
 #pragma warning restore CS0414
-    public void DrawGeneral(JobViewWindow jobViewWindow)
+    public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
 
         Share.Pull = true;

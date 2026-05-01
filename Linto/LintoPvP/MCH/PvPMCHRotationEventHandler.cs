@@ -21,7 +21,7 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle() => PvPMCHBattleData.Instance.Reset();
+    public void OnResetBattle() => PvPMCHBattleData.Reset();
     public async Task OnPreCombat()
     {
         PVPTargetHelper.自动选中();

@@ -4,5 +4,5 @@ public class PvPPCTBattleData
 {
     public static PvPPCTBattleData Instance = new();
 
-    public void Reset() => Instance = new PvPPCTBattleData();
+    public static void Reset() => Instance = new PvPPCTBattleData();
 }

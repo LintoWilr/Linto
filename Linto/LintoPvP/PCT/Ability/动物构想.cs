@@ -8,7 +8,7 @@ namespace Linto.LintoPvP.PCT.Ability;
 public class 动物构想 : ISlotResolver
 {
     public SlotMode SlotMode { get; } = SlotMode.Always;
-    public uint 动物构想变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物构想);
+    public static uint 动物构想变化() => Core.Resolve<MemApiSpell>().CheckActionChange(PCTSkillID.技能动物构想);
     public int Check()
     {
         if (!PvPPCTOverlay.PCTQt.GetQt("动物构想"))

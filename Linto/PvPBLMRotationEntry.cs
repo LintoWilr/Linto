@@ -15,7 +15,7 @@ namespace Linto;
 public class PvPBLMEntry : IRotationEntry
 {
     public void Dispose() => GC.SuppressFinalize(this);
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvP黑魔";

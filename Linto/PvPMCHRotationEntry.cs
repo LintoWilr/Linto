@@ -44,7 +44,7 @@ public class PvPMCHRotationEntry : IRotationEntry
 
     public string OverlayTitle { get; } = "机工";
 
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
     public string AuthorName { get; set; } = "Linto PvP";
@@ -71,7 +71,7 @@ public class PvPMCHRotationEntry : IRotationEntry
     {
         JobViewWindow = new JobViewWindow(PvPMCHSettings.Instance.JobViewSave, PvPMCHSettings.Instance.Save, OverlayTitle);
         //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
-        JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
+        JobViewWindow.AddTab("职业配置", PvPMCHOverlay.DrawGeneral);
         JobViewWindow.AddTab("监控", PVPHelper.监控);
         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
 

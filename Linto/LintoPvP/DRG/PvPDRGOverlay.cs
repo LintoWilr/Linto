@@ -6,7 +6,7 @@ namespace Linto.LintoPvP.DRG;
 
 public class PvPDRGOverlay
 {
-    public void DrawGeneral(JobViewWindow jobViewWindow)
+    public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
         var 小龙骑 = new 职业配置();
         小龙骑.配置龙骑技能();

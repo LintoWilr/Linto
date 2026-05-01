@@ -18,7 +18,7 @@ public class PvPPCTRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle() => PvPPCTBattleData.Instance.Reset();
+    public void OnResetBattle() => PvPPCTBattleData.Reset();
 
 
     public async Task OnPreCombat()

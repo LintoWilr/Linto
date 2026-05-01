@@ -49,7 +49,7 @@ public class 勇气 : ISlotResolver
     private const uint 钻头可用变化1 = 29405u;
     private const uint 钻头可用变化2 = 29408u;
     private const uint 勇气前置光环 = 3153u;
-    public uint 钻头变化() => Core.Resolve<MemApiSpell>().CheckActionChange(钻头基础技能);
+    public static uint 钻头变化() => Core.Resolve<MemApiSpell>().CheckActionChange(钻头基础技能);
     public int Check()
     {
         if (!PvPMCHOverlay.MCHQt.GetQt("职能技能"))

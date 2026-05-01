@@ -4,5 +4,5 @@ public class PvPSAMBattleData
 {
     public static PvPSAMBattleData Instance = new();
 
-    public void Reset() => Instance = new PvPSAMBattleData();
+    public static void Reset() => Instance = new PvPSAMBattleData();
 }

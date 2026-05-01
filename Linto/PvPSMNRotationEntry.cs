@@ -19,7 +19,7 @@ namespace Linto;
 public class PvPSMNRotationEntry : IRotationEntry
 {
     public void Dispose() => GC.SuppressFinalize(this);
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvPSMN";

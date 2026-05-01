@@ -12,7 +12,7 @@ public class 魔三连 : ISlotResolver
     private const uint 起始技能 = 41488u;
     private const uint 焦热技能 = 41491u;
     private const int 近战距离 = 5;
-    public uint 魔三连变化() => Core.Resolve<MemApiSpell>().CheckActionChange(起始技能);
+    public static uint 魔三连变化() => Core.Resolve<MemApiSpell>().CheckActionChange(起始技能);
     public int Check()
     {
         var changedSkill = 魔三连变化();
@@ -57,7 +57,7 @@ public class 焦热 : ISlotResolver
     private const uint 起始技能 = 41488u;
     private const uint 焦热技能 = 41491u;
     private const int 远程距离 = 25;
-    public uint 魔三连变化() => Core.Resolve<MemApiSpell>().CheckActionChange(起始技能);
+    public static uint 魔三连变化() => Core.Resolve<MemApiSpell>().CheckActionChange(起始技能);
     public int Check()
     {
         var changedSkill = 魔三连变化();

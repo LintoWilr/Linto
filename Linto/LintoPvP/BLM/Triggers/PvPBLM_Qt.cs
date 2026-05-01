@@ -60,7 +60,7 @@ public class LintoPvPBLMQt : ITriggerAction
         return true;
     }
 
-    public void Check()
+    public static void Check()
     {
     }
 }

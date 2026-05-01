@@ -45,7 +45,7 @@ public class 悖论 : ISlotResolver
 public class 元素天赋 : ISlotResolver
 {
     public SlotMode SlotMode { get; }
-    public uint 元素天赋变化() => Core.Resolve<MemApiSpell>().CheckActionChange(41475U);
+    public static uint 元素天赋变化() => Core.Resolve<MemApiSpell>().CheckActionChange(41475U);
     public int Check()
     {
         if (!PvPBLMOverlay.BLMQt.GetQt("元素天赋"))

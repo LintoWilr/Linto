@@ -16,7 +16,7 @@ public class PvPSAMRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle() => PvPSAMBattleData.Instance.Reset();
+    public void OnResetBattle() => PvPSAMBattleData.Reset();
     public async Task OnPreCombat()
     {
         PVPTargetHelper.自动选中();

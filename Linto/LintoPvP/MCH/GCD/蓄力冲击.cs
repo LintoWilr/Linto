@@ -57,7 +57,7 @@ public class 热冲击 : ISlotResolver
     private const uint 过热光环 = 3149u;
     private const int SkillRange = 25;
 
-    public uint 烈焰弹id()
+    public static uint 烈焰弹id()
     {
         if (PvPMCHSettings.Instance.热冲击)
             return 热冲击技能;

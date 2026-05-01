@@ -7,7 +7,7 @@ namespace Linto.LintoPvP.GNB;
 
 public class PvPGNBOverlay
 {
-    public void DrawGeneral(JobViewWindow jobViewWindow)
+    public static void DrawGeneral(JobViewWindow jobViewWindow)
     {
 
         Share.Pull = true;

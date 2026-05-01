@@ -18,7 +18,7 @@ namespace Linto;
 public class PvP双刀小子Entry : IRotationEntry
 {
     public void Dispose() => GC.SuppressFinalize(this);
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvP双刀小子";

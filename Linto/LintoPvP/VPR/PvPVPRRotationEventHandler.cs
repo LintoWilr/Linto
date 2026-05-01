@@ -15,8 +15,8 @@ public class PvPVPRRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle() => PvPVPRBattleData.Instance.Reset();
-    public void OnUIUpdate()
+    public void OnResetBattle() => PvPVPRBattleData.Reset();
+    public static void OnUIUpdate()
     {
         if (PvPSettings.Instance.监控) PVPHelper.监控窗口();
     }

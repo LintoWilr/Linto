@@ -797,7 +797,7 @@ public class PVPHelper
         private DateTime? _lastSprintTime;  // 使用可空的 DateTime 类型来记录最后一次冲刺的时间
         private bool _isSprinting;          // 内部标识是否处于冲刺状态
         // 判断是否处于冲刺状态，通过 Core.Me.HasAura(1342) 来判断是否拥有冲刺光环
-        public bool IsSprinting =>
+        public static bool IsSprinting =>
             // 自动同步当前冲刺状态
             Core.Me.HasAura(1342);
         // 每当检测冲刺时，如果处于冲刺状态且没有记录过时间，则记录当前时间

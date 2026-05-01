@@ -18,7 +18,7 @@ namespace Linto;
 public class PvP董慧敏Entry : IRotationEntry
 {
     public void Dispose() => GC.SuppressFinalize(this);
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
 

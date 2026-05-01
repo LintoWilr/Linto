@@ -17,7 +17,7 @@ namespace Linto;
 public class PvP崩破大王Entry : IRotationEntry
 {
     public void Dispose() => GC.SuppressFinalize(this);
-    public void DrawOverlay()
+    public static void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvP崩破大王";

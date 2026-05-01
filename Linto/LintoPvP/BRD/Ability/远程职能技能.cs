@@ -46,7 +46,7 @@ public class 勇气 : ISlotResolver
     private const uint 勇气u = 43250u;
     private const uint 勇气释放buff = 4490u;
     private const uint 勇气buff = 4479u;
-    public uint 钻头变化() => Core.Resolve<MemApiSpell>().CheckActionChange(29408u);
+    public static uint 钻头变化() => Core.Resolve<MemApiSpell>().CheckActionChange(29408u);
     public int Check()
     {
         if (!PvPBRDOverlay.BRDQt.GetQt("职能技能"))

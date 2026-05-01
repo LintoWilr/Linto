@@ -15,7 +15,7 @@ public class PvPSMNRotationEventHandler : IRotationEventHandler
     {
 
     }
-    public void OnResetBattle() => PvPSMNBattleData.Instance.Reset();
+    public void OnResetBattle() => PvPSMNBattleData.Reset();
 
 
     public async Task OnPreCombat()
