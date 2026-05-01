@@ -1,4 +1,4 @@
-﻿using AEAssist;
+using AEAssist;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
@@ -27,18 +27,18 @@ public static class MountHandler
     public static void 无目标坐骑()
     {
         if (!Core.Me.IsPvP()) return;
-        if (!(PVPHelper.通用码权限||PVPHelper.高级码)) return;
+        if (!(PVPHelper.通用码权限 || PVPHelper.高级码)) return;
         // 检查是否可以进行骑乘，如果不满足条件则返回。
         if (!CanUseMount()) return;
-        if (Core.Me.GetCurrTarget()!=null) return;
+        if (Core.Me.GetCurrTarget() != null) return;
         // 检查附近敌人数量，如果超过设定范围内的敌人数量，则返回。
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me, 
-                PvPSettings.Instance.无目标坐骑范围, 
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me,
+                PvPSettings.Instance.无目标坐骑范围,
                 PvPSettings.Instance.无目标坐骑范围) > 1)
         {
             return;
         }
-        
+
         // 检查技能（ID: 29055）是否在冷却中，若在冷却则返回。
         if (29055u.RecentlyUsed(2000)) return;
 
@@ -53,11 +53,11 @@ public static class MountHandler
         }
         else
         {
-            Core.Resolve<MemApiSendMessage>().SendMessage("/mcancel"); 
+            Core.Resolve<MemApiSendMessage>().SendMessage("/mcancel");
             Core.Resolve<MemApiSendMessage>().SendMessage("/mount 专属陆行鸟");
         }
         _lastMountTime = DateTime.Now;
-    } 
+    }
     // 定义限制区域 ID 常量
     private const uint 狼狱停船厂 = 250;
     private const uint 赤土红沙 = 1138;
@@ -70,21 +70,21 @@ public static class MountHandler
     private const uint 角力学校自定义 = 1058;
     private const uint 火山之心自定义 = 1059;
     private const uint 九霄云上自定义 = 1060;
-    
-    public static readonly HashSet<uint> RestrictedTerritoryIds = new HashSet<uint> 
-    {
-        狼狱停船厂, 
-        赤土红沙, 
-        赤土红沙自定义, 
-        机关大殿, 
+
+    public static readonly HashSet<uint> RestrictedTerritoryIds =
+    [
+        狼狱停船厂,
+        赤土红沙,
+        赤土红沙自定义,
+        机关大殿,
         机关大殿自定义,
-        角力学校, 
-        火山之心, 
-        九霄云上, 
-        角力学校自定义, 
-        火山之心自定义, 
+        角力学校,
+        火山之心,
+        九霄云上,
+        角力学校自定义,
+        火山之心自定义,
         九霄云上自定义,
-    };
+    ];
 
     /// <summary>
     /// 检查角色是否处于骑乘状态。
@@ -101,8 +101,8 @@ public static class MountHandler
         if (!CanUseMount()) return;
 
         // 检查附近敌人数量，如果超过设定范围内的敌人数量则返回
-        if (TargetHelper.GetNearbyEnemyCount(Core.Me, 
-                PvPSettings.Instance.无目标坐骑范围, 
+        if (TargetHelper.GetNearbyEnemyCount(Core.Me,
+                PvPSettings.Instance.无目标坐骑范围,
                 PvPSettings.Instance.无目标坐骑范围) > 1)
         {
             return;
@@ -136,13 +136,13 @@ public static class MountHandler
     /// </returns>
     private static bool CanUseMount()
     {
-        return PvPSettings.Instance.无目标坐骑 
-               && GCDHelper.GetGCDCooldown() == 0 
-               && !IsMounted() 
-               && Core.Me.GetCurrTarget()==null||Core.Me.GetCurrTarget().DistanceToPlayer()>80
-               && !Core.Me.IsCasting 
-               && Core.Me.IsPvP() 
-               && !IsInRestrictedTerritory();
+        return (PvPSettings.Instance.无目标坐骑
+               && GCDHelper.GetGCDCooldown() == 0
+               && !IsMounted()
+               && Core.Me.GetCurrTarget() == null) || (Core.Me.GetCurrTarget().DistanceToPlayer() > 80
+               && !Core.Me.IsCasting
+               && Core.Me.IsPvP()
+               && !IsInRestrictedTerritory());
     }
 
     /// <summary>
@@ -153,7 +153,7 @@ public static class MountHandler
     /// </returns>
     private static bool IsInRestrictedTerritory()
     {
-        uint currentTerritoryId = Core.Resolve<MemApiMap>().GetCurrTerrId();
+        var currentTerritoryId = Core.Resolve<MemApiMap>().GetCurrTerrId();
         return RestrictedTerritoryIds.Contains(currentTerritoryId);
     }
 
@@ -163,8 +163,5 @@ public static class MountHandler
     /// <returns>
     /// 返回一个布尔值，指示是否处于骑乘冷却中。
     /// </returns>
-    private static bool IsMountCooldownInEffect()
-    {
-        return (DateTime.Now - _lastMountTime).TotalSeconds < PvPSettings.Instance.坐骑cd;
-    }
+    private static bool IsMountCooldownInEffect() => (DateTime.Now - _lastMountTime).TotalSeconds < PvPSettings.Instance.坐骑cd;
 }
