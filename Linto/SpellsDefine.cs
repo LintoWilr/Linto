@@ -1,11 +1,11 @@
-﻿namespace AEAssist.CombatRoutine
+namespace AEAssist.CombatRoutine
 {
     public class SpellsDefine
     {
         public const uint Sprint = 3;
-        
-        public static HashSet<uint> AbilityAsGcdSet = new()
-        {
+
+        public static HashSet<uint> AbilityAsGcdSet =
+        [
             StandardStep,
             TechnicalStep,
             TenCombo,
@@ -20,7 +20,7 @@
             TcjHuton,
             TcjDoton,
             TcjSuiton,
-    };
+    ];
 
         // DPS Role
 
@@ -67,54 +67,39 @@
 
         public static uint GetTankStateOpenId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 28;
-                case Jobs.Warrior:
-                    return SpellsDefine.Defiance;
-                case Jobs.DarkKnight:
-                    return 3629;
-                case Jobs.Gunbreaker:
-                    return 16142;
-            }
-
-            return 0;
+                Jobs.Paladin => 28,
+                Jobs.Warrior => SpellsDefine.Defiance,
+                Jobs.DarkKnight => 3629,
+                Jobs.Gunbreaker => 16142,
+                _ => 0,
+            };
         }
 
         public static uint GetTankStateAuraId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 79;
-                case Jobs.Warrior:
-                    return AurasDefine.Defiance;
-                case Jobs.DarkKnight:
-                    return 743;
-                case Jobs.Gunbreaker:
-                    return 1833;
-            }
-
-            return 0;
+                Jobs.Paladin => 79,
+                Jobs.Warrior => AurasDefine.Defiance,
+                Jobs.DarkKnight => 743,
+                Jobs.Gunbreaker => 1833,
+                _ => 0,
+            };
         }
 
 
         public static uint GetTankStateCloseId(Jobs jobs)
         {
-            switch (jobs)
+            return jobs switch
             {
-                case Jobs.Paladin:
-                    return 32065;
-                case Jobs.Warrior:
-                    return 32066;
-                case Jobs.DarkKnight:
-                    return 32067;
-                case Jobs.Gunbreaker:
-                    return 32068;
-            }
-
-            return 0;
+                Jobs.Paladin => 32065,
+                Jobs.Warrior => 32066,
+                Jobs.DarkKnight => 32067,
+                Jobs.Gunbreaker => 32068,
+                _ => 0,
+            };
         }
 
         #endregion

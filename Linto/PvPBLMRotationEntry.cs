@@ -14,16 +14,14 @@ namespace Linto;
 
 public class PvPBLMEntry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
+    public void Dispose() => GC.SuppressFinalize(this);
     public void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvP黑魔";
     public string AuthorName { get; set; } = "Linto PvP";
-    public List<SlotResolverData> SlotResolvers = new()
-    {
+    public List<SlotResolverData> SlotResolvers =
+    [
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
         new (new 昏沉(),SlotMode.Always),
@@ -44,7 +42,7 @@ public class PvPBLMEntry : IRotationEntry
         new (new 冰2(),SlotMode.Always),
         new (new 冰1(),SlotMode.Always),
         new (new 冲刺(),SlotMode.Always),
-    };
+    ];
     public Rotation Build(string settingFolder)
     {
         PvPBLMSettings.Build(settingFolder);
@@ -65,15 +63,9 @@ public class PvPBLMEntry : IRotationEntry
         return rot;
     }
     public static JobViewWindow JobViewWindow { get; private set; } = null!;
-    public IRotationUI GetRotationUI()
-    {
-        return new 监控UI代理(PvPBLMEntry.JobViewWindow);
-    }
-    private PvPBLMSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-       settingUI.Draw();
-    }
+    public IRotationUI GetRotationUI() => new 监控UI代理(PvPBLMEntry.JobViewWindow);
+    private readonly PvPBLMSettingUI settingUI = new();
+    public void OnDrawSetting() => settingUI.Draw();
     public void BuildQT()
     {
         JobViewWindow = new JobViewWindow(PvPBLMSettings.Instance.JobViewSave, PvPBLMSettings.Instance.Save, OverlayTitle);
@@ -81,13 +73,13 @@ public class PvPBLMEntry : IRotationEntry
         //贤者ACR入口.职业视图窗口.AddTab("日志", _lazyOverlay.更新日志);
         //贤者ACR入口.职业视图窗口.AddTab("DEV", _lazyOverlay.DrawDev);
         JobViewWindow.AddTab("职业配置", PvPBLMOverlay.DrawGeneral);
-        JobViewWindow.AddTab("监控",PVPHelper.监控);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
         //JobViewWindow.AddTab("解锁", PvPBLMOverlay.DrawDev);
         JobViewWindow.AddQt("悖论", true);
         JobViewWindow.AddQt("悖论", true);
         JobViewWindow.AddQt("耀星", true);
-        JobViewWindow.AddQt("元素天赋", true); 
+        JobViewWindow.AddQt("元素天赋", true);
         JobViewWindow.AddQt("异言", true);
         JobViewWindow.AddQt("昏沉", true);
         JobViewWindow.AddQt("磁暴", true);
@@ -96,14 +88,11 @@ public class PvPBLMEntry : IRotationEntry
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);
-        JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("以太步",new HotkeyData.以太步());
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("以太步", new HotkeyData.以太步());
         JobViewWindow.DrawQtWindow();
     }
-    private IOpener? GetOpener(uint level)
-    {
-        return null;
-    }
+    private IOpener? GetOpener(uint level) => null;
 }

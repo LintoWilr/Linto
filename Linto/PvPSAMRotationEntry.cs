@@ -16,16 +16,14 @@ namespace Linto;
 
 public class PvP崩破大王Entry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
+    public void Dispose() => GC.SuppressFinalize(this);
     public void DrawOverlay()
     {
     }
     public string OverlayTitle { get; } = "PvP崩破大王";
     public string AuthorName { get; set; } = "Linto PvP";
-    public List<SlotResolverData> SlotResolvers = new()
-    {
+    public List<SlotResolverData> SlotResolvers =
+    [
         new (new 净化(),SlotMode.Always),
         new (new 斩铁剑(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
@@ -39,7 +37,7 @@ public class PvP崩破大王Entry : IRotationEntry
         new (new 雪月花(),SlotMode.Always),
         new (new 花车连击(),SlotMode.Always),
         new (new 冲刺(),SlotMode.Always),
-    };
+    ];
     public Rotation Build(string settingFolder)
     {
         PvPSAMSettings.Build(settingFolder);
@@ -54,21 +52,15 @@ public class PvP崩破大王Entry : IRotationEntry
             Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.1适配]",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
-     //   rot.AddTriggerAction(new LintoPvPSAMQt());
+        //   rot.AddTriggerAction(new LintoPvPSAMQt());
         rot.SetRotationEventHandler(new PvPSAMRotationEventHandler());
         rot.AddOpener(GetOpener);
         return rot;
     }
     public static JobViewWindow JobViewWindow { get; private set; } = null!;
-    public IRotationUI GetRotationUI()
-    {
-        return new 监控UI代理(PvP崩破大王Entry.JobViewWindow);
-    }
-    private PvPSamSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-       settingUI.Draw();
-    }
+    public IRotationUI GetRotationUI() => new 监控UI代理(PvP崩破大王Entry.JobViewWindow);
+    private readonly PvPSamSettingUI settingUI = new();
+    public void OnDrawSetting() => settingUI.Draw();
     public void BuildQT()
     {
         JobViewWindow = new JobViewWindow(PvPSAMSettings.Instance.JobViewSave, PvPSAMSettings.Instance.Save, OverlayTitle);
@@ -76,11 +68,11 @@ public class PvP崩破大王Entry : IRotationEntry
         //贤者ACR入口.职业视图窗口.AddTab("日志", _lazyOverlay.更新日志);
         //贤者ACR入口.职业视图窗口.AddTab("DEV", _lazyOverlay.DrawDev);
         JobViewWindow.AddTab("职业配置", PvPSAMOverlay.DrawGeneral);
-        JobViewWindow.AddTab("监控",PVPHelper.监控);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
         //JobViewWindow.AddTab("解锁", PvPSAMOverlay.DrawDev);
-        JobViewWindow.AddQt("斩铁剑", true,"对能斩掉的敌人斩铁");
-        JobViewWindow.AddQt("地天", true,"人群中开地天");
+        JobViewWindow.AddQt("斩铁剑", true, "对能斩掉的敌人斩铁");
+        JobViewWindow.AddQt("地天", true, "人群中开地天");
         JobViewWindow.AddQt("残心", true);
         JobViewWindow.AddQt("连击", true);
         JobViewWindow.AddQt("刀背击打", true);
@@ -90,37 +82,34 @@ public class PvP崩破大王Entry : IRotationEntry
         JobViewWindow.AddQt("喝热水", false);
         JobViewWindow.AddQt("自动净化", false);
         JobViewWindow.AddQt("冲刺", true);
-        JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-        JobViewWindow.AddHotkey("手动斩铁",new HotkeyData.武士LB());
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("手动斩铁", new HotkeyData.武士LB());
     }
-    private IOpener? GetOpener(uint level)
-    {
-        return null;
-    }
+    private IOpener? GetOpener(uint level) => null;
 }
-        //if (ImGui.CollapsingHeader("插入技能状态"))
-        //{
-        //    if (ImGui.Button("清除队列"))
-        //    {
-        //        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
-        //        AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
-        //    }
+//if (ImGui.CollapsingHeader("插入技能状态"))
+//{
+//    if (ImGui.Button("清除队列"))
+//    {
+//        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Clear();
+//        AI.Instance.BattleData.HighPrioritySlots_GCD.Clear();
+//    }
 
-        //    ImGui.SameLine();
-        //    if (ImGui.Button("清除一个"))
-        //    {
-        //        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
-        //        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
-        //    }
+//    ImGui.SameLine();
+//    if (ImGui.Button("清除一个"))
+//    {
+//        AI.Instance.BattleData.HighPrioritySlots_OffGCD.Dequeue();
+//        AI.Instance.BattleData.HighPrioritySlots_GCD.Dequeue();
+//    }
 
-        //    ImGui.Text("-------能力技-------");
-        //    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
-        //        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_OffGCD)
-        //            ImGui.Text(spell.Name);
-        //    ImGui.Text("-------GCD-------");
-        //    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
-        //        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_GCD)
-        //            ImGui.Text(spell.Name);
-        //}
+//    ImGui.Text("-------能力技-------");
+//    if (AI.Instance.BattleData.HighPrioritySlots_OffGCD.Count > 0)
+//        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_OffGCD)
+//            ImGui.Text(spell.Name);
+//    ImGui.Text("-------GCD-------");
+//    if (AI.Instance.BattleData.HighPrioritySlots_GCD.Count > 0)
+//        foreach (var spell in AI.Instance.BattleData.HighPrioritySlots_GCD)
+//            ImGui.Text(spell.Name);
+//}

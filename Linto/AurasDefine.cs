@@ -1,4 +1,4 @@
-﻿namespace AEAssist.CombatRoutine
+namespace AEAssist.CombatRoutine
 {
     public static class AurasDefine
     {
@@ -382,8 +382,8 @@
 
         #endregion
 
-        public static readonly List<uint> Invincibility = new()
-        {
+        public static readonly List<uint> Invincibility =
+        [
             Invincibility0,
             Invincibility1,
             Invincibility2,
@@ -393,6 +393,6 @@
             Invincibility6,
             Invincibility7,
             Invincibility8
-        };
+        ];
     }
 }

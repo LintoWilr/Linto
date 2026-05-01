@@ -15,22 +15,14 @@ namespace Linto;
 
 public class PvPBRDRotationEntry : IRotationEntry
 {
-    public void Dispose()
-    {
-    }
-    public IRotationUI GetRotationUI()
-    {
-        return new 监控UI代理(PvPBRDRotationEntry.JobViewWindow);
-    }
-    private PvPBRDSettingUI settingUI = new();
-    public void OnDrawSetting()
-    {
-        settingUI.Draw();
-    }
+    public void Dispose() => GC.SuppressFinalize(this);
+    public IRotationUI GetRotationUI() => new 监控UI代理(PvPBRDRotationEntry.JobViewWindow);
+    private readonly PvPBRDSettingUI settingUI = new();
+    public void OnDrawSetting() => settingUI.Draw();
     public static JobViewWindow JobViewWindow = null!;
-    private PvPBRDOverlay _lazyOverlay =  new PvPBRDOverlay();
-    public List<SlotResolverData> SlotResolvers = new()
-    {
+    private readonly PvPBRDOverlay _lazyOverlay = new();
+    public List<SlotResolverData> SlotResolvers =
+    [
         new (new 净化(),SlotMode.Always),
         new (new 药(),SlotMode.Always),
         new (new 光阴神(),SlotMode.Always),
@@ -44,10 +36,10 @@ public class PvPBRDRotationEntry : IRotationEntry
         new (new 完美音调(),SlotMode.Always),
         new (new 强劲射击(),SlotMode.Always),
         new (new 冲刺(),SlotMode.Always),
-    };
+    ];
 
     public string OverlayTitle { get; } = "巴德";
-    
+
     public void DrawOverlay()
     {
     }
@@ -66,33 +58,33 @@ public class PvPBRDRotationEntry : IRotationEntry
             Description = "[1级码及以上使用]不定时更新,有问题DC频道反馈\n[7.1适配]",
         };
         //rot.AddSlotSequences(new TriggerAction_QT());
-       // rot.AddTriggerAction(new LintoPvPBRDQt());
+        // rot.AddTriggerAction(new LintoPvPBRDQt());
         rot.SetRotationEventHandler(new PvPBRDRotationEventHandler());
         rot.AddOpener(GetOpener);
         return rot;
     }
     public void BuildQt()
     {
-         JobViewWindow = new JobViewWindow(PvPBRDSettings.Instance.JobViewSave, PvPBRDSettings.Instance.Save, OverlayTitle);
-         //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
-         JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
-         JobViewWindow.AddTab("监控",PVPHelper.监控);
-         JobViewWindow.AddTab("共通配置", PVPHelper.配置);
-         JobViewWindow.AddQt("和弦箭", true);
-         JobViewWindow.AddQt("光阴神", true);
-         JobViewWindow.AddQt("沉默", true);
-         JobViewWindow.AddQt("爆破箭", true);
-         JobViewWindow.AddQt("绝峰箭", true);
-         JobViewWindow.AddQt("强劲射击", true);
-         JobViewWindow.AddQt("喝热水", false);
-         JobViewWindow.AddQt("职能技能", true);
-         JobViewWindow.AddQt("自动净化", false);
-         JobViewWindow.AddQt("冲刺", true);
-         JobViewWindow.AddHotkey("疾跑",new HotKeyResolver_NormalSpell(29057U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("龟壳",new HotKeyResolver_NormalSpell(29054U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("热水",new HotKeyResolver_NormalSpell(29711U,SpellTargetType.Self,false));
-         JobViewWindow.AddHotkey("LB",new HotkeyData.诗人LB());
-         JobViewWindow.AddHotkey("后跳",new HotkeyData.后射());
+        JobViewWindow = new JobViewWindow(PvPBRDSettings.Instance.JobViewSave, PvPBRDSettings.Instance.Save, OverlayTitle);
+        //   jobViewWindow.AddTab("看你的", _lazyOverlay.Draw目标监控窗口);
+        JobViewWindow.AddTab("职业配置", _lazyOverlay.DrawGeneral);
+        JobViewWindow.AddTab("监控", PVPHelper.监控);
+        JobViewWindow.AddTab("共通配置", PVPHelper.配置);
+        JobViewWindow.AddQt("和弦箭", true);
+        JobViewWindow.AddQt("光阴神", true);
+        JobViewWindow.AddQt("沉默", true);
+        JobViewWindow.AddQt("爆破箭", true);
+        JobViewWindow.AddQt("绝峰箭", true);
+        JobViewWindow.AddQt("强劲射击", true);
+        JobViewWindow.AddQt("喝热水", false);
+        JobViewWindow.AddQt("职能技能", true);
+        JobViewWindow.AddQt("自动净化", false);
+        JobViewWindow.AddQt("冲刺", true);
+        JobViewWindow.AddHotkey("疾跑", new HotKeyResolver_NormalSpell(29057U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("龟壳", new HotKeyResolver_NormalSpell(29054U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("热水", new HotKeyResolver_NormalSpell(29711U, SpellTargetType.Self, false));
+        JobViewWindow.AddHotkey("LB", new HotkeyData.诗人LB());
+        JobViewWindow.AddHotkey("后跳", new HotkeyData.后射());
     }
     private IOpener? GetOpener(uint level)
     {
