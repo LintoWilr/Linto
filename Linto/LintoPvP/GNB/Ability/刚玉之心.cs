@@ -29,18 +29,18 @@ public class 刚玉之心 : ISlotResolver
         if (!spell.IsReadyWithCanCast())
             return -2;
 
-        bool 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
-        float 刚玉血量Threshold = 获取刚玉血量阈值();
-        float 守护之光血量Threshold = PvPSMNSettings.Instance.守护之光血量 / 100f;
+        var 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
+        var 刚玉血量Threshold = 获取刚玉血量阈值();
+        var 守护之光血量Threshold = PvPSMNSettings.Instance.守护之光血量 / 100f;
 
         if (刚玉队友)
         {
             // 校验索引有效性
-            int targetIndex = PvPGNBSettings.Instance.刚玉对象;
+            var targetIndex = PvPGNBSettings.Instance.刚玉对象;
             if (targetIndex < 0 || targetIndex >= PartyHelper.Party.Count)
                 return -93;
 
-            IBattleChara specifiedMember = PartyHelper.Party[targetIndex];
+            var specifiedMember = PartyHelper.Party[targetIndex];
             if (specifiedMember != null &&
                 specifiedMember.CurrentHpPercent() > 刚玉血量Threshold &&
                 Core.Me.CurrentHpPercent() > 守护之光血量Threshold)
@@ -51,8 +51,8 @@ public class 刚玉之心 : ISlotResolver
                 specifiedMember.DistanceToPlayer() > MaxCastDistance)
                 return -91;
 
-			IBattleChara? member = PartyHelper.CastableParty.FirstOrDefault(chara =>
-				chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
+            var member = PartyHelper.CastableParty.FirstOrDefault(chara =>
+                chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
 
             if (member == null)
                 return -92;
@@ -71,17 +71,17 @@ public class 刚玉之心 : ISlotResolver
 
     public void Build(Slot slot)
     {
-        bool 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
-        bool 刚玉播报 = PvPGNBSettings.Instance.刚玉播报;
-		IBattleChara? target = null;
-        float 刚玉血量Threshold = 获取刚玉血量阈值();
+        var 刚玉队友 = PvPGNBSettings.Instance.刚玉队友;
+        var 刚玉播报 = PvPGNBSettings.Instance.刚玉播报;
+        IBattleChara? target = null;
+        var 刚玉血量Threshold = 获取刚玉血量阈值();
 
         if (刚玉队友)
         {
-            int targetIndex = PvPGNBSettings.Instance.刚玉对象;
+            var targetIndex = PvPGNBSettings.Instance.刚玉对象;
             if (targetIndex >= 0 && targetIndex < PartyHelper.Party.Count)
             {
-                IBattleChara specifiedTarget = PartyHelper.Party[targetIndex];
+                var specifiedTarget = PartyHelper.Party[targetIndex];
 
                 if (specifiedTarget != null &&
                     specifiedTarget.CurrentHpPercent() <= 刚玉血量Threshold &&
@@ -91,11 +91,8 @@ public class 刚玉之心 : ISlotResolver
                 }
             }
 
-            if (target == null)
-            {
-                target = PartyHelper.CastableParty.FirstOrDefault(chara =>
+            target ??= PartyHelper.CastableParty.FirstOrDefault(chara =>
                     chara != null && chara.CurrentHpPercent() <= 刚玉血量Threshold);
-            }
 
             if (target == null)
                 return;
@@ -111,8 +108,5 @@ public class 刚玉之心 : ISlotResolver
             LogHelper.Print($"刚玉目标:{target.Name}");
     }
 
-    private static float 获取刚玉血量阈值()
-    {
-        return PvPGNBSettings.Instance.刚玉血量 / 100f;
-    }
+    private static float 获取刚玉血量阈值() => PvPGNBSettings.Instance.刚玉血量 / 100f;
 }

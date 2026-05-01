@@ -6,37 +6,34 @@ namespace Linto.LintoPvP.DRG.GCD;
 
 public class 渡星冲 : ISlotResolver
 {
-	public SlotMode SlotMode { get; }
-	private const uint SkillId = 41450u;
-	private const int SkillRange = 20;
+    public SlotMode SlotMode { get; }
+    private const uint SkillId = 41450u;
+    private const int SkillRange = 20;
 
-	public int Check()//41449
-	{
-		if(!DRGQt.GetQt("基础连击"))
-		{
-			return -1;
-		}
-		if (!PVPHelper.CanActive())
-		{
-			return -1;
-		}
-		if (GCDHelper.GetGCDCooldown()>600)
-		{
-			return -3;
-		}
-		if (PVPHelper.通用距离检查(SkillRange))
-		{
-			return -5 ;
-		}
-		if (PVPHelper.通用技能释放Check(SkillId,SkillRange)==null)
-		{
-			return -6 ;
-		}
+    public int Check()//41449
+    {
+        if (!DRGQt.GetQt("基础连击"))
+        {
+            return -1;
+        }
+        if (!PVPHelper.CanActive())
+        {
+            return -1;
+        }
+        if (GCDHelper.GetGCDCooldown() > 600)
+        {
+            return -3;
+        }
+        if (PVPHelper.通用距离检查(SkillRange))
+        {
+            return -5;
+        }
+        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
+        {
+            return -6;
+        }
         return 1;
-	}
+    }
 
-	public void Build(Slot slot)
-	{
-		PVPHelper.通用技能释放(slot,SkillId,SkillRange);
-	}
+    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }

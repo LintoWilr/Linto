@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using AEAssist.CombatRoutine.Trigger;
 using ECommons.LanguageHelpers;
@@ -13,8 +13,7 @@ public class LintoPvPGNBQt : ITriggerAction
     public bool Value { get; set; } = new();
     public string DisplayName => "PvPGNB".Loc();
     public string Remark { get; set; } = string.Empty;
-    public bool Draw()
-    {
+    public bool Draw() =>
         // var qtArray = PvPBLMOverlay.BLMQt.GetQtArray();
         // 当前combo = Array.IndexOf(qtArray, ValueName);
         // if (当前combo == -1)
@@ -53,8 +52,7 @@ public class LintoPvPGNBQt : ITriggerAction
             ImGui.EndTabBar();
         }*/
 
-        return true;
-    }
+        true;
 
     public bool Handle()
     {
