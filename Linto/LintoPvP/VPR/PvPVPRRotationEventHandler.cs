@@ -1,6 +1,7 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.VPR;
@@ -13,7 +14,14 @@ public class PvPVPRRotationEventHandler : IRotationEventHandler
     }
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
-
+        if (spell.Id == 39172u)
+        {
+            PvPVPRBattleData.Instance.祖灵之牙已完成 = true;
+        }
+        else if (spell.Id == 39173u)
+        {
+            PvPVPRBattleData.Instance.祖灵之牙已完成 = false;
+        }
     }
     public void OnResetBattle() => PvPVPRBattleData.Reset();
     public static void OnUIUpdate()
@@ -45,6 +53,10 @@ public class PvPVPRRotationEventHandler : IRotationEventHandler
     {
         PVPHelper.战斗状态();
         PVPTargetHelper.自动选中();
+        if (!Core.Me.HasAura(4094u))
+        {
+            PvPVPRBattleData.Instance.祖灵之牙已完成 = false;
+        }
     }
     public void OnEnterRotation()
     {

@@ -42,7 +42,8 @@ public class BUFF连击 : ISlotResolver
         }
         if (Core.Me.HasAura(开大Buff))//开大
         {
-            if (changedSkill == 技能祖灵大蛇牙)
+            var 祖灵牙完成 = PvPVPRBattleData.Instance.祖灵之牙已完成 || 技能祖灵之牙四式.RecentlyUsed(5000);
+            if (changedSkill == 技能祖灵大蛇牙 && 祖灵牙完成)
             {
                 return 1;
             }

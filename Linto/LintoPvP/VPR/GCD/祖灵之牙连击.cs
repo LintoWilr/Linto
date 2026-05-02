@@ -20,7 +20,13 @@ public class 祖灵之牙连击 : ISlotResolver
     private const uint LB技能 = 39190u;
     private const int 连击距离 = 5;
     private static int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
-    private static uint 祖灵之牙当前技能() => Core.Resolve<MemApiSpell>().CheckActionChange(齿牙变化起点);
+    private static uint 祖灵之牙当前技能()
+    {
+        var changedSkill = Core.Resolve<MemApiSpell>().CheckActionChange(齿牙变化起点);
+        return changedSkill is 技能连击1祖灵之牙一式 or 技能连击2祖灵之牙二式 or 技能连击3祖灵之牙三式 or 技能连击4祖灵之牙四式
+            ? changedSkill
+            : 技能连击1祖灵之牙一式;
+    }
     // public uint 技能满月 = 29527u;
     // public uint 技能樱花 = 29528u;
     // public uint 技能雪释放 = Core.Resolve<MemApiSpell>().CheckActionChange(29523u);
