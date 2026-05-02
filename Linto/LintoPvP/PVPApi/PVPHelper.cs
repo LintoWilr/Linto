@@ -1185,11 +1185,23 @@ public class PVPHelper
     {
         public static bool CanActive() => PVPHelper.CanActive();
 
+        public static bool IsBattleReady() => CanActive() && !IsMarksmanPreAnim();
+
+        public static bool IsQtEnabled(string qtKey) => PvPMCHOverlay.MCHQt.GetQt(qtKey);
+
         public static bool HasValidTarget()
         {
             var target = Core.Me.GetCurrTarget();
             return target != null && target != Core.Me && !target.IsDead;
         }
+
+        public static bool IsGcdReady(int maxCooldownMs) => GCDHelper.GetGCDCooldown() <= maxCooldownMs;
+
+        public static bool IsSkillReady(uint skillId) => skillId.GetSpell().IsReadyWithCanCast();
+
+        public static bool CanUseTargetedSkill(uint skillId, int distance) => PVPHelper.通用技能释放Check(skillId, distance) != null;
+
+        public static bool CanUseSelfSkill(uint skillId) => IsSkillReady(skillId);
 
         public static bool IsMarksmanPreAnim() => PvPMCHBattleData.Instance.InMarksmanPreAnim;
 
@@ -1207,6 +1219,18 @@ public class PVPHelper
         public static Spell? GetSharedSpell(uint skillId, int distance) => PVPHelper.通用技能释放Check(skillId, distance);
 
         public static bool CanCastSharedSkill(uint skillId, int distance) => GetSharedSpell(skillId, distance) != null;
+
+        public static Spell? BuildSharedSpell(uint skillId, int distance, Slot slot)
+        {
+            slot.maxDuration = 300;
+            var spell = GetSharedSpell(skillId, distance);
+            if (spell != null)
+            {
+                slot.Add(spell);
+            }
+
+            return spell;
+        }
 
         public static bool CanUseTurretOnTarget()
         {

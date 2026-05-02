@@ -145,6 +145,7 @@
       <Compile Include="LintoPvP\MCH\Ability\药.cs" />
       <Compile Include="LintoPvP\MCH\Ability\象式浮空炮塔.cs" />
       <Compile Include="LintoPvP\MCH\Ability\野火.cs" />
+      <Compile Include="LintoPvP\MCH\MCHSlotResolverBase.cs" />
       <Compile Include="LintoPvP\MCH\GCD\全金属爆发.cs" />
       <Compile Include="LintoPvP\MCH\GCD\回转飞锯.cs" />
       <Compile Include="LintoPvP\MCH\GCD\毒菌冲击.cs" />
