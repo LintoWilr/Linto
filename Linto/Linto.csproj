@@ -186,6 +186,7 @@
       <Compile Include="LintoPvP\PVPApi\PVPApi.Target\Filter.cs" />
       <Compile Include="LintoPvP\PVPApi\PVPApi.Target\Group.cs" />
       <Compile Include="LintoPvP\PVPApi\PVPApi.Target\PVPTargetHelper.cs" />
+      <Compile Include="LintoPvP\PVPApi\PvpKillConfirm.cs" />
       <Compile Include="LintoPvP\PVPApi\PVPHelper.cs" />
       <Compile Include="LintoPvP\PVPApi\PvPJobInterface.cs" />
       <Compile Include="LintoPvP\PVPApi\SkillDecision.cs" />

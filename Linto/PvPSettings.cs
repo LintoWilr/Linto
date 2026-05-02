@@ -16,6 +16,11 @@ public class PvPSettings
     public bool 自动选中 = true;
     public bool 不选冰 = false;
     public bool 技能自动选中 = true;
+    public bool 智能净化 = true;
+    public float 净化常规延迟秒 = 0.35f;
+    public int 净化集火人数阈值 = 3;
+    public float 净化集火延迟秒 = 0.1f;
+    public bool 防御中禁止净化 = true;
     public int 自动选中自定义范围 = 50;
     public bool 最合适目标 = true;
     public int 长臂猿 = 0;

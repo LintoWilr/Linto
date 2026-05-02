@@ -24,6 +24,11 @@ namespace Linto.LintoPvP.PVPApi;
 
 public class PVPHelper
 {
+    private const uint Pvp防御状态 = 3054u;
+    private const uint 净化技能 = 29056u;
+    private static long _净化受控开始毫秒;
+    private static long _上次净化放行毫秒;
+
     //抄来的
     public static Vector3 向量位移(Vector3 position, float facingRadians, float distance)
     {
@@ -91,11 +96,64 @@ public class PVPHelper
     /// </summary>
     public static bool 净化判断()
     {
-        if (Core.Me.HasCanDispel())
+        if (!Core.Me.IsPvP())
+        {
+            重置净化状态();
+            return false;
+        }
+
+        if (!Core.Me.HasCanDispel())
+        {
+            重置净化状态();
+            return false;
+        }
+
+        if (!PvPSettings.Instance.智能净化)
         {
             return true;
         }
-        return false;
+
+        if (PvPSettings.Instance.防御中禁止净化 && Core.Me.HasAura(Pvp防御状态))
+        {
+            重置净化状态();
+            return false;
+        }
+
+        if (!净化技能.GetSpell().IsReadyWithCanCast())
+        {
+            return false;
+        }
+
+        var now = Environment.TickCount64;
+        if (_净化受控开始毫秒 == 0L)
+        {
+            _净化受控开始毫秒 = now;
+        }
+
+        var 集火人数阈值 = Math.Clamp(PvPSettings.Instance.净化集火人数阈值, 1, 8);
+        var 被集火人数 = PVPTargetHelper.Get看着目标的人(Group.敌人, Core.Me).Count;
+        var 常规延迟毫秒 = (int)Math.Round(Math.Clamp(PvPSettings.Instance.净化常规延迟秒, 0.1f, 1.5f) * 1000f);
+        var 集火延迟毫秒 = (int)Math.Round(Math.Clamp(PvPSettings.Instance.净化集火延迟秒, 0.1f, 0.5f) * 1000f);
+        var 需要等待毫秒 = 被集火人数 >= 集火人数阈值 ? 集火延迟毫秒 : 常规延迟毫秒;
+
+        if (now - _净化受控开始毫秒 < 需要等待毫秒)
+        {
+            return false;
+        }
+
+        if (now - _上次净化放行毫秒 < 120L)
+        {
+            return false;
+        }
+
+        _上次净化放行毫秒 = now;
+        return true;
+    }
+
+    private static void 重置净化状态()
+    {
+        _净化受控开始毫秒 = 0L;
+        _上次净化放行毫秒 = 0L;
     }
 
     public static Spell 不等服务器Spell(uint id, IBattleChara? target)
@@ -329,6 +387,19 @@ public class PVPHelper
         ImGui.Checkbox($"自动选中(只在PvP生效)##{666}", ref PvPSettings.Instance.自动选中);
         ImGui.SameLine();
         s2();
+        ImGui.Checkbox($"智能净化(延迟/集火判断)##{667}", ref PvPSettings.Instance.智能净化);
+        if (PvPSettings.Instance.智能净化)
+        {
+            PvPSettings.Instance.净化常规延迟秒 = Math.Clamp(PvPSettings.Instance.净化常规延迟秒, 0.1f, 1.5f);
+            PvPSettings.Instance.净化集火人数阈值 = Math.Clamp(PvPSettings.Instance.净化集火人数阈值, 1, 8);
+            PvPSettings.Instance.净化集火延迟秒 = Math.Clamp(PvPSettings.Instance.净化集火延迟秒, 0.1f, 0.5f);
+            ImGui.PushItemWidth(100);
+            ImGui.InputFloat($"净化常规延迟秒##{668}", ref PvPSettings.Instance.净化常规延迟秒, 0.05f, 0.1f);
+            ImGui.InputInt($"净化集火人数阈值##{669}", ref PvPSettings.Instance.净化集火人数阈值, 1, 1);
+            ImGui.InputFloat($"净化集火延迟秒##{670}", ref PvPSettings.Instance.净化集火延迟秒, 0.05f, 0.1f);
+            ImGui.PopItemWidth();
+            ImGui.Checkbox($"防御中禁止净化##{671}", ref PvPSettings.Instance.防御中禁止净化);
+        }
         ImGui.Checkbox($"只选中玩家(测试)##{1412}", ref PvPSettings.Instance.不选冰);
         //ImGui.Checkbox($"无目标挂机时冲刺(测试)##{232}", ref PvPSettings.Instance.无目标冲刺);
         //ImGui.SameLine();

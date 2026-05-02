@@ -15,12 +15,12 @@ public class 祖灵之牙连击 : ISlotResolver
     private const uint 技能连击2祖灵之牙二式 = 39170u;
     private const uint 技能连击3祖灵之牙三式 = 39171u;
     private const uint 技能连击4祖灵之牙四式 = 39172u;
-    private const uint 技能祖灵之蛇四式 = 39182u;
-    private const uint 技能祖灵之牙四式 = 39172u;
+    private const uint 齿牙变化起点 = 39157u;
     private const uint 开大Buff = 4094u;
     private const uint LB技能 = 39190u;
     private const int 连击距离 = 5;
     private static int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+    private static uint 祖灵之牙当前技能() => Core.Resolve<MemApiSpell>().CheckActionChange(齿牙变化起点);
     // public uint 技能满月 = 29527u;
     // public uint 技能樱花 = 29528u;
     // public uint 技能雪释放 = Core.Resolve<MemApiSpell>().CheckActionChange(29523u);
@@ -63,36 +63,21 @@ public class 祖灵之牙连击 : ISlotResolver
         {
             return -44;
         }
-        if (技能祖灵之牙四式.RecentlyUsed(12000) && 技能祖灵之蛇四式.RecentlyUsed(12000))//开大
+        var changedSkill = 祖灵之牙当前技能();
+        if (changedSkill is not (技能连击1祖灵之牙一式 or 技能连击2祖灵之牙二式 or 技能连击3祖灵之牙三式 or 技能连击4祖灵之牙四式))
         {
             return -5;
+        }
+        if (PVPHelper.通用技能释放Check(changedSkill, 连击距离) == null)
+        {
+            return -6;
         }
         return 1;
     }
 
     public void Build(Slot slot)
     {
-        var lastGcd = Core.Resolve<MemApiSpellCastSuccess>().LastGcd;
-        //LB连击4
-        if (lastGcd == 技能连击3祖灵之牙三式)
-        {
-            PVPHelper.通用技能释放(slot, 技能连击4祖灵之牙四式, 连击距离);
-        }
-        //LB连击3
-        else if (lastGcd == 技能连击2祖灵之牙二式)
-        {
-            PVPHelper.通用技能释放(slot, 技能连击3祖灵之牙三式, 连击距离);
-        }
-        //LB连击2
-        else if (lastGcd == 技能连击1祖灵之牙一式)
-        {
-            PVPHelper.通用技能释放(slot, 技能连击2祖灵之牙二式, 连击距离);
-        }
-        //LB连击1
-        else
-        {
-            PVPHelper.通用技能释放(slot, 技能连击1祖灵之牙一式, 连击距离);
-        }
+        PVPHelper.通用技能释放(slot, 祖灵之牙当前技能(), 连击距离);
     }
 
 }

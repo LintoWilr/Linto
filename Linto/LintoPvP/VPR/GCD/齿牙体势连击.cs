@@ -1,6 +1,7 @@
 using AEAssist;
 using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
+using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
 using Linto.LintoPvP.PVPApi;
@@ -16,6 +17,7 @@ public class 齿牙体势连击 : ISlotResolver
     private const uint 技能连击4切割尖齿 = 39158u;
     private const uint 技能连击5疾速利齿 = 39160u;
     private const uint 技能连击6啮噬獠齿 = 39163u;
+    private const uint 开大Buff = 4094u;
     private const uint LB技能 = 39190u;
     private const int 连击距离 = 5;
     private static int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
@@ -39,6 +41,10 @@ public class 齿牙体势连击 : ISlotResolver
         if (!PVPHelper.CanActive())
         {
             return -2;
+        }
+        if (Core.Me.HasLocalPlayerAura(开大Buff))
+        {
+            return -6;
         }
 
         if (GCDHelper.GetGCDCooldown() > 600)
