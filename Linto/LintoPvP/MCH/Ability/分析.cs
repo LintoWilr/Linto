@@ -3,51 +3,32 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.Ability;
 
-public class 分析 : ISlotResolver
+public class 分析 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; } = SlotMode.Always;
-    private const uint SkillId = 29414u;
-    private const uint 分析中光环 = 3158u;
-    private const uint 分析可用技能 = 29405u;
-    private const int SkillRange = 25;
-    public int Check()
+    protected override string QtKey => "分析";
+    protected override uint SkillId => 29414u;
+    protected override int SkillRange => 25;
+    protected override bool UseSharedTargeting => false;
+
+    protected override int CheckSpecific()
     {
-        if (!PvPMCHOverlay.MCHQt.GetQt("分析"))
-        {
-            return -9;
-        }
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
-        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
-        {
-            return -6;
-        }
         if (SpellHelper.GetSpell(SkillId).Charges < 1)
         {
             return -1;
         }
         if (PvPMCHSettings.Instance.分析可用)
         {
-            if (!分析可用技能.GetSpell().IsReadyWithCanCast())
+            if (!29405u.GetSpell().IsReadyWithCanCast())
             {
                 return -8;
             }
         }
-        if (Core.Me.HasAura(分析中光环))
+        if (Core.Me.HasAura(3158u))
         {
             return -99;
         }
@@ -55,8 +36,12 @@ public class 分析 : ISlotResolver
         {
             return -99;
         }
+        if (!PVPHelper.MCH.CanUseTargetedSkill(SkillId, SkillRange))
+        {
+            return -1;
+        }
         return 0;
     }
 
-    public void Build(Slot slot) => slot.Add(PVPHelper.等服务器Spell(SkillId, Core.Me));
+    protected override void BuildSpecific(Slot slot) => slot.Add(PVPHelper.等服务器Spell(SkillId, Core.Me));
 }

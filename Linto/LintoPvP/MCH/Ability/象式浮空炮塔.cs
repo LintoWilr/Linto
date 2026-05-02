@@ -1,47 +1,24 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.Ability;
 
-public class 象式浮空炮塔 : ISlotResolver
+public class 象式浮空炮塔 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; } = SlotMode.Always;
-    private const uint SkillId = 29412u;
-    private const int SkillRange = 25;
+    protected override string QtKey => "浮空炮";
+    protected override uint SkillId => 29412u;
+    protected override int SkillRange => 25;
+    protected override int? MaxGcdCooldownMs => null;
 
-    public int Check()
+    protected override int CheckSpecific()
     {
-        if (!PvPMCHOverlay.MCHQt.GetQt("浮空炮"))
-        {
-            return -9;
-        }
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (!SkillId.GetSpell().IsReadyWithCanCast())
-        {
-            return -2;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
         if (GCDHelper.GetGCDCooldown() < 200)
         {
             return -3;
         }
-        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
-        {
-            return -6;
-        }
+
         return 0;
     }
-
-    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }
