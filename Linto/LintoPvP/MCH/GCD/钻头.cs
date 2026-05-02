@@ -2,7 +2,6 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
@@ -21,6 +20,10 @@ public class 钻头 : ISlotResolver
         if (!PVPHelper.CanActive())
         {
             return -1;
+        }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
         }
         if (!PvPMCHOverlay.MCHQt.GetQt("钻头"))
         {
@@ -42,7 +45,7 @@ public class 钻头 : ISlotResolver
         {
             return -6;
         }
-        if (!SkillId.GetSpell().IsReadyWithCanCast() || Core.Resolve<MemApiSpell>().CheckActionChange(SkillId) != SkillId)
+        if (!SkillId.GetSpell().IsReadyWithCanCast() || PVPHelper.MCH.GetChangedAction(SkillId) != SkillId)
         {
             return -2;
         }

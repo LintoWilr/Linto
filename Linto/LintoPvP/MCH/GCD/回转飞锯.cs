@@ -2,7 +2,6 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
@@ -15,12 +14,16 @@ public class 回转飞锯 : ISlotResolver
     private const uint RequiredAura = 3153u;
     private const uint 分析Buff = 3158u;
     private const uint 分析技能 = 29414u;
-    public static uint 机工变化() => Core.Resolve<MemApiSpell>().CheckActionChange(SkillId);
+    public static uint 机工变化() => PVPHelper.MCH.GetChangedAction(SkillId);
     public int Check()
     {
         if (!PVPHelper.CanActive())
         {
             return -1;
+        }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
         }
         if (!PvPMCHOverlay.MCHQt.GetQt("回转飞锯"))
         {
@@ -58,4 +61,3 @@ public class 回转飞锯 : ISlotResolver
 
     public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }
-
