@@ -19,7 +19,25 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     }
     public void OnSpellCastSuccess(Slot slot, Spell spell)
     {
-
+        PvPMCHBattleData.Instance.MarkSuccessfulSpell(spell.Id);
+        if (spell.Id == 29415U)
+        {
+            PvPMCHBattleData.Instance.RecordMarksmanPreAnim();
+            return;
+        }
+        if (spell.Id == 29409U)
+        {
+            var target = Core.Me.GetCurrTarget();
+            if (target != null)
+            {
+                PvPMCHBattleData.Instance.RecordWildfireWindow(target.EntityId, 8000);
+            }
+            return;
+        }
+        if (spell.Id == 41470U)
+        {
+            PvPMCHBattleData.Instance.ClearWildfireWindow();
+        }
     }
     public void OnResetBattle() => PvPMCHBattleData.Reset();
     public async Task OnPreCombat()
@@ -55,6 +73,10 @@ public class PvPMCHRotationEventHandler : IRotationEventHandler
     {
         PVPHelper.战斗状态();
         PVPTargetHelper.自动选中();
+        if (!PvPMCHBattleData.Instance.InMarksmanPreAnim)
+        {
+            PvPMCHBattleData.Instance.ClearMarksmanPreAnim();
+        }
     }
     #region 宏支持相关
 

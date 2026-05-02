@@ -17,6 +17,7 @@ using System.Runtime.CompilerServices;
 using ECommons.GameFunctions;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using Linto.LintoPvP.PVPApi.PVPApi.Target;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.RDM;
 using CSFramework = FFXIVClientStructs.FFXIV.Client.System.Framework.Framework;
 
@@ -1177,6 +1178,39 @@ public class PVPHelper
             }
 
             i++;
+        }
+    }
+
+    public static class MCH
+    {
+        public static bool CanActive() => PVPHelper.CanActive();
+
+        public static bool HasValidTarget()
+        {
+            var target = Core.Me.GetCurrTarget();
+            return target != null && target != Core.Me && !target.IsDead;
+        }
+
+        public static bool IsMarksmanPreAnim() => PvPMCHBattleData.Instance.InMarksmanPreAnim;
+
+        public static bool IsWildfireWindow() => PvPMCHBattleData.Instance.InWildfireWindow;
+
+        public static bool ShouldPrioritizeWildfire()
+        {
+            return HasValidTarget()
+                && 29409U.GetSpell().IsReadyWithCanCast()
+                && Core.Me.HasAura(3149U);
+        }
+
+        public static uint GetChangedAction(uint skillId) => Core.Resolve<MemApiSpell>().CheckActionChange(skillId);
+
+        public static Spell? GetSharedSpell(uint skillId, int distance) => PVPHelper.通用技能释放Check(skillId, distance);
+
+        public static bool CanCastSharedSkill(uint skillId, int distance) => GetSharedSpell(skillId, distance) != null;
+
+        public static bool CanUseTurretOnTarget()
+        {
+            return HasValidTarget() && GetSharedSpell(29412U, 25) != null;
         }
     }
 }
