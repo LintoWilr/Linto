@@ -2,26 +2,21 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH
 {
-    public class 药 : ISlotResolver
+    public class 药 : MCHSlotResolverBase
     {
-        public SlotMode SlotMode { get; } = SlotMode.Always;
-        private const uint 技能药 = 29711u;
-        public int Check()
-        {
+        protected override string QtKey => "喝热水";
+        protected override uint SkillId => 29711u;
+        protected override bool UseSharedTargeting => false;
+        protected override bool BlockInMarksmanPreAnim => false;
 
-            if (!PvPMCHOverlay.MCHQt.GetQt("喝热水"))
-            {
-                return -9;
-            }
-            if (!PVPHelper.CanActive())
-            {
-                return -3;
-            }
-            if (!技能药.GetSpell().IsReadyWithCanCast() || Core.Me.CurrentMp < 2500)
+        protected override int CheckSpecific()
+        {
+            if (Core.Me.CurrentMp < 2500)
             {
                 return -2;
             }
@@ -31,7 +26,5 @@ namespace Linto.LintoPvP.MCH
             }
             return -1;
         }
-
-        public void Build(Slot slot) => slot.Add(PVPHelper.等服务器Spell(技能药, Core.Me));
     }
 }

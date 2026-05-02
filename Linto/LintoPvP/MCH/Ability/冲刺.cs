@@ -4,30 +4,24 @@ using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
 using AEAssist.MemoryApi;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.Ability;
 
-public class 冲刺 : ISlotResolver
+public class 冲刺 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; } = SlotMode.Always;
-    private const uint 冲刺技能 = 29057u;
+    protected override string QtKey => "冲刺";
+    protected override uint SkillId => 29057u;
+    protected override bool UseSharedTargeting => false;
+    protected override bool BlockInMarksmanPreAnim => false;
+    protected override bool RequireReady => false;
 
-    public int Check()
+    protected override int CheckSpecific()
     {
-        var me = Core.Me;
-        if (!PvPMCHOverlay.MCHQt.GetQt("冲刺"))
+        if (Core.Me.HasAura(1342u))
         {
-            return -9;
-        }
-        if (me.HasAura(1342u))
-        {
-            // 冲刺光环在身上就直接拦截，避免短时间重复放冲刺。
             return -2;
-        }
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
         }
         if (GCDHelper.GetGCDCooldown() != 0)
         {
@@ -38,10 +32,5 @@ public class 冲刺 : ISlotResolver
             return -99;
         }
         return 0;
-    }
-    public void Build(Slot slot)
-    {
-        var me = Core.Me;
-        slot.Add(new Spell(冲刺技能, me));
     }
 }
