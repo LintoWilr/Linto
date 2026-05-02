@@ -20,12 +20,27 @@ public class 祖灵之牙连击 : ISlotResolver
     private const uint LB技能 = 39190u;
     private const int 连击距离 = 5;
     private static int 技能距离 => 3 + SettingMgr.GetSetting<GeneralSettings>().AttackRange;
+    private static bool 祖灵之牙已完成()
+    {
+        return PvPVPRBattleData.Instance.祖灵之牙已完成 || 技能连击4祖灵之牙四式.RecentlyUsed(5000);
+    }
     private static uint 祖灵之牙当前技能()
     {
         var changedSkill = Core.Resolve<MemApiSpell>().CheckActionChange(齿牙变化起点);
-        return changedSkill is 技能连击1祖灵之牙一式 or 技能连击2祖灵之牙二式 or 技能连击3祖灵之牙三式 or 技能连击4祖灵之牙四式
-            ? changedSkill
-            : 技能连击1祖灵之牙一式;
+        var isOuroStep = changedSkill is 技能连击1祖灵之牙一式 or 技能连击2祖灵之牙二式 or 技能连击3祖灵之牙三式 or 技能连击4祖灵之牙四式;
+        var 祖灵牙已完成 = 祖灵之牙已完成();
+
+        uint result = 0u;
+        if (isOuroStep)
+        {
+            result = changedSkill;
+        }
+        else if (changedSkill != 39173u && !祖灵牙已完成)
+        {
+            result = 技能连击1祖灵之牙一式;
+        }
+
+        return result;
     }
     // public uint 技能满月 = 29527u;
     // public uint 技能樱花 = 29528u;
@@ -69,7 +84,15 @@ public class 祖灵之牙连击 : ISlotResolver
         {
             return -44;
         }
+        if (祖灵之牙已完成())
+        {
+            return -5;
+        }
         var changedSkill = 祖灵之牙当前技能();
+        if (changedSkill == 0u)
+        {
+            return -5;
+        }
         if (changedSkill is not (技能连击1祖灵之牙一式 or 技能连击2祖灵之牙二式 or 技能连击3祖灵之牙三式 or 技能连击4祖灵之牙四式))
         {
             return -5;
