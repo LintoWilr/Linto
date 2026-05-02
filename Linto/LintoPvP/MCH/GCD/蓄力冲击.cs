@@ -2,63 +2,37 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
 
-public class 蓄力冲击 : ISlotResolver
+public class 蓄力冲击 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; }
-    private const uint SkillId = 29402u;
-    private const uint 过热光环 = 3149u;
-    private const int SkillRange = 25;
+    protected override string QtKey => "蓄力冲击";
+    protected override uint SkillId => 29402u;
+    protected override int SkillRange => 25;
+    protected override int? MaxGcdCooldownMs => 50;
 
-    public int Check()
+    protected override int CheckSpecific()
     {
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (!PvPMCHOverlay.MCHQt.GetQt("蓄力冲击"))
-        {
-            return -233;
-        }
-        if (!PVPHelper.MCH.GetChangedAction(SkillId).GetSpell().IsReadyWithCanCast())
-        {
-            return -2;
-        }
-        if (GCDHelper.GetGCDCooldown() > 50)
-        {
-            return -3;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
-        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
-        {
-            return -6;
-        }
-        if (Core.Me.HasAura(过热光环))
+        if (Core.Me.HasAura(3149u))
         {
             return -9;
         }
         return 0;
     }
-
-    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }
-public class 热冲击 : ISlotResolver
+public class 热冲击 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; }
+    protected override string QtKey => "野火";
+    protected override uint SkillId => 烈焰弹id();
+    protected override uint BuildSkillId => 烈焰弹id();
+    protected override int SkillRange => 25;
+    protected override int? MaxGcdCooldownMs => 200;
+
     private const uint 热冲击技能 = 29403u;
     private const uint 烈焰弹技能 = 41468u;
-    private const uint 过热光环 = 3149u;
-    private const int SkillRange = 25;
 
     public static uint 烈焰弹id()
     {
@@ -66,47 +40,13 @@ public class 热冲击 : ISlotResolver
             return 热冲击技能;
         else return 烈焰弹技能;
     }
-    public int Check()
+
+    protected override int CheckSpecific()
     {
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (!PvPMCHOverlay.MCHQt.GetQt("野火"))
-        {
-            return -233;
-        }
-        if (!PVPHelper.MCH.GetChangedAction(烈焰弹id()).GetSpell().IsReadyWithCanCast())
-        {
-            return -2;
-        }
-        if (GCDHelper.GetGCDCooldown() > 200)
-        {
-            return -3;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
-        var currentSkill = 烈焰弹id();
-        if (PVPHelper.通用技能释放Check(currentSkill, SkillRange) == null)
-        {
-            return -6;
-        }
-        if (!Core.Me.HasAura(过热光环))
+        if (!Core.Me.HasAura(3149u))
         {
             return -9;
         }
         return 0;
-    }
-
-    public void Build(Slot slot)
-    {
-        var currentSkill = 烈焰弹id();
-        PVPHelper.通用技能释放(slot, currentSkill, SkillRange);
     }
 }
