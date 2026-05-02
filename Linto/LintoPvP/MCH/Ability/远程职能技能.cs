@@ -3,7 +3,6 @@ using AEAssist.CombatRoutine;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.Ability;
@@ -27,6 +26,10 @@ public class 速度之星 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!速度之星u.GetSpell().IsReadyWithCanCast())
         {
             return -1;
@@ -49,7 +52,7 @@ public class 勇气 : ISlotResolver
     private const uint 钻头可用变化1 = 29405u;
     private const uint 钻头可用变化2 = 29408u;
     private const uint 勇气前置光环 = 3153u;
-    public static uint 钻头变化() => Core.Resolve<MemApiSpell>().CheckActionChange(钻头基础技能);
+    public static uint 钻头变化() => PVPHelper.MCH.GetChangedAction(钻头基础技能);
     public int Check()
     {
         if (!PvPMCHOverlay.MCHQt.GetQt("职能技能"))
@@ -63,6 +66,10 @@ public class 勇气 : ISlotResolver
         if (!PVPHelper.CanActive())
         {
             return -1;
+        }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
         }
         if (!勇气u.GetSpell().IsReadyWithCanCast())
         {
