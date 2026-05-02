@@ -24,6 +24,10 @@ public class 分析 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (PVPHelper.通用距离检查(SkillRange))
         {
             return -5;

@@ -20,6 +20,10 @@ public class 象式浮空炮塔 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!SkillId.GetSpell().IsReadyWithCanCast())
         {
             return -2;

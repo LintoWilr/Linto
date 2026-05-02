@@ -22,6 +22,10 @@ public class 野火 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!SkillId.GetSpell().IsReadyWithCanCast())
         {
             return -1;
