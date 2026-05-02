@@ -1,53 +1,27 @@
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Helper;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
 
-public class 全金属爆发 : ISlotResolver
+public class 全金属爆发 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; }
-    private const uint SkillId = 41469u;
-    private const int SkillRange = 25;
+    protected override string QtKey => "全金属爆发";
+    protected override uint SkillId => 41469u;
+    protected override int SkillRange => 25;
+    protected override int? MaxGcdCooldownMs => 200;
 
-    public int Check()
+    protected override int CheckSpecific()
     {
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (!PvPMCHOverlay.MCHQt.GetQt("全金属爆发"))
-        {
-            return -233;
-        }
-        if (!SkillId.GetSpell().IsReadyWithCanCast())
-        {
-            return -5;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
-        if (GCDHelper.GetGCDCooldown() > 200)
-        {
-            return -3;
-        }
-        if (PVPHelper.通用技能释放Check(SkillId, SkillRange) == null)
-        {
-            return -6;
-        }
-
         if (PvPMCHSettings.Instance.金属爆发仅野火)
         {
             if (PVPTargetHelper.TargetSelector.Get野火目标() == null)
+            {
                 return -9;
+            }
         }
+
         return 0;
     }
-
-    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }

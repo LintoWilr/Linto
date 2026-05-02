@@ -2,62 +2,35 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
+using Linto.LintoPvP.MCH;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
 
-public class 回转飞锯 : ISlotResolver
+public class 回转飞锯 : MCHSlotResolverBase
 {
-    public SlotMode SlotMode { get; }
-    private const uint SkillId = 29408u;
-    private const int SkillRange = 25;
-    private const uint RequiredAura = 3153u;
-    private const uint 分析Buff = 3158u;
-    private const uint 分析技能 = 29414u;
-    public static uint 机工变化() => PVPHelper.MCH.GetChangedAction(SkillId);
-    public int Check()
+    protected override string QtKey => "回转飞锯";
+    protected override uint SkillId => 29408u;
+    protected override int SkillRange => 25;
+    protected override int? MaxGcdCooldownMs => 200;
+    protected override uint? RequiredAura => 3153u;
+
+    public static uint 机工变化() => PVPHelper.MCH.GetChangedAction(29408u);
+
+    protected override int CheckSpecific()
     {
-        if (!PVPHelper.CanActive())
-        {
-            return -1;
-        }
-        if (PVPHelper.MCH.IsMarksmanPreAnim())
-        {
-            return -2;
-        }
-        if (!PvPMCHOverlay.MCHQt.GetQt("回转飞锯"))
-        {
-            return -233;
-        }
-        if (GCDHelper.GetGCDCooldown() > 200)
-        {
-            return -3;
-        }
-        if (PVPHelper.通用距离检查(SkillRange))
-        {
-            return -5;
-        }
         var changedSkill = 机工变化();
-        if (PVPHelper.通用技能释放Check(changedSkill, SkillRange) == null)
-        {
-            return -6;
-        }
-        if (changedSkill != SkillId || !Core.Me.HasAura(RequiredAura) || !SkillId.GetSpell().IsReadyWithCanCast())
+        if (changedSkill != SkillId)
         {
             return -2;
         }
-        if (PvPMCHSettings.Instance.回转飞锯分析)
+        if (PvPMCHSettings.Instance.回转飞锯分析 && !Core.Me.HasAura(3158u))
         {
-            if (!Core.Me.HasAura(分析Buff))
+            if (SpellHelper.GetSpell(29414u).Charges > 0.5)
             {
-                if (SpellHelper.GetSpell(分析技能).Charges > 0.5)
-                {
-                    return -23;
-                }
+                return -23;
             }
         }
         return 0;
     }
-
-    public void Build(Slot slot) => PVPHelper.通用技能释放(slot, SkillId, SkillRange);
 }
