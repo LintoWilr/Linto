@@ -2,7 +2,6 @@ using AEAssist;
 using AEAssist.CombatRoutine.Module;
 using AEAssist.Extension;
 using AEAssist.Helper;
-using AEAssist.MemoryApi;
 using Linto.LintoPvP.PVPApi;
 
 namespace Linto.LintoPvP.MCH.GCD;
@@ -20,11 +19,15 @@ public class 蓄力冲击 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!PvPMCHOverlay.MCHQt.GetQt("蓄力冲击"))
         {
             return -233;
         }
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(SkillId).GetSpell().IsReadyWithCanCast())
+        if (!PVPHelper.MCH.GetChangedAction(SkillId).GetSpell().IsReadyWithCanCast())
         {
             return -2;
         }
@@ -69,11 +72,15 @@ public class 热冲击 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!PvPMCHOverlay.MCHQt.GetQt("野火"))
         {
             return -233;
         }
-        if (!Core.Resolve<MemApiSpell>().CheckActionChange(烈焰弹id()).GetSpell().IsReadyWithCanCast())
+        if (!PVPHelper.MCH.GetChangedAction(烈焰弹id()).GetSpell().IsReadyWithCanCast())
         {
             return -2;
         }

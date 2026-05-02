@@ -16,6 +16,10 @@ public class 全金属爆发 : ISlotResolver
         {
             return -1;
         }
+        if (PVPHelper.MCH.IsMarksmanPreAnim())
+        {
+            return -2;
+        }
         if (!PvPMCHOverlay.MCHQt.GetQt("全金属爆发"))
         {
             return -233;
